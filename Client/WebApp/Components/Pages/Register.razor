@@ -1,0 +1,87 @@
+@page "/register"
+
+@using System.ComponentModel.DataAnnotations
+
+<h3>Create User Profile</h3>
+
+<div class="profile-form-container">
+    <EditForm Model="@profile" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            <label for="name">Full Name</label>
+            <InputText id="name" class="form-control" @bind-Value="profile.Name" />
+        </div>
+
+        <div class="form-group">
+            <label for="description">Profile Description</label>
+            <InputTextArea id="description" class="form-control" @bind-Value="profile.Description" rows="4" />
+        </div>
+
+        <div class="form-group">
+            <label for="experience">Experience</label>
+            <InputTextArea id="experience" class="form-control" @bind-Value="profile.Experience" rows="3" />
+        </div>
+
+        <div class="form-group">
+            <label for="education">Education</label>
+            <InputTextArea id="education" class="form-control" @bind-Value="profile.Education" rows="3" />
+        </div>
+
+        <div class="form-group">
+            <label for="skills">Skills</label>
+            <select id="skills" class="form-control" multiple @onchange="HandleSkillSelection">
+                @foreach (var skill in skills)
+                {
+                    <option value="@skill" selected="@profile.SelectedSkills.Contains(skill)">
+                        @skill
+                    </option>
+                }
+            </select>
+            <small>Select one or more skills (Ctrl+Click to select multiple)</small>
+        </div>
+
+        <button type="submit" class="submit-btn">Create Profile</button>
+    </EditForm>
+</div>
+
+@code {
+    private UserProfile profile = new();
+
+    // Placeholder skills list — replace later with data from the database
+    private List<string> skills = new()
+{
+"C#",
+"JavaScript",
+"SQL",
+"Blazor",
+"React",
+"Azure",
+"Docker"
+};
+
+    private void HandleValidSubmit()
+    {
+        Console.WriteLine($"Profile Created for {profile.Name}");
+    }
+
+    private void HandleSkillSelection(ChangeEventArgs e)
+    {
+        var selectedOptions = ((IEnumerable<string>)e.Value)?.ToList() ?? new List<string>();
+
+        profile.SelectedSkills = selectedOptions;
+    }
+
+    public class UserProfile
+    {
+        [Required]
+        public string Name { get; set; } = string.Empty;
+
+        public string Description { get; set; } = string.Empty;
+        public string Experience { get; set; } = string.Empty;
+        public string Education { get; set; } = string.Empty;
+
+        public List<string> SelectedSkills { get; set; } = new();
+    }
+}
