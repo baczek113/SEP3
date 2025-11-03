@@ -35,4 +35,14 @@ public class User {
         this.role = role;
         this.name = name;
     }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public String getEmail()
+    {
+        return email;
+    }
 }

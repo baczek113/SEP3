@@ -24,4 +24,16 @@ public class CompanyRepresentative {
         this.user = user;
         this.position = position;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public User getUser() {
+        return user;
+    }
 }
