@@ -1,6 +1,8 @@
 @page "/register"
 
 @using System.ComponentModel.DataAnnotations
+@rendermode InteractiveServer
+
 
 <h3>Create User Profile</h3>
 
@@ -30,16 +32,16 @@
         </div>
 
         <div class="form-group">
-            <label for="skills">Skills</label>
-            <select id="skills" class="form-control" multiple @onchange="HandleSkillSelection">
+            <label>Skills</label>
+            <div class="skills-list">
                 @foreach (var skill in skills)
                 {
-                    <option value="@skill" selected="@profile.SelectedSkills.Contains(skill)">
+                    <button type="button" class="skill-btn @(profile.SelectedSkills.Contains(skill) ? "selected" : "")"
+                        @onclick="() => ToggleSkill(skill)">
                         @skill
-                    </option>
+                    </button>
                 }
-            </select>
-            <small>Select one or more skills (Ctrl+Click to select multiple)</small>
+            </div>
         </div>
 
         <button type="submit" class="submit-btn">Create Profile</button>
@@ -49,7 +51,7 @@
 @code {
     private UserProfile profile = new();
 
-    // Placeholder skills list — replace later with data from the database
+    // Placeholder list of skills
     private List<string> skills = new()
 {
 "C#",
@@ -61,27 +63,27 @@
 "Docker"
 };
 
-    private void HandleValidSubmit()
+    private void ToggleSkill(string skill)
     {
-        Console.WriteLine($"Profile Created for {profile.Name}");
+        if (profile.SelectedSkills.Contains(skill))
+            profile.SelectedSkills.Remove(skill);
+        else
+            profile.SelectedSkills.Add(skill);
     }
 
-    private void HandleSkillSelection(ChangeEventArgs e)
+    private void HandleValidSubmit()
     {
-        var selectedOptions = ((IEnumerable<string>)e.Value)?.ToList() ?? new List<string>();
-
-        profile.SelectedSkills = selectedOptions;
+        Console.WriteLine($"Profile created for {profile.Name}");
+        Console.WriteLine($"Skills: {string.Join(", ", profile.SelectedSkills)}");
     }
 
     public class UserProfile
     {
         [Required]
         public string Name { get; set; } = string.Empty;
-
         public string Description { get; set; } = string.Empty;
         public string Experience { get; set; } = string.Empty;
         public string Education { get; set; } = string.Empty;
-
         public List<string> SelectedSkills { get; set; } = new();
     }
 }
