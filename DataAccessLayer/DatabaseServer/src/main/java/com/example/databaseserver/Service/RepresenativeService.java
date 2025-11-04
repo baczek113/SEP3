@@ -9,10 +9,10 @@ import com.example.databaseserver.generated.RepresentativeResponse;
 import com.example.databaseserver.generated.RepresentativeServiceGrpc;
 import io.grpc.stub.StreamObserver;
 import jakarta.transaction.Transactional;
+import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
+@GrpcService
 public class RepresenativeService extends RepresentativeServiceGrpc.RepresentativeServiceImplBase {
     private final RepresentativeRepository repository;
 
