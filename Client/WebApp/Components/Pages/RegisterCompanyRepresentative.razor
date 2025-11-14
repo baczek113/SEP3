@@ -1,6 +1,6 @@
 @page "/register-company-representative"
-
 @using System.ComponentModel.DataAnnotations
+@using global::DTOs
 @using Services
 @inject HttpCompanyRepresentativeService HttpCompanyRepresentativeService
 @rendermode InteractiveServer
@@ -56,7 +56,7 @@
     {
         try
         {
-            await HttpCompanyRepresentativeService.AddCompanyRepresentativeAsync(new DTOs.AddCompanyRepresentativeDto
+            await HttpCompanyRepresentativeService.AddCompanyRepresentativeAsync(new AddCompanyRepresentativeDto
             {
                 Name = profile.Name,
                 Email = profile.Email,

@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option java_package = "com.example.databaseserver.generated";
+option java_multiple_files = true;
+
+service ApplicantService {
+  rpc CreateApplicant (CreateApplicantRequest) returns (ApplicantResponse);
+}
+
+message CreateApplicantRequest {
+  string name          = 1;
+  string email         = 2;
+  string password_hash = 3;
+  string experience    = 4;
+  string city          = 5;
+  string postcode      = 6;
+  string address       = 7;
+}
+
+message ApplicantResponse {
+  int64 id         = 1;
+  string name      = 2;
+  string email     = 3;
+  string experience = 4;
+  string city      = 5;
+  string postcode  = 6;
+  string address   = 7;
+}
