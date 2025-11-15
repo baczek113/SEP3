@@ -18,3 +18,4 @@ message RepresentativeResponse {
   string email = 3;
   string position = 4;
 }
+

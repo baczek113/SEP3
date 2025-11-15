@@ -7,6 +7,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<RepresentativeService>();
+builder.Services.AddSingleton<ApplicantService>();
 
 var app = builder.Build();
 

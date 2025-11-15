@@ -10,7 +10,8 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5177") });
 builder.Services.AddScoped<HttpCompanyRepresentativeService>();
-
+builder.Services.AddScoped<HttpApplicantService>();
+    `
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
