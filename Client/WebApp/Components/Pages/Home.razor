@@ -1,7 +1,20 @@
 ﻿@page "/"
+@layout AuthLayout
+@rendermode InteractiveServer
 
-<PageTitle>Home</PageTitle>
+<div class="landing-page">
+    <div class="landing-card">
+        <h1 class="landing-title">
+            Welcome to <span class="brand-name">HireFire</span>
+        </h1>
+        <p class="landing-subtitle">
+            A modern platform where motivated applicants meet ambitious companies.
+            Log in to continue, or create an account to discover new opportunities and hire the talent you need.
+        </p>
 
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
+        <div class="landing-actions">
+            <a href="/login" class="btn primary-btn">Log in</a>
+            <a href="/register" class="btn secondary-btn">Register</a>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,5 @@
 using DTOs;
+using WebApp.DTOs.CompanyRepresentative;
 
 namespace Services;
 

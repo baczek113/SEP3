@@ -1,89 +1,197 @@
 @page "/register"
-
+@layout AuthLayout
 @using System.ComponentModel.DataAnnotations
+@using Services
+@using WebApp.DTOs.Applicant
+@using WebApp.DTOs.CompanyRepresentative
+@inject HttpApplicantService HttpApplicantService
+@inject HttpCompanyRepresentativeService HttpCompanyRepresentativeService
 @rendermode InteractiveServer
 
+<div class="register-shell">
+    <div class="register-card">
+        <div class="register-header">
+            <h2>Create Your HireFire Account</h2>
+            <p>
+                Choose how you want to get started — as an applicant looking for your next challenge
+                or as a company representative searching for the right talent.
+            </p>
 
-<h3>Create User Profile</h3>
-
-<div class="profile-form-container">
-    <EditForm Model="@profile" OnValidSubmit="@HandleValidSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-
-        <div class="form-group">
-            <label for="name">Full Name</label>
-            <InputText id="name" class="form-control" @bind-Value="profile.Name" />
-        </div>
-
-        <div class="form-group">
-            <label for="description">Profile Description</label>
-            <InputTextArea id="description" class="form-control" @bind-Value="profile.Description" rows="4" />
-        </div>
-
-        <div class="form-group">
-            <label for="experience">Experience</label>
-            <InputTextArea id="experience" class="form-control" @bind-Value="profile.Experience" rows="3" />
-        </div>
-
-        <div class="form-group">
-            <label for="education">Education</label>
-            <InputTextArea id="education" class="form-control" @bind-Value="profile.Education" rows="3" />
-        </div>
-
-        <div class="form-group">
-            <label>Skills</label>
-            <div class="skills-list">
-                @foreach (var skill in skills)
-                {
-                    <button type="button" class="skill-btn @(profile.SelectedSkills.Contains(skill) ? "selected" : "")"
-                        @onclick="() => ToggleSkill(skill)">
-                        @skill
-                    </button>
-                }
+            <div class="register-switch">
+                <button class="switch-btn @(currentMode == RegisterMode.Applicant ? "active" : "")"
+                        @onclick="() => SetMode(RegisterMode.Applicant)">
+                    Applicant
+                </button>
+                <button class="switch-btn @(currentMode == RegisterMode.Representative ? "active" : "")"
+                        @onclick="() => SetMode(RegisterMode.Representative)">
+                    Company Representative
+                </button>
             </div>
         </div>
 
-        <button type="submit" class="submit-btn">Create Profile</button>
-    </EditForm>
+        <div class="register-form-area">
+            @if (currentMode == RegisterMode.Applicant)
+            {
+                <EditForm Model="@applicantProfile" OnValidSubmit="HandleApplicantSubmit">
+                    <DataAnnotationsValidator />
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="a-name">Full Name</label>
+                            <InputText id="a-name" class="form-control" @bind-Value="applicantProfile.Name" />
+                            <ValidationMessage For="@(() => applicantProfile.Name)" class="validation-message" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="a-email">Email</label>
+                            <InputText id="a-email" class="form-control" @bind-Value="applicantProfile.Email" />
+                            <ValidationMessage For="@(() => applicantProfile.Email)" class="validation-message" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="a-password">Password</label>
+                            <InputText type="password" id="a-password" class="form-control" @bind-Value="applicantProfile.Password" />
+                            <ValidationMessage For="@(() => applicantProfile.Password)" class="validation-message" />
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="a-experience">Experience</label>
+                            <InputTextArea id="a-experience" class="form-control" @bind-Value="applicantProfile.Experience" />
+                            <ValidationMessage For="@(() => applicantProfile.Experience)" class="validation-message" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="a-city">City</label>
+                            <InputText id="a-city" class="form-control" @bind-Value="applicantProfile.City" />
+                            <ValidationMessage For="@(() => applicantProfile.City)" class="validation-message" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="a-postcode">Postcode</label>
+                            <InputText id="a-postcode" class="form-control" @bind-Value="applicantProfile.Postcode" />
+                            <ValidationMessage For="@(() => applicantProfile.Postcode)" class="validation-message" />
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="a-address">Address</label>
+                            <InputText id="a-address" class="form-control" @bind-Value="applicantProfile.Address" />
+                            <ValidationMessage For="@(() => applicantProfile.Address)" class="validation-message" />
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn primary-btn">
+                        Create Applicant Account
+                    </button>
+                </EditForm>
+            }
+            else if (currentMode == RegisterMode.Representative)
+            {
+                <EditForm Model="@representativeProfile" OnValidSubmit="HandleRepresentativeSubmit">
+                    <DataAnnotationsValidator />
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="r-name">Full Name</label>
+                            <InputText id="r-name" class="form-control" @bind-Value="representativeProfile.Name" />
+                            <ValidationMessage For="@(() => representativeProfile.Name)" class="validation-message" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="r-email">Email</label>
+                            <InputText id="r-email" class="form-control" @bind-Value="representativeProfile.Email" />
+                            <ValidationMessage For="@(() => representativeProfile.Email)" class="validation-message" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="r-position">Position</label>
+                            <InputText id="r-position" class="form-control" @bind-Value="representativeProfile.Position" />
+                            <ValidationMessage For="@(() => representativeProfile.Position)" class="validation-message" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="r-password">Password</label>
+                            <InputText type="password" id="r-password" class="form-control" @bind-Value="representativeProfile.Password" />
+                            <ValidationMessage For="@(() => representativeProfile.Password)" class="validation-message" />
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn primary-btn">
+                        Create Company Account
+                    </button>
+                </EditForm>
+            }
+
+            <div class="@($"notification-container {(notificationVisible ? "show" : "")}")">
+                <div class="@($"notification {notificationType}")">
+                    @notificationMessage
+                </div>
+            </div>
+
+            <div class="register-footer-hint">
+                Already have an account? <a href="/login">Log in</a>.
+            </div>
+        </div>
+    </div>
 </div>
 
 @code {
-    private UserProfile profile = new();
-
-    // Placeholder list of skills
-    private List<string> skills = new()
-{
-"C#",
-"JavaScript",
-"SQL",
-"Blazor",
-"React",
-"Azure",
-"Docker"
-};
-
-    private void ToggleSkill(string skill)
+    private enum RegisterMode
     {
-        if (profile.SelectedSkills.Contains(skill))
-            profile.SelectedSkills.Remove(skill);
-        else
-            profile.SelectedSkills.Add(skill);
+        Applicant,
+        Representative
     }
 
-    private void HandleValidSubmit()
+    private RegisterMode currentMode = RegisterMode.Applicant;
+
+    private AddApplicantDto applicantProfile = new();
+    private AddCompanyRepresentativeDto representativeProfile = new();
+
+    private bool notificationVisible = false;
+    private string notificationMessage = string.Empty;
+    private string notificationType = string.Empty;
+
+    private void SetMode(RegisterMode mode)
     {
-        Console.WriteLine($"Profile created for {profile.Name}");
-        Console.WriteLine($"Skills: {string.Join(", ", profile.SelectedSkills)}");
+        currentMode = mode;
+        notificationVisible = false;
     }
 
-    public class UserProfile
+    private async Task HandleApplicantSubmit()
     {
-        [Required]
-        public string Name { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        public string Experience { get; set; } = string.Empty;
-        public string Education { get; set; } = string.Empty;
-        public List<string> SelectedSkills { get; set; } = new();
+        try
+        {
+            await HttpApplicantService.AddApplicantAsync(applicantProfile);
+            ShowNotification("Applicant account created successfully!", "success");
+        }
+        catch
+        {
+            ShowNotification("Failed to create applicant account. Please try again.", "error");
+        }
+    }
+
+    private async Task HandleRepresentativeSubmit()
+    {
+        try
+        {
+            await HttpCompanyRepresentativeService.AddCompanyRepresentativeAsync(representativeProfile);
+            ShowNotification("Company representative account created successfully!", "success");
+        }
+        catch
+        {
+            ShowNotification("Failed to create company representative account. Please try again.", "error");
+        }
+    }
+
+    private void ShowNotification(string message, string type)
+    {
+        notificationMessage = message;
+        notificationType = type;
+        notificationVisible = true;
+
+        _ = Task.Delay(3000).ContinueWith(_ =>
+        {
+            notificationVisible = false;
+            InvokeAsync(StateHasChanged);
+        });
     }
 }
