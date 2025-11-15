@@ -99,11 +99,12 @@ CREATE TABLE job_listing_skills (
 
 -- ---------- APPLICANTS & SKILLS ----------
 CREATE TABLE applicant_skill (
-  applicant_id BIGINT NOT NULL REFERENCES applicant(user_id) ON DELETE CASCADE,
-  skill_id     BIGINT NOT NULL REFERENCES skill(id) ON DELETE CASCADE,
-  level        skill_level NOT NULL,
-  PRIMARY KEY (applicant_id, skill_id)
+    id            BIGSERIAL PRIMARY KEY,
+    applicant_id  BIGINT NOT NULL REFERENCES applicant(user_id) ON DELETE CASCADE,
+    skill_id      BIGINT NOT NULL REFERENCES skill(id) ON DELETE CASCADE,
+    level         skill_level NOT NULL
 );
+
 
 -- ---------- APPLICATIONS ----------
 CREATE TABLE application (

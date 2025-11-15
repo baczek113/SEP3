@@ -24,6 +24,6 @@ public class RepresentativeController : ControllerBase
         }
 
         var result = await _service.CreateRepresentativeAsync(dto);
-        return result;
+        return Ok(result);
     }
 }
