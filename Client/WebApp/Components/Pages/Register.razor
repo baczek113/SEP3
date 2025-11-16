@@ -7,6 +7,10 @@
 @inject HttpApplicantService HttpApplicantService
 @inject HttpCompanyRepresentativeService HttpCompanyRepresentativeService
 @rendermode InteractiveServer
+@inject NavigationManager Nav
+@using WebApp.DTOs.Applicant
+@using Services
+
 
 <div class="register-shell">
     <div class="register-card">
@@ -155,19 +159,36 @@
         currentMode = mode;
         notificationVisible = false;
     }
-
     private async Task HandleApplicantSubmit()
     {
         try
         {
-            await HttpApplicantService.AddApplicantAsync(applicantProfile);
-            ShowNotification("Applicant account created successfully!", "success");
+            var created = await HttpApplicantService.AddApplicantAsync(new AddApplicantDto
+            {
+                Name      = applicantProfile.Name,
+                Email     = applicantProfile.Email,
+                Password  = applicantProfile.Password,
+                Experience= applicantProfile.Experience,
+                City      = applicantProfile.City,
+                Postcode  = applicantProfile.Postcode,
+                Address   = applicantProfile.Address
+            });
+
+            ShowNotification(message: "Applicant account created successfully!", type: "success");
+
+            await Task.Delay(800); // opcjonalne
+
+            
+            Nav.NavigateTo($"/applicant/skills/{created.Id}");
         }
         catch
         {
-            ShowNotification("Failed to create applicant account. Please try again.", "error");
+            ShowNotification(message: "Failed to create applicant account. Please try again.", type: "error");
+            
         }
     }
+
+
 
     private async Task HandleRepresentativeSubmit()
     {

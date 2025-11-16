@@ -115,7 +115,7 @@ public class ApplicantService extends ApplicantServiceGrpc.ApplicantServiceImplB
             ApplicantSkill applicantSkill = new ApplicantSkill(applicant, skill, level);
             ApplicantSkill saved = applicantSkillRepository.save(applicantSkill);
 
-            // 6) Zbuduj odpowiedź dla klienta gRPC
+
             ApplicantSkillResponse response = ApplicantSkillResponse.newBuilder()
                     .setId(saved.getId())
                     .setApplicantId(applicant.getId())
@@ -128,7 +128,13 @@ public class ApplicantService extends ApplicantServiceGrpc.ApplicantServiceImplB
             responseObserver.onCompleted();
         }
         catch (Exception e) {
-            responseObserver.onError(e);
+            e.printStackTrace();
+
+            responseObserver.onError(
+                    io.grpc.Status.INTERNAL
+                            .withDescription(e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName())
+                            .withCause(e)
+                            .asRuntimeException());
         }
     }
 
