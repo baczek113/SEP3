@@ -1,0 +1,121 @@
+﻿@page "/register-company"
+@layout AuthLayout
+@using System.ComponentModel.DataAnnotations
+@using WebApp.DTOs.Company
+@using WebApp.Services
+@inject HttpCompanyService HttpCompanyService
+@inject NavigationManager Nav
+@rendermode InteractiveServer
+
+<div class="register-shell">
+    <div class="register-card">
+        <div class="register-header">
+            <h2>Register Your Company</h2>
+            <p>
+                Tell us about your company so we can help you connect
+                with the right talent on HireFire.
+            </p>
+        </div>
+
+        <div class="register-form-area">
+            <EditForm Model="@companyProfile" OnValidSubmit="HandleCompanySubmit">
+                <DataAnnotationsValidator />
+
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="c-name">Company Name</label>
+                        <InputText id="c-name" class="form-control" @bind-Value="companyProfile.Name" />
+                        <ValidationMessage For="@(() => companyProfile.Name)" class="validation-message" />
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="c-website">Website</label>
+                        <InputText id="c-website" class="form-control" @bind-Value="companyProfile.Website" />
+                        <ValidationMessage For="@(() => companyProfile.Website)" class="validation-message" />
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="c-description">Description</label>
+                        <InputTextArea id="c-description" class="form-control" @bind-Value="companyProfile.Description" />
+                        <ValidationMessage For="@(() => companyProfile.Description)" class="validation-message" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="c-city">City</label>
+                        <InputText id="c-city" class="form-control" @bind-Value="companyProfile.City" />
+                        <ValidationMessage For="@(() => companyProfile.City)" class="validation-message" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="c-postcode">Postcode</label>
+                        <InputText id="c-postcode" class="form-control" @bind-Value="companyProfile.Postcode" />
+                        <ValidationMessage For="@(() => companyProfile.Postcode)" class="validation-message" />
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="c-address">Address</label>
+                        <InputText id="c-address" class="form-control" @bind-Value="companyProfile.Address" />
+                        <ValidationMessage For="@(() => companyProfile.Address)" class="validation-message" />
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn primary-btn">
+                    Register Company
+                </button>
+            </EditForm>
+
+            <div class="@($"notification-container {(notificationVisible ? "show" : "")}")">
+                <div class="@($"notification {notificationType}")">
+                    @notificationMessage
+                </div>
+            </div>
+
+            <div class="register-footer-hint">
+                Want to create a personal account instead? <a href="/register">Go back to sign up</a>.
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private CreateCompanyDto companyProfile = new();
+
+    private bool notificationVisible = false;
+    private string notificationMessage = string.Empty;
+    private string notificationType = string.Empty;
+
+    // Na razie mock – dopóki nie ma logowania
+    private const long MockCompanyRepresentativeId = 1;
+
+    private async Task HandleCompanySubmit()
+    {
+        try
+        {
+            companyProfile.CompanyRepresentativeId = MockCompanyRepresentativeId;
+
+            var created = await HttpCompanyService.AddCompany(companyProfile);
+
+            ShowNotification("Company registered successfully!", "success");
+
+            await Task.Delay(800);
+            // np. później: Nav.NavigateTo($"/company/{created.Id}");
+        }
+        catch
+        {
+            ShowNotification("Failed to register company. Please try again.", "error");
+        }
+    }
+
+    private void ShowNotification(string message, string type)
+    {
+        notificationMessage = message;
+        notificationType = type;
+        notificationVisible = true;
+
+        _ = Task.Delay(3000).ContinueWith(_ =>
+        {
+            notificationVisible = false;
+            InvokeAsync(StateHasChanged);
+        });
+    }
+}

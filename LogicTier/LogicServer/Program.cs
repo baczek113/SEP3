@@ -8,6 +8,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<RepresentativeService>();
 builder.Services.AddSingleton<ApplicantService>();
+builder.Services.AddSingleton<CompanyService>();
 
 var app = builder.Build();
 

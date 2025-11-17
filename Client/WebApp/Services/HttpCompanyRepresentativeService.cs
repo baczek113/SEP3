@@ -2,7 +2,7 @@ using System.Text.Json;
 using DTOs;
 using WebApp.DTOs.CompanyRepresentative;
 
-namespace Services;
+namespace WebApp.Services;
 
 public class HttpCompanyRepresentativeService : ICompanyRepresentativeService
 {
