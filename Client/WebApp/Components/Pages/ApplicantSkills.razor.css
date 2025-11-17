@@ -1,0 +1,240 @@
+﻿.skills-page {
+    max-width: 960px;
+    margin: 40px auto;
+    padding: 28px 32px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+}
+
+.skills-header {
+    margin-bottom: 24px;
+}
+
+.skills-title {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.add-skill-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    border: none;
+    background: linear-gradient(135deg, #3182ce, #2b6cb0);
+    color: #ffffff;
+    font-size: 26px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 20px rgba(49, 130, 206, 0.45);
+    cursor: default;
+}
+
+.skills-title-text h3 {
+    margin: 0 0 4px;
+    color: #1a202c;
+    font-size: 1.5rem;
+}
+
+.skills-title-text p {
+    margin: 0;
+    color: #4a5568;
+    font-size: 0.95rem;
+}
+
+.selected-skills-section {
+    margin-bottom: 18px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background-color: #f7fafc;
+    border: 1px solid #e2e8f0;
+}
+
+.selected-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    display: inline-block;
+    margin-bottom: 6px;
+}
+
+.selected-skills-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin-top: 8px;
+    margin-bottom: 24px;
+}
+
+.skill-category-card {
+    background-color: #f7fafc;
+    border-radius: 14px;
+    padding: 14px 16px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.skill-category-header h4 {
+    margin: 0;
+    color: #2d3748;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.skill-category-header p {
+    margin: 4px 0 0;
+    color: #718096;
+    font-size: 0.85rem;
+}
+
+.skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.skill-chip {
+    border-radius: 999px;
+    border: 1px solid #cbd5e0;
+    background-color: #edf2f7;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    color: #2d3748;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.skill-chip:hover {
+    background-color: #e2e8f0;
+    border-color: #a0aec0;
+}
+
+.skill-chip.selected {
+    background-color: #3182ce;
+    border-color: #3182ce;
+    color: #ffffff;
+    box-shadow: 0 0 0 2px rgba(49, 130, 206, 0.25);
+}
+
+.skill-chip .chip-remove {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.skills-actions {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.save-skills-btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 11px 0;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, #3182ce, #2b6cb0);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.08s ease-out, box-shadow 0.12s ease-out, opacity 0.12s ease-out;
+    box-shadow: 0 8px 18px rgba(49, 130, 206, 0.4);
+}
+
+.save-skills-btn:hover:enabled {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(49, 130, 206, 0.45);
+}
+
+.save-skills-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.hint-text {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #718096;
+    text-align: center;
+}
+
+/* Notyfikacje – możesz użyć tych samych klas co wcześniej */
+
+.notification-container {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.notification-container.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.notification {
+    min-width: 240px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.25);
+}
+
+.notification.success {
+    background-color: #c6f6d5;
+    color: #22543d;
+}
+
+.notification.error {
+    background-color: #fed7d7;
+    color: #742a2a;
+}
+.selected-skill-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 8px 4px 0;
+}
+
+.skill-level-select {
+    padding: 4px 8px;
+    border-radius: 999px;
+    border: 1px solid #cbd5e0;
+    background-color: #ffffff;
+    font-size: 0.85rem;
+    color: #2d3748;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.skill-level-select:focus {
+    border-color: #3182ce;
+    box-shadow: 0 0 0 2px rgba(49,130,206,0.25);
+}
+

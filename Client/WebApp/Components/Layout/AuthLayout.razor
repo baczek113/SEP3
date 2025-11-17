@@ -1,0 +1,30 @@
+﻿@inherits LayoutComponentBase
+
+<div class="auth-shell">
+    <header class="auth-header">
+        <a href="/" class="auth-logo">
+            <span class="logo-mark">🔥</span>
+            <span class="logo-text">
+                Hire<span>Fire</span>
+            </span>
+        </a>
+    </header>
+
+    <main class="auth-main">
+        @Body
+    </main>
+
+    <footer class="auth-footer">
+        <div class="auth-footer-main">
+            <span>© @DateTime.Now.Year HireFire</span>
+            <span>Matching great people with great companies.</span>
+        </div>
+        <div class="auth-footer-links">
+            <a href="#">Privacy</a>
+            <span>·</span>
+            <a href="#">Terms</a>
+            <span>·</span>
+            <a href="#">Support</a>
+        </div>
+    </footer>
+</div>

@@ -1,0 +1,49 @@
+﻿@page "/login"
+@using System.ComponentModel.DataAnnotations
+@layout AuthLayout
+@rendermode InteractiveServer
+
+<div class="profile-form-container">
+    <h3>Log in to your account</h3>
+
+    <EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
+        <DataAnnotationsValidator />
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <InputText id="email" class="form-control" @bind-Value="loginModel.Email" />
+            <ValidationMessage For="@(() => loginModel.Email)" class="validation-message" />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <InputText id="password" type="password" class="form-control" @bind-Value="loginModel.Password" />
+            <ValidationMessage For="@(() => loginModel.Password)" class="validation-message" />
+        </div>
+
+        <button type="submit" class="submit-btn">Log in</button>
+
+        <div class="login-footer-hint">
+            Don't have an account? <a href="/register">Register now</a>.
+        </div>
+    </EditForm>
+</div>
+
+@code {
+    private LoginModel loginModel = new();
+
+    private Task HandleLogin()
+    {
+        return Task.CompletedTask;
+    }
+
+    public class LoginModel
+    {
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
+
+        [Required]
+        public string Password { get; set; } = string.Empty;
+    }
+}
