@@ -1,5 +1,5 @@
 ﻿@page "/"
-@layout AuthLayout
+@layout MainLayout
 @rendermode InteractiveServer
 
 <div class="landing-page">
@@ -18,3 +18,12 @@
         </div>
     </div>
 </div>
+
+<AuthorizeView>
+    <Authorized>
+        @context.User.Identity.Name
+    </Authorized>
+    <NotAuthorized>
+        lol
+    </NotAuthorized>
+</AuthorizeView>

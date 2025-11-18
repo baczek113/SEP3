@@ -1,24 +1,29 @@
 ﻿@page "/login"
 @using System.ComponentModel.DataAnnotations
-@layout AuthLayout
+@using Microsoft.AspNetCore.Identity.Data
+@using Services
+@inject AuthenticationStateProvider AuthProvider
+@inject NavigationManager navigationManager
+@using WebApp.DTOs.Authentication
+@layout MainLayout
 @rendermode InteractiveServer
 
 <div class="profile-form-container">
     <h3>Log in to your account</h3>
 
-    <EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
+    <EditForm Model="@loginRequest" OnValidSubmit="HandleLogin" FormName="LoginForm">
         <DataAnnotationsValidator />
 
         <div class="form-group">
             <label for="email">Email</label>
-            <InputText id="email" class="form-control" @bind-Value="loginModel.Email" />
-            <ValidationMessage For="@(() => loginModel.Email)" class="validation-message" />
+            <InputText id="email" class="form-control" @bind-Value="loginRequest.Email" />
+            <ValidationMessage For="@(() => loginRequest.Email)" class="validation-message" />
         </div>
 
         <div class="form-group">
             <label for="password">Password</label>
-            <InputText id="password" type="password" class="form-control" @bind-Value="loginModel.Password" />
-            <ValidationMessage For="@(() => loginModel.Password)" class="validation-message" />
+            <InputText id="password" type="password" class="form-control" @bind-Value="loginRequest.Password" />
+            <ValidationMessage For="@(() => loginRequest.Password)" class="validation-message" />
         </div>
 
         <button type="submit" class="submit-btn">Log in</button>
@@ -30,11 +35,23 @@
 </div>
 
 @code {
-    private LoginModel loginModel = new();
+    private LoginRequestDto loginRequest = new();
 
-    private Task HandleLogin()
+    private async Task HandleLogin()
     {
-        return Task.CompletedTask;
+        try
+        {
+            await ((AuthProvider)AuthProvider).LoginAsync(loginRequest);
+            //show success notification
+
+            await Task.Delay(800);
+            navigationManager.NavigateTo("/");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            //handle failure
+        }
     }
 
     public class LoginModel
