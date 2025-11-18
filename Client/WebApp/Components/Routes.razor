@@ -1,8 +1,16 @@
-﻿<CascadingAuthenticationState>
-    <Router AppAssembly="typeof(Program).Assembly" NotFoundPage="typeof(Pages.NotFound)">
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@rendermode InteractiveServer
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(Program).Assembly">
         <Found Context="routeData">
-            <RouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)"/>
-            <FocusOnNavigate RouteData="routeData" Selector="h1"/>
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
+            <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
         </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p role="alert">Sorry, there is nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
     </Router>
 </CascadingAuthenticationState>

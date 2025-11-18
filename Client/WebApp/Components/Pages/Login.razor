@@ -2,6 +2,7 @@
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Identity.Data
 @using Services
+@using WebApp.Authentication
 @inject AuthenticationStateProvider AuthProvider
 @inject NavigationManager navigationManager
 @using WebApp.DTOs.Authentication
@@ -42,7 +43,6 @@
         try
         {
             await ((AuthProvider)AuthProvider).LoginAsync(loginRequest);
-            //show success notification
 
             await Task.Delay(800);
             navigationManager.NavigateTo("/");
@@ -50,7 +50,6 @@
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
-            //handle failure
         }
     }
 
