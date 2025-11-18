@@ -50,4 +50,14 @@ public class User {
     {
         return password;
     }
+
+    public UserRole getRole()
+    {
+        return role;
+    }
+
+    public Long getId()
+    {
+        return id;
+    }
 }

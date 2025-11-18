@@ -36,8 +36,10 @@ public class AuthenticationService
 
             return new LoginResponseDto()
             {
+                Id = unchecked((int)(response.Id)),
                 Role = response.Role,
                 Name = response.Name,
+                Email = response.Email,
                 Success = true
             };
         }

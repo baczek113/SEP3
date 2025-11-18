@@ -25,15 +25,16 @@ namespace HireFire.Grpc {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "ChpQcm90by9hdXRoZW50aWNhdGlvbi5wcm90byIzCgxMb2dpblJlcXVlc3QS",
-            "DQoFZW1haWwYASABKAkSFAoMcGFzc3dvcmRIYXNoGAIgASgJIisKDUxvZ2lu",
-            "UmVzcG9uc2USDAoEcm9sZRgBIAEoCRIMCgRuYW1lGAIgASgJMj8KFUF1dGhl",
-            "bnRpY2F0aW9uU2VydmljZRImCgVMb2dpbhINLkxvZ2luUmVxdWVzdBoOLkxv",
-            "Z2luUmVzcG9uc2VCEKoCDUhpcmVGaXJlLkdycGNiBnByb3RvMw=="));
+            "DQoFZW1haWwYASABKAkSFAoMcGFzc3dvcmRIYXNoGAIgASgJIkYKDUxvZ2lu",
+            "UmVzcG9uc2USCgoCaWQYASABKAMSDAoEcm9sZRgCIAEoCRIMCgRuYW1lGAMg",
+            "ASgJEg0KBWVtYWlsGAQgASgJMj8KFUF1dGhlbnRpY2F0aW9uU2VydmljZRIm",
+            "CgVMb2dpbhINLkxvZ2luUmVxdWVzdBoOLkxvZ2luUmVzcG9uc2VCEKoCDUhp",
+            "cmVGaXJlLkdycGNiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.LoginRequest), global::HireFire.Grpc.LoginRequest.Parser, new[]{ "Email", "PasswordHash" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.LoginResponse), global::HireFire.Grpc.LoginResponse.Parser, new[]{ "Role", "Name" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.LoginResponse), global::HireFire.Grpc.LoginResponse.Parser, new[]{ "Id", "Role", "Name", "Email" }, null, null, null, null)
           }));
     }
     #endregion
@@ -302,8 +303,10 @@ namespace HireFire.Grpc {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public LoginResponse(LoginResponse other) : this() {
+      id_ = other.id_;
       role_ = other.role_;
       name_ = other.name_;
+      email_ = other.email_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -313,8 +316,20 @@ namespace HireFire.Grpc {
       return new LoginResponse(this);
     }
 
+    /// <summary>Field number for the "id" field.</summary>
+    public const int IdFieldNumber = 1;
+    private long id_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long Id {
+      get { return id_; }
+      set {
+        id_ = value;
+      }
+    }
+
     /// <summary>Field number for the "role" field.</summary>
-    public const int RoleFieldNumber = 1;
+    public const int RoleFieldNumber = 2;
     private string role_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -326,7 +341,7 @@ namespace HireFire.Grpc {
     }
 
     /// <summary>Field number for the "name" field.</summary>
-    public const int NameFieldNumber = 2;
+    public const int NameFieldNumber = 3;
     private string name_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -334,6 +349,18 @@ namespace HireFire.Grpc {
       get { return name_; }
       set {
         name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "email" field.</summary>
+    public const int EmailFieldNumber = 4;
+    private string email_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Email {
+      get { return email_; }
+      set {
+        email_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -352,8 +379,10 @@ namespace HireFire.Grpc {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (Id != other.Id) return false;
       if (Role != other.Role) return false;
       if (Name != other.Name) return false;
+      if (Email != other.Email) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -361,8 +390,10 @@ namespace HireFire.Grpc {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
+      if (Id != 0L) hash ^= Id.GetHashCode();
       if (Role.Length != 0) hash ^= Role.GetHashCode();
       if (Name.Length != 0) hash ^= Name.GetHashCode();
+      if (Email.Length != 0) hash ^= Email.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -381,13 +412,21 @@ namespace HireFire.Grpc {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
+      if (Id != 0L) {
+        output.WriteRawTag(8);
+        output.WriteInt64(Id);
+      }
       if (Role.Length != 0) {
-        output.WriteRawTag(10);
+        output.WriteRawTag(18);
         output.WriteString(Role);
       }
       if (Name.Length != 0) {
-        output.WriteRawTag(18);
+        output.WriteRawTag(26);
         output.WriteString(Name);
+      }
+      if (Email.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(Email);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -399,13 +438,21 @@ namespace HireFire.Grpc {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Id != 0L) {
+        output.WriteRawTag(8);
+        output.WriteInt64(Id);
+      }
       if (Role.Length != 0) {
-        output.WriteRawTag(10);
+        output.WriteRawTag(18);
         output.WriteString(Role);
       }
       if (Name.Length != 0) {
-        output.WriteRawTag(18);
+        output.WriteRawTag(26);
         output.WriteString(Name);
+      }
+      if (Email.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(Email);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -417,11 +464,17 @@ namespace HireFire.Grpc {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
+      if (Id != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(Id);
+      }
       if (Role.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Role);
       }
       if (Name.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+      }
+      if (Email.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Email);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -435,11 +488,17 @@ namespace HireFire.Grpc {
       if (other == null) {
         return;
       }
+      if (other.Id != 0L) {
+        Id = other.Id;
+      }
       if (other.Role.Length != 0) {
         Role = other.Role;
       }
       if (other.Name.Length != 0) {
         Name = other.Name;
+      }
+      if (other.Email.Length != 0) {
+        Email = other.Email;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -456,12 +515,20 @@ namespace HireFire.Grpc {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 10: {
-            Role = input.ReadString();
+          case 8: {
+            Id = input.ReadInt64();
             break;
           }
           case 18: {
+            Role = input.ReadString();
+            break;
+          }
+          case 26: {
             Name = input.ReadString();
+            break;
+          }
+          case 34: {
+            Email = input.ReadString();
             break;
           }
         }
@@ -479,12 +546,20 @@ namespace HireFire.Grpc {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
-          case 10: {
-            Role = input.ReadString();
+          case 8: {
+            Id = input.ReadInt64();
             break;
           }
           case 18: {
+            Role = input.ReadString();
+            break;
+          }
+          case 26: {
             Name = input.ReadString();
+            break;
+          }
+          case 34: {
+            Email = input.ReadString();
             break;
           }
         }

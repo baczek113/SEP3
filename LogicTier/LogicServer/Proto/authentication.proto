@@ -12,6 +12,8 @@ message LoginRequest {
 }
 
 message LoginResponse {
-  string role = 1;
-  string name = 2;
+  int64 id = 1;
+  string role = 2;
+  string name = 3;
+  string email = 4;
 }

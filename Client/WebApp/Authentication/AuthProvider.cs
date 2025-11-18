@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using System.Text.Json;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.JSInterop;
 using Services;
 using WebApp.DTOs.Authentication;
 
@@ -9,11 +10,12 @@ namespace WebApp.Authentication
     public class AuthProvider : AuthenticationStateProvider
     {
         private readonly HttpClient client;
-        private ClaimsPrincipal currentClaimsPrincipal = new(new ClaimsIdentity());
+        private readonly IJSRuntime jsRuntime;
 
-        public AuthProvider(HttpClient client)
+        public AuthProvider(HttpClient client, IJSRuntime jsRuntime)
         {
             this.client = client;
+            this.jsRuntime = jsRuntime;
         }
 
         public async Task LoginAsync(LoginRequestDto request)
@@ -31,28 +33,55 @@ namespace WebApp.Authentication
                 throw new Exception("Incorrect credentials");
             }
 
+            string serialisedData = JsonSerializer.Serialize(loginResponseDto); 
+            await jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "currentUser", serialisedData);
+            
             List<Claim> claims = new List<Claim>()
             {
                 new(ClaimTypes.Name, loginResponseDto.Name),
                 new("Role",  loginResponseDto.Role),
-                new("Email", request.Email)
+                new("Email", loginResponseDto.Email),
+                new(ClaimTypes.NameIdentifier, loginResponseDto.Id.ToString())
             };
 
             ClaimsIdentity identity = new ClaimsIdentity(claims, "apiauth");
-
-            currentClaimsPrincipal = new ClaimsPrincipal(identity);
-            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(currentClaimsPrincipal)));
+            ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity); 
+            NotifyAuthenticationStateChanged( Task.FromResult(new AuthenticationState(claimsPrincipal)) );
         }
 
-        public override Task<AuthenticationState> GetAuthenticationStateAsync()
+        public async override Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            return Task.FromResult(new AuthenticationState(currentClaimsPrincipal));
+            string userAsJson = "";
+            try
+            {
+                userAsJson = await jsRuntime.InvokeAsync<string>("sessionStorage.getItem", "currentUser");
+            }
+            catch (InvalidOperationException e)
+            {
+                return new AuthenticationState(new());
+            }
+
+            if (string.IsNullOrEmpty(userAsJson))
+            {
+                return new AuthenticationState(new());
+            } 
+            LoginResponseDto loginResponseDto = JsonSerializer.Deserialize<LoginResponseDto>(userAsJson)!;
+            List<Claim> claims = new List<Claim>()
+            {
+                new(ClaimTypes.Name, loginResponseDto.Name),
+                new("Role",  loginResponseDto.Role),
+                new("Email", loginResponseDto.Email),
+                new(ClaimTypes.NameIdentifier, loginResponseDto.Id.ToString())
+            }; 
+            ClaimsIdentity identity = new ClaimsIdentity(claims, "apiauth"); 
+            ClaimsPrincipal claimsPrincipal = new ClaimsPrincipal(identity); 
+            return new AuthenticationState(claimsPrincipal);
         }
 
-        public void Logout()
+        public async void LogoutAsync()
         {
-            currentClaimsPrincipal = new(new ClaimsIdentity());
-            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(currentClaimsPrincipal)));
+            await jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "currentUser", ""); 
+            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(new())));
         }
     }
 }

@@ -34,6 +34,8 @@ public class AuthenticationService extends AuthenticationServiceGrpc.Authenticat
             LoginResponse response = LoginResponse.newBuilder()
                     .setRole(user.getRole().name())
                     .setName(user.getName())
+                    .setId(user.getId())
+                    .setEmail(user.getEmail())
                     .build();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
