@@ -45,4 +45,19 @@ public class User {
     {
         return email;
     }
+
+    public String getPassword()
+    {
+        return password;
+    }
+
+    public UserRole getRole()
+    {
+        return role;
+    }
+
+    public Long getId()
+    {
+        return id;
+    }
 }

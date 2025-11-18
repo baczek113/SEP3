@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option csharp_namespace = "HireFire.Grpc";
+
+service AuthenticationService {
+  rpc Login (LoginRequest) returns (LoginResponse);
+}
+
+message LoginRequest {
+  string email = 1;
+  string passwordHash = 2;
+}
+
+message LoginResponse {
+  int64 id = 1;
+  string role = 2;
+  string name = 3;
+  string email = 4;
+}

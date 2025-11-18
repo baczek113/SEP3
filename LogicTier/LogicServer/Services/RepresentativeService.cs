@@ -19,7 +19,7 @@ public class RepresentativeService
         using var channel = GrpcChannel.ForAddress(_grpcAddress);
         var client = new HireFire.Grpc.RepresentativeService.RepresentativeServiceClient(channel);
 
-        var passwordHash = HashPassword(dto.Password);
+        var passwordHash = AuthenticationService.HashPassword(dto.Password);
 
         var request = new CreateRepRequest
         {
@@ -38,11 +38,5 @@ public class RepresentativeService
             Email = reply.Email,
             Position = reply.Position
         };
-    }
-    private static string HashPassword(string password)
-    {
-        using var sha256 = SHA256.Create();
-        var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-        return BitConverter.ToString(bytes).Replace("-", "").ToLowerInvariant();
     }
 }

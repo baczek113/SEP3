@@ -1,17 +1,19 @@
+using Microsoft.AspNetCore.Components.Authorization;
+using WebApp.Authentication;
 using WebApp.Components;
 using WebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5177") });
 builder.Services.AddScoped<HttpCompanyRepresentativeService>();
 builder.Services.AddScoped<HttpApplicantService>();
 builder.Services.AddScoped<HttpCompanyService>();
+builder.Services.AddScoped<AuthenticationStateProvider, AuthProvider>();
     
 var app = builder.Build();
 
@@ -23,7 +25,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseStatusCodePagesWithReExecute("/not-found", createScopeForErrors: true);
+app.UseStatusCodePagesWithReExecute("/not-found");
 
 app.UseHttpsRedirection();
 
