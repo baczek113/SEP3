@@ -1,11 +1,11 @@
 ﻿namespace LogicServer.DTOs.Applicant;
 
-public class CreateApplicantDto
+public class ApplicantDto
 {
+    public long Id { get; set; }
+
     public string Name { get; set; } = null!;
     public string Email { get; set; } = null!;
-    public string Password { get; set; } = null!;
-
     public string Experience { get; set; } = null!;
 
     public string City { get; set; } = null!;

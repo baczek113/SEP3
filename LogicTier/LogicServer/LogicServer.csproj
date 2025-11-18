@@ -15,6 +15,7 @@
     <ItemGroup>
         <Protobuf Include="Proto\hirefire.proto" GrpcServices="Client" OutputDir="GeneratedGrpc\" />
         <Protobuf Include="Proto\applicant.proto" GrpcServices="Client" OutputDir="GeneratedGrpc\" />
+        <Protobuf Include="Proto\company.proto" GrpcServices="Client" />
     </ItemGroup>
     <ItemGroup>
       <Folder Include="GeneratedGrpc\" />

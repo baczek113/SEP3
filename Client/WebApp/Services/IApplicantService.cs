@@ -1,6 +1,6 @@
 ﻿using WebApp.DTOs.Applicant;
 
-namespace Services;
+namespace WebApp.Services;
 
 public interface IApplicantService
 {

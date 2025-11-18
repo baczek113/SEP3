@@ -19,11 +19,6 @@ CREATE TABLE users (
                        name      VARCHAR(120) NOT NULL
 );
 
--- ---------- SUBTYPES (is-a User) ----------
-CREATE TABLE admin (
-                       user_id   BIGINT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE
-);
-
 CREATE TABLE company_representative (
                                         user_id   BIGINT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
                                         position  VARCHAR(120)
@@ -57,7 +52,6 @@ CREATE TABLE company (
                          website     VARCHAR(255),
                          is_approved BOOLEAN NOT NULL DEFAULT FALSE,
                          cr_id       BIGINT REFERENCES company_representative(user_id) ON DELETE SET NULL,
-                         approved_by BIGINT REFERENCES admin(user_id) ON DELETE SET NULL,
                          location_id BIGINT REFERENCES location(id) ON DELETE SET NULL
 );
 

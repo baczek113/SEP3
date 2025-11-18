@@ -1,7 +1,7 @@
 using DTOs;
 using WebApp.DTOs.CompanyRepresentative;
 
-namespace Services;
+namespace WebApp.Services;
 
 public interface ICompanyRepresentativeService
 {

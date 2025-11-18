@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using WebApp.DTOs.Applicant;
 
-namespace Services;
+namespace WebApp.Services;
 
 public class HttpApplicantService: IApplicantService
 {

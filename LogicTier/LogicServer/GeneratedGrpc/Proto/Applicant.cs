@@ -43,9 +43,8 @@ namespace HireFire.Grpc {
             "UlQQBTKbAQoQQXBwbGljYW50U2VydmljZRI+Cg9DcmVhdGVBcHBsaWNhbnQS",
             "Fy5DcmVhdGVBcHBsaWNhbnRSZXF1ZXN0GhIuQXBwbGljYW50UmVzcG9uc2US",
             "RwoRQWRkQXBwbGljYW50U2tpbGwSGS5BZGRBcHBsaWNhbnRTa2lsbFJlcXVl",
-            "c3QaFy5BcHBsaWNhbnRTa2lsbFJlc3BvbnNlQjgKJGNvbS5leGFtcGxlLmRh",
-            "dGFiYXNlc2VydmVyLmdlbmVyYXRlZFABqgINSGlyZUZpcmUuR3JwY2IGcHJv",
-            "dG8z"));
+            "c3QaFy5BcHBsaWNhbnRTa2lsbFJlc3BvbnNlQhCqAg1IaXJlRmlyZS5HcnBj",
+            "YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::HireFire.Grpc.SkillLevelProto), }, null, new pbr::GeneratedClrTypeInfo[] {
