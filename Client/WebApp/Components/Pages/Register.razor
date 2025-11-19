@@ -195,6 +195,13 @@
         {
             await HttpCompanyRepresentativeService.AddCompanyRepresentativeAsync(representativeProfile);
             ShowNotification("Company representative account created successfully!", "success");
+            
+            ShowNotification(message: "Company representative account created successfully!", type: "success");
+
+            await Task.Delay(800);
+
+            
+            Nav.NavigateTo($"/login");
         }
         catch
         {

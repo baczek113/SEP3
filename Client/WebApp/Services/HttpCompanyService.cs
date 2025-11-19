@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Microsoft.AspNetCore.Http.Json;
 using WebApp.DTOs.Company;
 
 namespace WebApp.Services;
@@ -21,5 +22,16 @@ public class HttpCompanyService: ICompanyService
             throw new Exception(response);
         }
         return JsonSerializer.Deserialize<CompanyDto>(response, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
+    }
+
+    public async Task<List<CompanyDto>> GetMyCompaniesAsync(long representativeId)
+    {
+        var httpResponse = await client.GetAsync($"api/company/by-representative/{representativeId}");
+        var response = await httpResponse.Content.ReadAsStringAsync();
+
+        if (!httpResponse.IsSuccessStatusCode)
+            throw new Exception(response);
+
+        return JsonSerializer.Deserialize<List<CompanyDto>>(response, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
     }
 }

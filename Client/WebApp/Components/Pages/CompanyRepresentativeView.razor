@@ -1,0 +1,116 @@
+﻿@page "/company-representative/dashboard"
+@layout MainLayout
+@rendermode InteractiveServer
+
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@using WebApp.DTOs.Company
+@using WebApp.Services
+
+@inject HttpCompanyService CompanyService
+@inject NavigationManager Nav
+
+}
+<AuthorizeView Roles="company_representative">
+    <Authorized Context="_">
+        <div class="dash-shell">
+            <div class="dash-card">
+                <div class="dash-header">
+                    <div class="dash-title">
+                        <h2>Hello @userName</h2>
+                        <p>Here are the companies you have registered on HireFire.</p>
+                    </div>
+
+                    <a href="/register-company" class="primary-btn dash-register-btn">
+                        Register Company
+                    </a>
+                </div>
+
+                <div class="dash-content">
+                    @if (isLoading)
+                    {
+                        <div class="dash-loading">
+                            Loading your companies...
+                        </div>
+                    }
+                    else if (companies is null || companies.Count == 0)
+                    {
+                        <div class="dash-empty">
+                            <h4>No companies registered yet</h4>
+                            <p>Start by creating your first company profile.</p>
+                            <a href="/register-company" class="primary-btn dash-register-btn">
+                                Register Company
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="company-list">
+                            @foreach (var company in companies)
+                            {
+                                <div class="company-card">
+                                    <div class="company-card-header">
+                                        <h3>@company.Name</h3>
+                                        @if (!string.IsNullOrWhiteSpace(company.City))
+                                        {
+                                            <span class="company-location">@company.City @company.Postcode</span>
+                                        }
+                                    </div>
+
+                                    @if (!string.IsNullOrWhiteSpace(company.Description))
+                                    {
+                                        <p class="company-description">@company.Description</p>
+                                    }
+
+                                    <div class="company-meta">
+                                        @if (!string.IsNullOrWhiteSpace(company.Website))
+                                        {
+                                            <a href="@company.Website" target="_blank" rel="noopener noreferrer">
+                                                Visit website
+                                            </a>
+                                        }
+
+                                        <span class="company-status @(company.IsApproved ? "approved" : "pending")">
+                                            @(company.IsApproved ? "Approved" : "Pending approval")
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>You must be logged in as a company representative to view this page.</p>
+        <a href="/login">Go to login</a>
+    </NotAuthorized>
+</AuthorizeView>
+@code {
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
+
+    private string userName = "there";
+    private long representativeId;
+    private List<CompanyDto> companies = new();
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateTask;
+        var user = authState.User;
+
+        userName = user.Identity?.Name ?? "there";
+
+        var idClaim = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        long.TryParse(idClaim, out representativeId);
+
+        if (representativeId > 0)
+        {
+            companies = await CompanyService.GetMyCompaniesAsync(representativeId);
+        }
+
+        isLoading = false;
+    }
+    
+}
