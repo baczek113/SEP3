@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+option java_package = "com.example.databaseserver.generated";
+option java_multiple_files = true;
+option csharp_namespace = "HireFire.Grpc";
+
+service RecruiterService {
+
+  rpc RegisterRecruiter (RegisterRecruiterRequest) returns (RecruiterResponse);
+
+  rpc GetRecruitersForCompany (GetRecruitersForCompanyRequest)
+      returns (GetRecruitersForCompanyResponse);
+}
+
+message RegisterRecruiterRequest {
+  string email    = 1;
+  string password = 2;
+  string name     = 3;
+  string position = 4;
+  int64 hired_by_representative_id = 5;
+  int64 works_in_company_id = 6;
+}
+
+message RecruiterResponse {
+  int64 id                 = 1;
+  string email             = 2;
+  string name              = 3;
+  string position          = 4;
+  int64 hired_by_id        = 5;
+  int64 works_in_company_id = 6;
+}
+
+message GetRecruitersForCompanyRequest {
+  int64 company_id = 1;
+}
+
+message GetRecruitersForCompanyResponse {
+  repeated RecruiterResponse recruiters = 1;
+}
