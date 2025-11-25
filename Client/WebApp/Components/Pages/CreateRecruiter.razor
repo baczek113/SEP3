@@ -1,0 +1,151 @@
+﻿@page "/company/{CompanyId:long}/register-recruiter"
+@layout MainLayout
+@using System.Security.Claims
+
+@using WebApp.DTOs.Recruiter
+@using WebApp.Services
+
+@inject HttpRecruiterService HttpRecruiterService
+@inject NavigationManager Nav
+@inject AuthenticationStateProvider AuthStateProvider
+
+@rendermode InteractiveServer
+
+<AuthorizeView Roles="company_representative">
+    <Authorized Context="_">
+        <div class="register-shell">
+            <div class="register-card">
+                <div class="register-header">
+                    <h2>Create Recruiter Account</h2>
+                    <p>
+                        Add a recruiter who will be able to post jobs and talk
+                        to applicants on behalf of this company.
+                    </p>
+                </div>
+
+                <div class="register-form-area">
+                    <EditForm Model="@recruiterProfile" OnValidSubmit="HandleRecruiterSubmit">
+                        <DataAnnotationsValidator/>
+
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label for="r-name">Full name</label>
+                                <InputText id="r-name" class="form-control" @bind-Value="recruiterProfile.Name"/>
+                                <ValidationMessage For="@(() => recruiterProfile.Name)" class="validation-message"/>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="r-email">Work email</label>
+                                <InputText id="r-email" class="form-control" @bind-Value="recruiterProfile.Email"/>
+                                <ValidationMessage For="@(() => recruiterProfile.Email)" class="validation-message"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="r-password">Password</label>
+                                <InputText id="r-password" type="password" class="form-control"
+                                           @bind-Value="recruiterProfile.Password"/>
+                                <ValidationMessage For="@(() => recruiterProfile.Password)" class="validation-message"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="r-password-confirm">Confirm password</label>
+                                <InputText id="r-password-confirm" type="password" class="form-control"
+                                           @bind-Value="confirmPassword"/>
+                                @if (!string.IsNullOrEmpty(passwordError))
+                                {
+                                    <span class="validation-message">@passwordError</span>
+                                }
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="r-position">Position / title</label>
+                                <InputText id="r-position" class="form-control" @bind-Value="recruiterProfile.Position"/>
+                                <ValidationMessage For="@(() => recruiterProfile.Position)" class="validation-message"/>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="submit-btn primary-btn">
+                            Create recruiter account
+                        </button>
+                    </EditForm>
+
+                    <div class="@($"notification-container {(notificationVisible ? "show" : "")}")">
+                        <div class="@($"notification {notificationType}")">
+                            @notificationMessage
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>You must be logged in as a company representative to create a recruiter.</p>
+        <a href="/login">Go to login</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    [Parameter] public long CompanyId { get; set; }
+
+    private CreateRecruiterDto recruiterProfile = new();
+    private string confirmPassword = string.Empty;
+    private string? passwordError;
+
+    private bool notificationVisible = false;
+    private string notificationMessage = string.Empty;
+    private string notificationType = string.Empty;
+
+    private async Task HandleRecruiterSubmit()
+    {
+        passwordError = null;
+
+        if (recruiterProfile.Password != confirmPassword)
+        {
+            passwordError = "Passwords do not match.";
+            return;
+        }
+
+        try
+        {
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            var idClaim = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!long.TryParse(idClaim, out var representativeId))
+            {
+                ShowNotification("You must be logged in as a company representative to create a recruiter.", "error");
+                Nav.NavigateTo("/login");
+                return;
+            }
+
+            recruiterProfile.HiredByRepresentativeId = representativeId;
+            recruiterProfile.WorksInCompanyId = CompanyId;
+
+            var created = await HttpRecruiterService.AddRecruiter(recruiterProfile);
+
+            ShowNotification("Recruiter account created successfully!", "success");
+
+            await Task.Delay(800);
+            Nav.NavigateTo($"/company/{CompanyId}");
+        }
+        catch (Exception ex)
+        {
+            ShowNotification($"Failed to create recruiter: {ex.Message}", "error");
+        }
+
+    }
+
+    private void ShowNotification(string message, string type)
+    {
+        notificationMessage = message;
+        notificationType = type;
+        notificationVisible = true;
+
+        _ = Task.Delay(3000).ContinueWith(_ =>
+        {
+            notificationVisible = false;
+            InvokeAsync(StateHasChanged);
+        });
+    }
+}

@@ -48,7 +48,11 @@
                         <div class="company-list">
                             @foreach (var company in companies)
                             {
-                                <div class="company-card">
+                                <div class="company-card"
+                                     @onclick="@(() => NavigateToCompany(company.Id))"
+                                     style="cursor: pointer;">
+
+
                                     <div class="company-card-header">
                                         <h3>@company.Name</h3>
                                         @if (!string.IsNullOrWhiteSpace(company.City))
@@ -77,6 +81,7 @@
                                 </div>
                             }
                         </div>
+
                     }
                 </div>
             </div>
@@ -112,5 +117,10 @@
 
         isLoading = false;
     }
+    private void NavigateToCompany(long id)
+    {
+        Nav.NavigateTo($"/company/{id}");
+    }
+
     
 }

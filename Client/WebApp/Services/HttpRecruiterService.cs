@@ -16,10 +16,11 @@ public class HttpRecruiterService : IRecruiterService
     {
         HttpResponseMessage httpResponse = await client.PostAsJsonAsync("api/Recruiter", request);
         string response = await httpResponse.Content.ReadAsStringAsync();
-
+    
         if (!httpResponse.IsSuccessStatusCode)
         {
-            throw new Exception(response);
+            throw new Exception($"Status {httpResponse.StatusCode}: {response}");
+            
         }
 
         return JsonSerializer.Deserialize<RecruiterDto>(response, 

@@ -1,5 +1,169 @@
-﻿<h3>CompanyView</h3>
+﻿@page "/company/{CompanyId:long}"
+@layout MainLayout
+@rendermode InteractiveServer
+
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@using WebApp.DTOs.Company
+@using WebApp.DTOs.Recruiter
+@using WebApp.Services
+
+@inject AuthenticationStateProvider AuthStateProvider
+@inject HttpCompanyService CompanyService
+@inject HttpRecruiterService RecruiterService
+@inject NavigationManager Nav
+
+<AuthorizeView Roles="company_representative">
+    <Authorized>
+        <div class="dash-shell">
+            <div class="dash-card company-detail-card">
+                <!-- HEADER -->
+                <div class="company-detail-header">
+                    <div class="company-detail-title">
+                        <span class="company-detail-label">Company profile</span>
+                        <h2>@(company?.Name ?? "Your company")</h2>
+
+                        @if (!string.IsNullOrWhiteSpace(company?.City))
+                        {
+                            <p class="company-detail-location">
+                                @company.City @company.Postcode
+                            </p>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(company?.Description))
+                        {
+                            <p class="company-detail-description">
+                                @company.Description
+                            </p>
+                        }
+
+                        <div class="company-detail-meta">
+                            @if (!string.IsNullOrWhiteSpace(company?.Website))
+                            {
+                                <a href="@company.Website" target="_blank" rel="noopener noreferrer">
+                                    Visit website
+                                </a>
+                            }
+
+                            @if (company is not null)
+                            {
+                                <span class="company-status @(company.IsApproved ? "approved" : "pending")">
+                                    @(company.IsApproved ? "Approved" : "Pending approval")
+                                </span>
+                            }
+                        </div>
+                    </div>
+
+                    <a href="@($"/company/{CompanyId}/register-recruiter")"
+                       class="primary-btn dash-register-btn">
+                        Create recruiter account
+                    </a>
+                </div>
+
+                <!-- CONTENT -->
+                <div class="company-detail-content">
+                    @if (isLoading)
+                    {
+                        <div class="dash-loading">
+                            Loading company details...
+                        </div>
+                    }
+                    else if (company is null)
+                    {
+                        <div class="dash-empty">
+                            <h4>Company not found</h4>
+                            <p>Please go back to your dashboard and select a valid company.</p>
+                            <a href="/company-representative/dashboard" class="primary-btn dash-register-btn">
+                                Back to dashboard
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <!-- Recruiters section -->
+                        <div class="recruiter-section">
+                            <div class="recruiter-header">
+                                <h3>Recruiters for this company</h3>
+                                <p>Manage people who can post jobs and talk to applicants on behalf of this company.</p>
+                            </div>
+
+                            @if (recruiters is null || recruiters.Count == 0)
+                            {
+                                <div class="dash-empty recruiters-empty">
+                                    <h4>No recruiters yet</h4>
+                                    <p>Create the first recruiter account to start posting job listings.</p>
+                                    <a href="@($"/company/{CompanyId}/register-recruiter")"
+                                       class="primary-btn dash-register-btn">
+                                        Create recruiter account
+                                    </a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="recruiter-list">
+                                    @foreach (var r in recruiters)
+                                    {
+                                        <div class="recruiter-card">
+                                            <div class="recruiter-main">
+                                                <h4>@r.Name</h4>
+                                                <p class="recruiter-position">
+                                                    @(string.IsNullOrWhiteSpace(r.Position) ? "Recruiter" : r.Position)
+                                                </p>
+                                            </div>
+                                            <div class="recruiter-meta">
+                                                <span class="recruiter-email">@r.Email</span>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>You must be logged in as a company representative to view this page.</p>
+        <a href="/login">Go to login</a>
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
-    
+    [Parameter] public long CompanyId { get; set; }
+
+    private CompanyDto? company;
+    private List<RecruiterDto> recruiters = new();
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+
+        try
+        {
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+            var idClaim = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (long.TryParse(idClaim, out var representativeId) && representativeId > 0)
+            {
+                
+                var myCompanies = await CompanyService.GetMyCompaniesAsync(representativeId);
+
+                
+                company = myCompanies.FirstOrDefault(c => c.Id == CompanyId);
+            }
+
+            
+            recruiters = await RecruiterService.GetRecruitersForCompanyAsync(CompanyId);
+        }
+        catch
+        {
+            
+        }
+
+        isLoading = false;
+    }
 }
+

@@ -13,6 +13,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://
 builder.Services.AddScoped<HttpCompanyRepresentativeService>();
 builder.Services.AddScoped<HttpApplicantService>();
 builder.Services.AddScoped<HttpCompanyService>();
+builder.Services.AddScoped<HttpRecruiterService>();
 builder.Services.AddScoped<AuthenticationStateProvider, AuthProvider>();
 
 builder.Services.AddAuthentication("Cookies").AddCookie();
