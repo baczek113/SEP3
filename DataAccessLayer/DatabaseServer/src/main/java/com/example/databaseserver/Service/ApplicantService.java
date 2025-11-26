@@ -1,15 +1,25 @@
 package com.example.databaseserver.Service;
 
-import com.example.databaseserver.Entities.*;
 import com.example.databaseserver.Entities.Applicant;
-import com.example.databaseserver.Repositories.ApplicantRepository;
-import com.example.databaseserver.Repositories.ApplicantSkillRepository;
-import com.example.databaseserver.Repositories.LocationRepository;
-import com.example.databaseserver.Repositories.SkillRepository;
-import com.example.databaseserver.generated.*;
+import com.example.databaseserver.Entities.User;
+import com.example.databaseserver.Entities.Location;
+import com.example.databaseserver.Entities.ApplicantSkill;
+import com.example.databaseserver.Entities.Skill;
+import com.example.databaseserver.Entities.SkillLevel;
+import com.example.databaseserver.Entities.UserRole;
+import com.example.databaseserver.Repositories.*;
+import com.example.databaseserver.generated.ApplicantServiceGrpc;
+import com.example.databaseserver.generated.CreateApplicantRequest;
+import com.example.databaseserver.generated.ApplicantResponse;
+import com.example.databaseserver.generated.AddApplicantSkillRequest;
+import com.example.databaseserver.generated.ApplicantSkillResponse;
+import com.example.databaseserver.generated.SkillLevelProto;
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import jakarta.transaction.Transactional;
 import net.devh.boot.grpc.server.service.GrpcService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @GrpcService
@@ -19,13 +29,15 @@ public class ApplicantService extends ApplicantServiceGrpc.ApplicantServiceImplB
     private final LocationRepository locationRepository;
     private final SkillRepository skillRepository;
     private final ApplicantSkillRepository applicantSkillRepository;
+    private final UserRepository userRepository;
+    private static final Logger log = LoggerFactory.getLogger(ApplicantService.class);
 
     @Autowired
-    public ApplicantService(ApplicantRepository applicantRepository,
-                            LocationRepository locationRepository, ApplicantSkillRepository applicantSkillRepository, SkillRepository skillRepository) {
+    public ApplicantService(ApplicantRepository applicantRepository, LocationRepository locationRepository, ApplicantSkillRepository applicantSkillRepository, SkillRepository skillRepository, UserRepository userRepository) {
         this.applicantRepository = applicantRepository;
         this.locationRepository = locationRepository;
         this.applicantSkillRepository = applicantSkillRepository;
+        this.userRepository = userRepository;
         this.skillRepository = skillRepository;
     }
 
@@ -33,6 +45,15 @@ public class ApplicantService extends ApplicantServiceGrpc.ApplicantServiceImplB
     @Transactional
     public void createApplicant(CreateApplicantRequest request,
                                 StreamObserver<ApplicantResponse> responseObserver) {
+        if (userRepository.existsByEmail(request.getEmail())) {
+            log.warn("Blocked duplicate registration attempt for email: {} | APPLICANT", request.getEmail());
+            responseObserver.onError(
+                    Status.ALREADY_EXISTS
+                            .withDescription("Email already in use: " + request.getEmail())
+                            .asRuntimeException()
+            );
+            return;
+        }
         try {
             User user = new User(
                     request.getEmail(),
@@ -80,8 +101,11 @@ public class ApplicantService extends ApplicantServiceGrpc.ApplicantServiceImplB
 
             responseObserver.onNext(response);
             responseObserver.onCompleted();
-        } catch (Exception e) {
-            responseObserver.onError(e);
+        }
+        catch (Exception e) {
+            responseObserver.onError(Status.INTERNAL
+                    .withDescription("Error creating applicant: " + e.getMessage())
+                    .asRuntimeException());
         }
     }
     @Override
