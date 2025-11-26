@@ -1,0 +1,161 @@
+﻿@page "/create-job-listing"
+@layout MainLayout
+@using System.Security.Claims
+@using WebApp.DTOs.Job
+@using WebApp.Services
+
+@inject HttpJobListingService HttpJobListingService
+@inject HttpRecruiterService HttpRecruiterService
+@inject NavigationManager Nav
+@inject AuthenticationStateProvider AuthStateProvider
+
+@rendermode InteractiveServer
+
+<AuthorizeView Roles="recruiter">
+    <Authorized Context="_">
+        <div class="register-shell">
+            <div class="register-card">
+                <div class="register-header">
+                    <h2>Create Job Listing</h2>
+                    <p>
+                        Provide the details of your open position so candidates
+                        can discover your opportunity on HireFire.
+                    </p>
+                </div>
+
+                <div class="register-form-area">
+                    <EditForm Model="@jobListing" OnValidSubmit="HandleJobListingSubmit">
+                        <DataAnnotationsValidator/>
+
+                        <div class="form-grid">
+
+                            <div class="form-group full-width">
+                                <label for="j-title">Job Title</label>
+                                <InputText id="j-title" class="form-control" @bind-Value="jobListing.Title"/>
+                                <ValidationMessage For="@(() => jobListing.Title)" class="validation-message"/>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="j-description">Description</label>
+                                <InputTextArea id="j-description" class="form-control" @bind-Value="jobListing.Description"/>
+                                <ValidationMessage For="@(() => jobListing.Description)" class="validation-message"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="j-salary">Salary (optional)</label>
+                                <InputNumber id="j-salary" class="form-control" @bind-Value="jobListing.Salary"/>
+                                <ValidationMessage For="@(() => jobListing.Salary)" class="validation-message"/>
+                            </div>
+
+                            <!-- LOCATION -->
+                            <div class="form-group">
+                                <label for="j-city">City</label>
+                                <InputText id="j-city" class="form-control" @bind-Value="jobListing.City"/>
+                                <ValidationMessage For="@(() => jobListing.City)" class="validation-message"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="j-postcode">Postcode</label>
+                                <InputText id="j-postcode" class="form-control" @bind-Value="jobListing.Postcode"/>
+                                <ValidationMessage For="@(() => jobListing.Postcode)" class="validation-message"/>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="j-address">Address</label>
+                                <InputText id="j-address" class="form-control" @bind-Value="jobListing.Address"/>
+                                <ValidationMessage For="@(() => jobListing.Address)" class="validation-message"/>
+                            </div>
+
+                        </div>
+
+                        <button type="submit" class="submit-btn primary-btn" disabled="@isSubmitting">
+                            @(isSubmitting ? "Creating..." : "Create Job Listing")
+                        </button>
+                    </EditForm>
+
+                    <div class="@($"notification-container {(notificationVisible ? "show" : "")}")">
+                        <div class="@($"notification {notificationType}")">
+                            @notificationMessage
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </Authorized>
+
+    <NotAuthorized>
+        <p>You must be logged in as a recruiter to create a job listing.</p>
+        <a href="/login">Go to login</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private CreateJobListingDto jobListing = new();
+
+    private bool notificationVisible = false;
+    private string notificationMessage = string.Empty;
+    private string notificationType = string.Empty;
+    private bool isSubmitting = false;
+
+    private async Task HandleJobListingSubmit()
+    {
+        try
+        {
+            isSubmitting = true;
+
+            // 🔹 IDENTYCZNIE jak w register-company:
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            var idClaim = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!long.TryParse(idClaim, out var recruiterId))
+            {
+                ShowNotification("You must be logged in as a recruiter to create a job listing.", "error");
+                Nav.NavigateTo("/login");
+                return;
+            }
+
+            // 🔹 POBRANIE REKRUTERA, ŻEBY USTAWIĆ COMPANY ID
+            var recruiter = await HttpRecruiterService.GetRecruiterByIdAsync(recruiterId);
+
+            if (recruiter == null || recruiter.WorksInCompanyId == 0)
+            {
+                ShowNotification("You must be assigned to a company before creating job listings.", "error");
+                return;
+            }
+
+            jobListing.PostedById = recruiterId;
+            jobListing.CompanyId = recruiter.WorksInCompanyId;
+
+            var created = await HttpJobListingService.AddJobListing(jobListing);
+
+            ShowNotification("Job listing created successfully!", "success");
+
+            await Task.Delay(800);
+            Nav.NavigateTo("/recruiter/dashboard");
+        }
+        catch(Exception ex)
+        {
+            ShowNotification(ex.Message, "error");
+
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    private void ShowNotification(string message, string type)
+    {
+        notificationMessage = message;
+        notificationType = type;
+        notificationVisible = true;
+
+        _ = Task.Delay(3000).ContinueWith(_ =>
+        {
+            notificationVisible = false;
+            InvokeAsync(StateHasChanged);
+        });
+    }
+}

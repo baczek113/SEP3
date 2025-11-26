@@ -10,11 +10,13 @@ service RecruiterService {
 
   rpc GetRecruitersForCompany (GetRecruitersForCompanyRequest)
       returns (GetRecruitersForCompanyResponse);
+
+  rpc GetRecruiterById (GetRecruiterByIdRequest) returns (RecruiterResponse);
 }
 
 message RegisterRecruiterRequest {
   string email    = 1;
-  string password = 2;
+  string password_hash = 2;
   string name     = 3;
   string position = 4;
   int64 hired_by_representative_id = 5;
@@ -36,4 +38,8 @@ message GetRecruitersForCompanyRequest {
 
 message GetRecruitersForCompanyResponse {
   repeated RecruiterResponse recruiters = 1;
+}
+
+message GetRecruiterByIdRequest {
+  int64 id = 1;
 }

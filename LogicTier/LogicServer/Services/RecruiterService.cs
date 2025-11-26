@@ -17,11 +17,12 @@ public class RecruiterService
     {
         using var channel = GrpcChannel.ForAddress(_grpcAddress);
         var client = new HireFire.Grpc.RecruiterService.RecruiterServiceClient(channel);
+        var passwordHash = AuthenticationService.HashPassword(dto.Password);
 
         var request = new RegisterRecruiterRequest
         {
             Email                    = dto.Email,
-            Password                 = dto.Password,
+            PasswordHash                = passwordHash,
             Name                     = dto.Name,
             Position                 = dto.Position ?? string.Empty,
             HiredByRepresentativeId  = dto.HiredByRepresentativeId,
@@ -65,4 +66,31 @@ public class RecruiterService
             })
             .ToList();
     }
+    public async Task<RecruiterDto?> GetByIdAsync(long recruiterId)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new HireFire.Grpc.RecruiterService.RecruiterServiceClient(channel);
+
+        var request = new GetRecruiterByIdRequest
+        {
+            Id = recruiterId
+        };
+
+        var reply = await client.GetRecruiterByIdAsync(request);
+
+        // recruiter not found → Java returns id = 0
+        if (reply.Id == 0)
+            return null;
+
+        return new RecruiterDto
+        {
+            Id = reply.Id,
+            Email = reply.Email,
+            Name = reply.Name,
+            Position = reply.Position,
+            HiredById = reply.HiredById,
+            WorksInCompanyId = reply.WorksInCompanyId
+        };
+    }
+
 }

@@ -1,4 +1,8 @@
-﻿@inherits LayoutComponentBase
+﻿@using WebApp.Authentication
+@inherits LayoutComponentBase
+@inject NavigationManager Nav
+@inject AuthProvider AuthState
+
 <div class="auth-shell">
     <header class="auth-header">
         <a href="/" class="auth-logo">
@@ -7,6 +11,10 @@
                 Hire<span>Fire</span>
             </span>
         </a>
+
+        <button class="logout-btn" @onclick="OnLogoutClicked">
+            Logout
+        </button>
     </header>
 
     <main class="auth-main">
@@ -27,3 +35,11 @@
         </div>
     </footer>
 </div>
+
+@code {
+    private async Task OnLogoutClicked()
+    {
+        await AuthState.LogoutAsync();
+        Nav.NavigateTo("/");
+    }
+}

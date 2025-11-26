@@ -77,7 +77,7 @@ namespace WebApp.Authentication
             return new AuthenticationState(claimsPrincipal);
         }
 
-        public async void LogoutAsync()
+        public async Task LogoutAsync()
         {
             await jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "currentUser", ""); 
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(new())));

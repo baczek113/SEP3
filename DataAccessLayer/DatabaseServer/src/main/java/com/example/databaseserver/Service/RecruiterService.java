@@ -43,7 +43,7 @@ public class RecruiterService extends RecruiterServiceGrpc.RecruiterServiceImplB
 
             User user = new User(
                     request.getEmail(),
-                    request.getPassword(),
+                    request.getPasswordHash(),
                     UserRole.recruiter,
                     request.getName()
             );
@@ -135,6 +135,53 @@ public class RecruiterService extends RecruiterServiceGrpc.RecruiterServiceImplB
             responseObserver.onError(e);
         }
     }
+    @Override
+    @Transactional
+    public void getRecruiterById(GetRecruiterByIdRequest request,
+                                 StreamObserver<RecruiterResponse> responseObserver) {
+
+        try {
+            Recruiter recruiter = recruiterRepository.findById(request.getId()).orElse(null);
+
+            if (recruiter == null) {
+                responseObserver.onNext(
+                        RecruiterResponse.newBuilder()
+                                .setId(0)
+                                .setEmail("")
+                                .setName("")
+                                .setPosition("")
+                                .setHiredById(0)
+                                .setWorksInCompanyId(0)
+                                .build()
+                );
+                responseObserver.onCompleted();
+                return;
+            }
+
+            long worksInCompanyId = recruiter.getWorksIn() != null
+                    ? recruiter.getWorksIn().getId()
+                    : 0;
+
+            RecruiterResponse response = RecruiterResponse.newBuilder()
+                    .setId(recruiter.getId())
+                    .setEmail(recruiter.getUser().getEmail()) // jeśli chcesz
+                    .setName(recruiter.getUser().getName())   // jeśli chcesz
+                    .setPosition(recruiter.getPosition() == null ? "" : recruiter.getPosition())
+                    .setHiredById(
+                            recruiter.getHiredBy() != null ? recruiter.getHiredBy().getId() : 0
+                    )
+                    .setWorksInCompanyId(worksInCompanyId)
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
+        catch (Exception e) {
+            responseObserver.onError(e);
+        }
+    }
+
+
 
     private String safe(String value) {
         return value == null ? "" : value;

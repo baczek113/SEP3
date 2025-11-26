@@ -31,4 +31,15 @@ public class RecruiterController : ControllerBase
         var result = await _recruiterService.GetRecruitersForCompanyAsync(companyId);
         return Ok(result);
     }
+    [HttpGet("{recruiterId:long}")]
+    public async Task<ActionResult<RecruiterDto>> GetRecruiterById(long recruiterId)
+    {
+        var result = await _recruiterService.GetByIdAsync(recruiterId);
+
+        if (result == null)
+            return NotFound($"Recruiter with ID {recruiterId} not found.");
+
+        return Ok(result);
+    }
+
 }

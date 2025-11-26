@@ -12,4 +12,6 @@ public interface RecruiterRepository extends JpaRepository<Recruiter, Long> {
 
 
     List<Recruiter> findByHiredBy_Id(Long representativeId);
+
+    
 }
