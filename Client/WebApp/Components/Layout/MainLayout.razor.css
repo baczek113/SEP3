@@ -79,6 +79,23 @@
     text-decoration: underline;
 }
 
+.logout-btn {
+    margin-left: auto;
+    padding: 8px 18px;
+    background-color: #3182ce;
+    color: white;
+    font-weight: 600;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.logout-btn:hover {
+    background-color: #2b6cb0;
+}
+
+
 @media (max-width: 640px) {
     .auth-header {
         padding: 0 16px;
@@ -88,4 +105,6 @@
         flex-direction: column;
         align-items: flex-start;
     }
+    
+    
 }

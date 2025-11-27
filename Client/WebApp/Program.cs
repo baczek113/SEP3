@@ -13,7 +13,16 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://
 builder.Services.AddScoped<HttpCompanyRepresentativeService>();
 builder.Services.AddScoped<HttpApplicantService>();
 builder.Services.AddScoped<HttpCompanyService>();
+builder.Services.AddScoped<HttpRecruiterService>();
+builder.Services.AddScoped<AuthProvider>();
 builder.Services.AddScoped<AuthenticationStateProvider, AuthProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider>(sp =>
+    sp.GetRequiredService<AuthProvider>());
+builder.Services.AddScoped<HttpJobListingService>();
+builder.Services.AddAuthentication("Cookies").AddCookie();
+builder.Services.AddAuthorization();
+
+
     
 var app = builder.Build();
 
@@ -24,6 +33,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseAuthentication(); app.UseAuthorization();
 
 app.UseStatusCodePagesWithReExecute("/not-found");
 

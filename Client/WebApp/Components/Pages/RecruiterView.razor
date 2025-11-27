@@ -1,0 +1,117 @@
+﻿@page "/recruiter/dashboard"
+@layout MainLayout
+@rendermode InteractiveServer
+
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@using WebApp.DTOs.Job
+@using WebApp.Services
+
+@inject HttpJobListingService JobListingService
+@inject NavigationManager Nav
+
+<AuthorizeView Roles="recruiter">
+    <Authorized Context="_">
+        <div class="dash-shell">
+            <div class="dash-card">
+                <div class="dash-header">
+                    <div class="dash-title">
+                        <h2>Hello @userName</h2>
+                        <p>Here are the job listings you have created on HireFire.</p>
+                    </div>
+
+                    <a href="/create-job-listing" class="primary-btn dash-register-btn">
+                        Create Job Listing
+                    </a>
+                </div>
+
+                <div class="dash-content">
+                    @if (isLoading)
+                    {
+                        <div class="dash-loading">
+                            Loading your job listings...
+                        </div>
+                    }
+                    else if (jobListings is null || jobListings.Count == 0)
+                    {
+                        <div class="dash-empty">
+                            <h4>No job listings yet</h4>
+                            <p>Start by creating your first job listing.</p>
+                            <a href="/create-job-listing" class="primary-btn dash-register-btn">
+                                Create Job Listing
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="job-list">
+                            @foreach (var job in jobListings)
+                            {
+                                <div class="job-card"
+                                     @onclick="@(() => NavigateToJob(job.Id))"
+                                     style="cursor: pointer;">
+                                    <div class="job-card-header">
+                                        <h3>@job.Title</h3>
+                                        @if (!string.IsNullOrWhiteSpace(job.DatePosted.ToString()))
+                                        {
+                                            <span class="job-date">@job.DatePosted</span>
+                                        }
+                                    </div>
+
+                                    @if (!string.IsNullOrWhiteSpace(job.Description))
+                                    {
+                                        <p class="job-description">@job.Description</p>
+                                    }
+
+                                    <div class="job-meta">
+                                        @if (!string.IsNullOrWhiteSpace(job.Salary.ToString()))
+                                        {
+                                            <span class="job-salary">Salary: @job.Salary</span>
+                                        }
+                                        <span class="job-id">ID: @job.Id</span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>You must be logged in as a recruiter to view this page.</p>
+        <a href="/login">Go to login</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
+
+    private string userName = "there";
+    private long recruiterId;
+    private List<JobListingDto> jobListings = new();
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateTask;
+        var user = authState.User;
+
+        userName = user.Identity?.Name ?? "there";
+
+        var idClaim = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        long.TryParse(idClaim, out recruiterId);
+
+        if (recruiterId > 0)
+        {
+            jobListings = await JobListingService.GetByRecruiterAsync(recruiterId);
+        }
+
+        isLoading = false;
+    }
+
+    private void NavigateToJob(long id)
+    {
+        Nav.NavigateTo($"/job-listing/{id}");
+    }
+}

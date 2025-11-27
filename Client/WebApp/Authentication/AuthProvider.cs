@@ -38,7 +38,7 @@ namespace WebApp.Authentication
             List<Claim> claims = new List<Claim>()
             {
                 new(ClaimTypes.Name, loginResponseDto.Name),
-                new("Role",  loginResponseDto.Role),
+                new(ClaimTypes.Role, loginResponseDto.Role),
                 new("Email", loginResponseDto.Email),
                 new(ClaimTypes.NameIdentifier, loginResponseDto.Id.ToString())
             };
@@ -68,7 +68,7 @@ namespace WebApp.Authentication
             List<Claim> claims = new List<Claim>()
             {
                 new(ClaimTypes.Name, loginResponseDto.Name),
-                new("Role",  loginResponseDto.Role),
+                new(ClaimTypes.Role, loginResponseDto.Role),
                 new("Email", loginResponseDto.Email),
                 new(ClaimTypes.NameIdentifier, loginResponseDto.Id.ToString())
             }; 
@@ -77,7 +77,7 @@ namespace WebApp.Authentication
             return new AuthenticationState(claimsPrincipal);
         }
 
-        public async void LogoutAsync()
+        public async Task LogoutAsync()
         {
             await jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "currentUser", ""); 
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(new())));

@@ -1,0 +1,149 @@
+﻿.company-detail-card {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.company-detail-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 16px;
+}
+
+.company-detail-title h2 {
+    font-size: 1.9rem;
+    margin-bottom: 4px;
+    color: #1a202c;
+    font-weight: 700;
+}
+
+.company-detail-label {
+    display: inline-block;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #718096;
+    margin-bottom: 4px;
+}
+
+.company-detail-location {
+    font-size: 0.9rem;
+    color: #718096;
+    margin-bottom: 6px;
+}
+
+.company-detail-description {
+    font-size: 0.96rem;
+    color: #4a5568;
+    margin-bottom: 8px;
+}
+
+.company-detail-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.88rem;
+}
+
+.company-detail-meta a {
+    color: #3182ce;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.company-detail-meta a:hover {
+    color: #2b6cb0;
+}
+
+.company-detail-content {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* Recruiters section */
+
+.recruiter-section {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.recruiter-header h3 {
+    font-size: 1.1rem;
+    margin-bottom: 2px;
+    color: #1a202c;
+    font-weight: 600;
+}
+
+.recruiter-header p {
+    font-size: 0.9rem;
+    color: #4a5568;
+}
+
+.recruiters-empty {
+    margin-top: 4px;
+}
+
+.recruiter-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.recruiter-card {
+    background-color: #f9fafb;
+    border-radius: 12px;
+    padding: 10px 12px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.recruiter-main h4 {
+    font-size: 0.98rem;
+    margin-bottom: 2px;
+    color: #1a202c;
+    font-weight: 600;
+}
+
+.recruiter-position {
+    font-size: 0.86rem;
+    color: #4a5568;
+}
+
+.recruiter-meta {
+    font-size: 0.85rem;
+    color: #4a5568;
+}
+
+.recruiter-email {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+
+@media (max-width: 768px) {
+    .company-detail-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .dash-register-btn {
+        align-self: stretch;
+        text-align: center;
+    }
+
+    .recruiter-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

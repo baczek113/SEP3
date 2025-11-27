@@ -8,6 +8,7 @@
 @using WebApp.DTOs.Authentication
 @layout MainLayout
 @rendermode InteractiveServer
+@using System.Security.Claims
 
 <div class="profile-form-container">
     <h3>Log in to your account</h3>
@@ -42,14 +43,32 @@
     {
         try
         {
+          
             await ((AuthProvider)AuthProvider).LoginAsync(loginRequest);
 
-            await Task.Delay(800);
-            navigationManager.NavigateTo("/");
+            
+            var authState = await AuthProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+            
+            var role = user.FindFirst(ClaimTypes.Role)?.Value;
+
+           
+            var target = role switch
+            {
+                "applicant"              => "/applicant/dashboard",
+                "company_representative" => "/company-representative/dashboard",
+                "admin"                  => "/admin",
+                "recruiter"              => "/recruiter/dashboard",
+                _                        => "/"  
+            };
+
+            // 5) Przekierowanie
+            navigationManager.NavigateTo(target);
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
+            // tutaj możesz wstawić ładny komunikat o błędzie na UI
         }
     }
 
@@ -63,3 +82,4 @@
         public string Password { get; set; } = string.Empty;
     }
 }
+

@@ -6,6 +6,8 @@ option csharp_namespace = "HireFire.Grpc";
 
 service CompanyService {
   rpc CreateCompany (CreateCompanyRequest) returns (CompanyResponse);
+  rpc GetCompaniesForRepresentative (GetCompaniesForRepresentativeRequest)
+      returns (GetCompaniesForRepresentativeResponse);
 }
 
 message CreateCompanyRequest {
@@ -32,4 +34,12 @@ message CompanyResponse {
   string address     = 8;
 
   int64 company_representative_id = 9;
+}
+
+message GetCompaniesForRepresentativeRequest {
+  int64 company_representative_id = 1;
+}
+
+message GetCompaniesForRepresentativeResponse {
+  repeated CompanyResponse companies = 1;
 }
