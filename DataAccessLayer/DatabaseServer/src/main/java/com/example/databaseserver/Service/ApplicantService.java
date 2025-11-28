@@ -8,12 +8,7 @@ import com.example.databaseserver.Entities.Skill;
 import com.example.databaseserver.Entities.SkillLevel;
 import com.example.databaseserver.Entities.UserRole;
 import com.example.databaseserver.Repositories.*;
-import com.example.databaseserver.generated.ApplicantServiceGrpc;
-import com.example.databaseserver.generated.CreateApplicantRequest;
-import com.example.databaseserver.generated.ApplicantResponse;
-import com.example.databaseserver.generated.AddApplicantSkillRequest;
-import com.example.databaseserver.generated.ApplicantSkillResponse;
-import com.example.databaseserver.generated.SkillLevelProto;
+import com.example.databaseserver.generated.*;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import jakarta.transaction.Transactional;
@@ -21,6 +16,9 @@ import net.devh.boot.grpc.server.service.GrpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @GrpcService
 public class ApplicantService extends ApplicantServiceGrpc.ApplicantServiceImplBase {
@@ -161,6 +159,46 @@ public class ApplicantService extends ApplicantServiceGrpc.ApplicantServiceImplB
                             .asRuntimeException());
         }
     }
+
+    @Override
+    @Transactional
+    public void getApplicantSkills(GetApplicantSkillsRequest request,
+                                   StreamObserver<ApplicantSkillsResponse> responseObserver) {
+        try {
+            List<ApplicantSkill> skills = applicantSkillRepository.findByApplicant_Id(request.getApplicantId());
+            if(skills.isEmpty()) {
+                throw new RuntimeException("Applicant with id " + request.getApplicantId() + " has no skills");
+            }
+
+            List<ApplicantSkillResponse> skillsResponse = new ArrayList<>();
+            for(ApplicantSkill skill : skills) {
+                skillsResponse.add(ApplicantSkillResponse.newBuilder()
+                        .setId(skill.getId())
+                        .setApplicantId(request.getApplicantId())
+                        .setSkillId(skill.getId())
+                        .setSkillName(skill.getSkill().getName())
+                        .setLevel(mapEntityToProtoLevel(skill.getLevel()))
+                        .build());
+            }
+            ApplicantSkillsResponse response = ApplicantSkillsResponse.newBuilder()
+                    .addAllSkills(skillsResponse)
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+
+            responseObserver.onError(
+                    io.grpc.Status.INTERNAL
+                            .withDescription(e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName())
+                            .withCause(e)
+                            .asRuntimeException());
+        }
+    }
+
+
 
     private SkillLevel mapProtoToEntityLevel(SkillLevelProto protoLevel) {
         return switch (protoLevel) {
