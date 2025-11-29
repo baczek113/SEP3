@@ -39,16 +39,18 @@ namespace HireFire.Grpc {
             "LlNraWxsTGV2ZWxQcm90byIxChlHZXRBcHBsaWNhbnRTa2lsbHNSZXF1ZXN0",
             "EhQKDGFwcGxpY2FudF9pZBgBIAEoAyJCChdBcHBsaWNhbnRTa2lsbHNSZXNw",
             "b25zZRInCgZza2lsbHMYASADKAsyFy5BcHBsaWNhbnRTa2lsbFJlc3BvbnNl",
-            "KqUBCg9Ta2lsbExldmVsUHJvdG8SGwoXU0tJTExfTEVWRUxfVU5TUEVDSUZJ",
-            "RUQQABIYChRTS0lMTF9MRVZFTF9CRUdJTk5FUhABEhYKElNLSUxMX0xFVkVM",
-            "X0pVTklPUhACEhMKD1NLSUxMX0xFVkVMX01JRBADEhYKElNLSUxMX0xFVkVM",
-            "X1NFTklPUhAEEhYKElNLSUxMX0xFVkVMX0VYUEVSVBAFMucBChBBcHBsaWNh",
-            "bnRTZXJ2aWNlEj4KD0NyZWF0ZUFwcGxpY2FudBIXLkNyZWF0ZUFwcGxpY2Fu",
-            "dFJlcXVlc3QaEi5BcHBsaWNhbnRSZXNwb25zZRJHChFBZGRBcHBsaWNhbnRT",
-            "a2lsbBIZLkFkZEFwcGxpY2FudFNraWxsUmVxdWVzdBoXLkFwcGxpY2FudFNr",
-            "aWxsUmVzcG9uc2USSgoSR2V0QXBwbGljYW50U2tpbGxzEhouR2V0QXBwbGlj",
-            "YW50U2tpbGxzUmVxdWVzdBoYLkFwcGxpY2FudFNraWxsc1Jlc3BvbnNlQhCq",
-            "Ag1IaXJlRmlyZS5HcnBjYgZwcm90bzM="));
+            "IiEKE0dldEFwcGxpY2FudFJlcXVlc3QSCgoCaWQYASABKAMqpQEKD1NraWxs",
+            "TGV2ZWxQcm90bxIbChdTS0lMTF9MRVZFTF9VTlNQRUNJRklFRBAAEhgKFFNL",
+            "SUxMX0xFVkVMX0JFR0lOTkVSEAESFgoSU0tJTExfTEVWRUxfSlVOSU9SEAIS",
+            "EwoPU0tJTExfTEVWRUxfTUlEEAMSFgoSU0tJTExfTEVWRUxfU0VOSU9SEAQS",
+            "FgoSU0tJTExfTEVWRUxfRVhQRVJUEAUypQIKEEFwcGxpY2FudFNlcnZpY2US",
+            "PgoPQ3JlYXRlQXBwbGljYW50EhcuQ3JlYXRlQXBwbGljYW50UmVxdWVzdBoS",
+            "LkFwcGxpY2FudFJlc3BvbnNlEkcKEUFkZEFwcGxpY2FudFNraWxsEhkuQWRk",
+            "QXBwbGljYW50U2tpbGxSZXF1ZXN0GhcuQXBwbGljYW50U2tpbGxSZXNwb25z",
+            "ZRJKChJHZXRBcHBsaWNhbnRTa2lsbHMSGi5HZXRBcHBsaWNhbnRTa2lsbHNS",
+            "ZXF1ZXN0GhguQXBwbGljYW50U2tpbGxzUmVzcG9uc2USPAoQR2V0QXBwbGlj",
+            "YW50QnlJZBIULkdldEFwcGxpY2FudFJlcXVlc3QaEi5BcHBsaWNhbnRSZXNw",
+            "b25zZUIQqgINSGlyZUZpcmUuR3JwY2IGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::HireFire.Grpc.SkillLevelProto), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -57,7 +59,8 @@ namespace HireFire.Grpc {
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.AddApplicantSkillRequest), global::HireFire.Grpc.AddApplicantSkillRequest.Parser, new[]{ "ApplicantId", "SkillName", "Category", "Level" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.ApplicantSkillResponse), global::HireFire.Grpc.ApplicantSkillResponse.Parser, new[]{ "Id", "ApplicantId", "SkillId", "SkillName", "Level" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.GetApplicantSkillsRequest), global::HireFire.Grpc.GetApplicantSkillsRequest.Parser, new[]{ "ApplicantId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.ApplicantSkillsResponse), global::HireFire.Grpc.ApplicantSkillsResponse.Parser, new[]{ "Skills" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.ApplicantSkillsResponse), global::HireFire.Grpc.ApplicantSkillsResponse.Parser, new[]{ "Skills" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.GetApplicantRequest), global::HireFire.Grpc.GetApplicantRequest.Parser, new[]{ "Id" }, null, null, null, null)
           }));
     }
     #endregion
@@ -1899,6 +1902,196 @@ namespace HireFire.Grpc {
             break;
           case 10: {
             skills_.AddEntriesFrom(ref input, _repeated_skills_codec);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class GetApplicantRequest : pb::IMessage<GetApplicantRequest>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<GetApplicantRequest> _parser = new pb::MessageParser<GetApplicantRequest>(() => new GetApplicantRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<GetApplicantRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::HireFire.Grpc.ApplicantReflection.Descriptor.MessageTypes[6]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetApplicantRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetApplicantRequest(GetApplicantRequest other) : this() {
+      id_ = other.id_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetApplicantRequest Clone() {
+      return new GetApplicantRequest(this);
+    }
+
+    /// <summary>Field number for the "id" field.</summary>
+    public const int IdFieldNumber = 1;
+    private long id_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long Id {
+      get { return id_; }
+      set {
+        id_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as GetApplicantRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(GetApplicantRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Id != other.Id) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Id != 0L) hash ^= Id.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Id != 0L) {
+        output.WriteRawTag(8);
+        output.WriteInt64(Id);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Id != 0L) {
+        output.WriteRawTag(8);
+        output.WriteInt64(Id);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Id != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(Id);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(GetApplicantRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Id != 0L) {
+        Id = other.Id;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            Id = input.ReadInt64();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            Id = input.ReadInt64();
             break;
           }
         }

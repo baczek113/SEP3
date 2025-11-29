@@ -57,6 +57,8 @@ namespace HireFire.Grpc {
     static readonly grpc::Marshaller<global::HireFire.Grpc.GetApplicantSkillsRequest> __Marshaller_GetApplicantSkillsRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.GetApplicantSkillsRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::HireFire.Grpc.ApplicantSkillsResponse> __Marshaller_ApplicantSkillsResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.ApplicantSkillsResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::HireFire.Grpc.GetApplicantRequest> __Marshaller_GetApplicantRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.GetApplicantRequest.Parser));
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::HireFire.Grpc.CreateApplicantRequest, global::HireFire.Grpc.ApplicantResponse> __Method_CreateApplicant = new grpc::Method<global::HireFire.Grpc.CreateApplicantRequest, global::HireFire.Grpc.ApplicantResponse>(
@@ -81,6 +83,14 @@ namespace HireFire.Grpc {
         "GetApplicantSkills",
         __Marshaller_GetApplicantSkillsRequest,
         __Marshaller_ApplicantSkillsResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::HireFire.Grpc.GetApplicantRequest, global::HireFire.Grpc.ApplicantResponse> __Method_GetApplicantById = new grpc::Method<global::HireFire.Grpc.GetApplicantRequest, global::HireFire.Grpc.ApplicantResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "GetApplicantById",
+        __Marshaller_GetApplicantRequest,
+        __Marshaller_ApplicantResponse);
 
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
@@ -174,6 +184,26 @@ namespace HireFire.Grpc {
       public virtual grpc::AsyncUnaryCall<global::HireFire.Grpc.ApplicantSkillsResponse> GetApplicantSkillsAsync(global::HireFire.Grpc.GetApplicantSkillsRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_GetApplicantSkills, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::HireFire.Grpc.ApplicantResponse GetApplicantById(global::HireFire.Grpc.GetApplicantRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetApplicantById(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::HireFire.Grpc.ApplicantResponse GetApplicantById(global::HireFire.Grpc.GetApplicantRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetApplicantById, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::HireFire.Grpc.ApplicantResponse> GetApplicantByIdAsync(global::HireFire.Grpc.GetApplicantRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetApplicantByIdAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::HireFire.Grpc.ApplicantResponse> GetApplicantByIdAsync(global::HireFire.Grpc.GetApplicantRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetApplicantById, null, options, request);
       }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]

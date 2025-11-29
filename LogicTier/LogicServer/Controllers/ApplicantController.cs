@@ -1,5 +1,6 @@
 ﻿using Grpc.Core;
 using LogicServer.DTOs.Applicant;
+using LogicServer.DTOs.JobListing;
 using LogicServer.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -67,4 +68,10 @@ public class ApplicantController : ControllerBase
         return Ok(result);
     }
     
+    [HttpGet("job-listings/by-applicant/{applicantId:long}")]
+    public async Task<ActionResult<List<JobListingDto>>> GetSuggestedJobListings(long applicantId)
+    {
+        var result = await _service.GetSuggestedJobsAsync(applicantId);
+        return Ok(result);
+    }
 }

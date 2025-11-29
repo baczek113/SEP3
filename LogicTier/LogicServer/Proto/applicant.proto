@@ -16,6 +16,7 @@ service ApplicantService {
   rpc CreateApplicant (CreateApplicantRequest) returns (ApplicantResponse);
   rpc AddApplicantSkill (AddApplicantSkillRequest) returns (ApplicantSkillResponse);
   rpc GetApplicantSkills (GetApplicantSkillsRequest) returns (ApplicantSkillsResponse);
+  rpc GetApplicantById (GetApplicantRequest) returns (ApplicantResponse);
 }
 
 
@@ -60,4 +61,8 @@ message GetApplicantSkillsRequest {
 
 message ApplicantSkillsResponse {
   repeated ApplicantSkillResponse skills = 1;
+}
+
+message GetApplicantRequest {
+  int64 id = 1;
 }

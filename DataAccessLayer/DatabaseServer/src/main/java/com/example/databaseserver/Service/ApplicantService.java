@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @GrpcService
 public class ApplicantService extends ApplicantServiceGrpc.ApplicantServiceImplBase {
@@ -175,7 +176,7 @@ public class ApplicantService extends ApplicantServiceGrpc.ApplicantServiceImplB
                 skillsResponse.add(ApplicantSkillResponse.newBuilder()
                         .setId(skill.getId())
                         .setApplicantId(request.getApplicantId())
-                        .setSkillId(skill.getId())
+                        .setSkillId(skill.getSkill().getId())
                         .setSkillName(skill.getSkill().getName())
                         .setLevel(mapEntityToProtoLevel(skill.getLevel()))
                         .build());
@@ -198,7 +199,53 @@ public class ApplicantService extends ApplicantServiceGrpc.ApplicantServiceImplB
         }
     }
 
+    @Override
+    @Transactional
+    public void getApplicantById(GetApplicantRequest request,
+                                   StreamObserver<ApplicantResponse> responseObserver) {
+        try {
+            Optional<Applicant> applicant = applicantRepository.findById(request.getId());
+            if(applicant.isEmpty()) {
+                responseObserver.onError(
+                        io.grpc.Status.NOT_FOUND
+                                .withDescription("No applicant with id: " + request.getId() + " found")
+                                .asRuntimeException());
+                return;
+            }
+            ApplicantResponse response = ApplicantResponse.newBuilder()
+                    .setId(applicant.get().getId())
+                    .setName(applicant.get().getUser().getName())
+                    .setEmail(applicant.get().getUser().getEmail())
+                    .setExperience(
+                            applicant.get().getExperience() == null
+                                    ? ""
+                                    : applicant.get().getExperience()
+                    )
+                    .setCity(applicant.get().getLocation().getCity())
+                    .setPostcode(
+                            applicant.get().getLocation().getPostcode() == null
+                                    ? ""
+                                    : applicant.get().getLocation().getPostcode()
+                    )
+                    .setAddress(
+                            applicant.get().getLocation().getAddress() == null
+                                    ? ""
+                                    : applicant.get().getLocation().getAddress()
+                    )
+                    .build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
 
+            responseObserver.onError(
+                    io.grpc.Status.INTERNAL
+                            .withDescription(e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName())
+                            .withCause(e)
+                            .asRuntimeException());
+        }
+    }
 
     private SkillLevel mapProtoToEntityLevel(SkillLevelProto protoLevel) {
         return switch (protoLevel) {
