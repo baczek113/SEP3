@@ -36,22 +36,28 @@ namespace HireFire.Grpc {
             "DjIQLlNraWxsTGV2ZWxQcm90byKBAQoWQXBwbGljYW50U2tpbGxSZXNwb25z",
             "ZRIKCgJpZBgBIAEoAxIUCgxhcHBsaWNhbnRfaWQYAiABKAMSEAoIc2tpbGxf",
             "aWQYAyABKAMSEgoKc2tpbGxfbmFtZRgEIAEoCRIfCgVsZXZlbBgFIAEoDjIQ",
-            "LlNraWxsTGV2ZWxQcm90byqlAQoPU2tpbGxMZXZlbFByb3RvEhsKF1NLSUxM",
-            "X0xFVkVMX1VOU1BFQ0lGSUVEEAASGAoUU0tJTExfTEVWRUxfQkVHSU5ORVIQ",
-            "ARIWChJTS0lMTF9MRVZFTF9KVU5JT1IQAhITCg9TS0lMTF9MRVZFTF9NSUQQ",
-            "AxIWChJTS0lMTF9MRVZFTF9TRU5JT1IQBBIWChJTS0lMTF9MRVZFTF9FWFBF",
-            "UlQQBTKbAQoQQXBwbGljYW50U2VydmljZRI+Cg9DcmVhdGVBcHBsaWNhbnQS",
-            "Fy5DcmVhdGVBcHBsaWNhbnRSZXF1ZXN0GhIuQXBwbGljYW50UmVzcG9uc2US",
-            "RwoRQWRkQXBwbGljYW50U2tpbGwSGS5BZGRBcHBsaWNhbnRTa2lsbFJlcXVl",
-            "c3QaFy5BcHBsaWNhbnRTa2lsbFJlc3BvbnNlQhCqAg1IaXJlRmlyZS5HcnBj",
-            "YgZwcm90bzM="));
+            "LlNraWxsTGV2ZWxQcm90byIxChlHZXRBcHBsaWNhbnRTa2lsbHNSZXF1ZXN0",
+            "EhQKDGFwcGxpY2FudF9pZBgBIAEoAyJCChdBcHBsaWNhbnRTa2lsbHNSZXNw",
+            "b25zZRInCgZza2lsbHMYASADKAsyFy5BcHBsaWNhbnRTa2lsbFJlc3BvbnNl",
+            "KqUBCg9Ta2lsbExldmVsUHJvdG8SGwoXU0tJTExfTEVWRUxfVU5TUEVDSUZJ",
+            "RUQQABIYChRTS0lMTF9MRVZFTF9CRUdJTk5FUhABEhYKElNLSUxMX0xFVkVM",
+            "X0pVTklPUhACEhMKD1NLSUxMX0xFVkVMX01JRBADEhYKElNLSUxMX0xFVkVM",
+            "X1NFTklPUhAEEhYKElNLSUxMX0xFVkVMX0VYUEVSVBAFMucBChBBcHBsaWNh",
+            "bnRTZXJ2aWNlEj4KD0NyZWF0ZUFwcGxpY2FudBIXLkNyZWF0ZUFwcGxpY2Fu",
+            "dFJlcXVlc3QaEi5BcHBsaWNhbnRSZXNwb25zZRJHChFBZGRBcHBsaWNhbnRT",
+            "a2lsbBIZLkFkZEFwcGxpY2FudFNraWxsUmVxdWVzdBoXLkFwcGxpY2FudFNr",
+            "aWxsUmVzcG9uc2USSgoSR2V0QXBwbGljYW50U2tpbGxzEhouR2V0QXBwbGlj",
+            "YW50U2tpbGxzUmVxdWVzdBoYLkFwcGxpY2FudFNraWxsc1Jlc3BvbnNlQhCq",
+            "Ag1IaXJlRmlyZS5HcnBjYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::HireFire.Grpc.SkillLevelProto), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.CreateApplicantRequest), global::HireFire.Grpc.CreateApplicantRequest.Parser, new[]{ "Name", "Email", "PasswordHash", "Experience", "City", "Postcode", "Address" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.ApplicantResponse), global::HireFire.Grpc.ApplicantResponse.Parser, new[]{ "Id", "Name", "Email", "Experience", "City", "Postcode", "Address" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.AddApplicantSkillRequest), global::HireFire.Grpc.AddApplicantSkillRequest.Parser, new[]{ "ApplicantId", "SkillName", "Category", "Level" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.ApplicantSkillResponse), global::HireFire.Grpc.ApplicantSkillResponse.Parser, new[]{ "Id", "ApplicantId", "SkillId", "SkillName", "Level" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.ApplicantSkillResponse), global::HireFire.Grpc.ApplicantSkillResponse.Parser, new[]{ "Id", "ApplicantId", "SkillId", "SkillName", "Level" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.GetApplicantSkillsRequest), global::HireFire.Grpc.GetApplicantSkillsRequest.Parser, new[]{ "ApplicantId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.ApplicantSkillsResponse), global::HireFire.Grpc.ApplicantSkillsResponse.Parser, new[]{ "Skills" }, null, null, null, null)
           }));
     }
     #endregion
@@ -1524,6 +1530,375 @@ namespace HireFire.Grpc {
           }
           case 40: {
             Level = (global::HireFire.Grpc.SkillLevelProto) input.ReadEnum();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class GetApplicantSkillsRequest : pb::IMessage<GetApplicantSkillsRequest>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<GetApplicantSkillsRequest> _parser = new pb::MessageParser<GetApplicantSkillsRequest>(() => new GetApplicantSkillsRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<GetApplicantSkillsRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::HireFire.Grpc.ApplicantReflection.Descriptor.MessageTypes[4]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetApplicantSkillsRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetApplicantSkillsRequest(GetApplicantSkillsRequest other) : this() {
+      applicantId_ = other.applicantId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetApplicantSkillsRequest Clone() {
+      return new GetApplicantSkillsRequest(this);
+    }
+
+    /// <summary>Field number for the "applicant_id" field.</summary>
+    public const int ApplicantIdFieldNumber = 1;
+    private long applicantId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long ApplicantId {
+      get { return applicantId_; }
+      set {
+        applicantId_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as GetApplicantSkillsRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(GetApplicantSkillsRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (ApplicantId != other.ApplicantId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (ApplicantId != 0L) hash ^= ApplicantId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (ApplicantId != 0L) {
+        output.WriteRawTag(8);
+        output.WriteInt64(ApplicantId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (ApplicantId != 0L) {
+        output.WriteRawTag(8);
+        output.WriteInt64(ApplicantId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (ApplicantId != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(ApplicantId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(GetApplicantSkillsRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.ApplicantId != 0L) {
+        ApplicantId = other.ApplicantId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            ApplicantId = input.ReadInt64();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            ApplicantId = input.ReadInt64();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class ApplicantSkillsResponse : pb::IMessage<ApplicantSkillsResponse>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<ApplicantSkillsResponse> _parser = new pb::MessageParser<ApplicantSkillsResponse>(() => new ApplicantSkillsResponse());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<ApplicantSkillsResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::HireFire.Grpc.ApplicantReflection.Descriptor.MessageTypes[5]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ApplicantSkillsResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ApplicantSkillsResponse(ApplicantSkillsResponse other) : this() {
+      skills_ = other.skills_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ApplicantSkillsResponse Clone() {
+      return new ApplicantSkillsResponse(this);
+    }
+
+    /// <summary>Field number for the "skills" field.</summary>
+    public const int SkillsFieldNumber = 1;
+    private static readonly pb::FieldCodec<global::HireFire.Grpc.ApplicantSkillResponse> _repeated_skills_codec
+        = pb::FieldCodec.ForMessage(10, global::HireFire.Grpc.ApplicantSkillResponse.Parser);
+    private readonly pbc::RepeatedField<global::HireFire.Grpc.ApplicantSkillResponse> skills_ = new pbc::RepeatedField<global::HireFire.Grpc.ApplicantSkillResponse>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::HireFire.Grpc.ApplicantSkillResponse> Skills {
+      get { return skills_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as ApplicantSkillsResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(ApplicantSkillsResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if(!skills_.Equals(other.skills_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      hash ^= skills_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      skills_.WriteTo(output, _repeated_skills_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      skills_.WriteTo(ref output, _repeated_skills_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      size += skills_.CalculateSize(_repeated_skills_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(ApplicantSkillsResponse other) {
+      if (other == null) {
+        return;
+      }
+      skills_.Add(other.skills_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            skills_.AddEntriesFrom(input, _repeated_skills_codec);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            skills_.AddEntriesFrom(ref input, _repeated_skills_codec);
             break;
           }
         }

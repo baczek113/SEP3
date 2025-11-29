@@ -89,7 +89,31 @@ public class ApplicantService
             SkillName = reply.SkillName,
             Level = MapToDto(reply.Level)
         };
-}
+    }
+
+    public async Task<List<ApplicantSkillResponse>> GetApplicantSkillsAsync(long userId)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new GrpcApplicantService.ApplicantServiceClient(channel);
+    
+    
+        var request = new GetApplicantSkillsRequest()
+        {
+            ApplicantId = userId,
+        };
+    
+        var reply = await client.GetApplicantSkillsAsync(request);
+
+        List<ApplicantSkillResponse> response = new();
+
+        foreach (var applicantSkill in reply.Skills)
+        {
+            response.Add(applicantSkill);
+        }
+
+        return response;
+    }
+    
     private static SkillLevelProto MapToProto(SkillLevelDto level) =>
         level switch
         {

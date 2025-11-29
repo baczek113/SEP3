@@ -56,11 +56,15 @@ public class ApplicantController : ControllerBase
         }
         catch (Exception ex)
         {
-            
             return BadRequest(ex.Message);
         }
     }
-
     
+    [HttpGet("skills/by-applicant/{applicantId:long}")]
+    public async Task<ActionResult<List<ApplicantSkillDto>>> GetApplicantSkills(long applicantId)
+    {
+        var result = await _service.GetApplicantSkillsAsync(applicantId);
+        return Ok(result);
+    }
     
 }

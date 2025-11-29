@@ -15,6 +15,7 @@ enum SkillLevelProto {
 service ApplicantService {
   rpc CreateApplicant (CreateApplicantRequest) returns (ApplicantResponse);
   rpc AddApplicantSkill (AddApplicantSkillRequest) returns (ApplicantSkillResponse);
+  rpc GetApplicantSkills (GetApplicantSkillsRequest) returns (ApplicantSkillsResponse);
 }
 
 
@@ -51,4 +52,12 @@ message ApplicantSkillResponse {
   int64 skill_id      = 3;
   string skill_name   = 4;
   SkillLevelProto level = 5;
+}
+
+message GetApplicantSkillsRequest {
+  int64 applicant_id = 1;
+}
+
+message ApplicantSkillsResponse {
+  repeated ApplicantSkillResponse skills = 1;
 }

@@ -1,13 +1,11 @@
 package com.example.databaseserver.Service;
 
 import com.example.databaseserver.Entities.Company;
+import com.example.databaseserver.Entities.JobSkill;
 import com.example.databaseserver.Entities.Location;
 import com.example.databaseserver.Entities.JobListing;
 import com.example.databaseserver.Entities.Recruiter;
-import com.example.databaseserver.Repositories.CompanyRepository;
-import com.example.databaseserver.Repositories.LocationRepository;
-import com.example.databaseserver.Repositories.JobListingRepository;
-import com.example.databaseserver.Repositories.RecruiterRepository;
+import com.example.databaseserver.Repositories.*;
 import com.example.databaseserver.generated.*;
 
 import io.grpc.Status;
@@ -18,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @GrpcService
@@ -27,16 +26,19 @@ public class JobListingService extends JobListingServiceGrpc.JobListingServiceIm
     private final CompanyRepository companyRepository;
     private final LocationRepository locationRepository;
     private final RecruiterRepository recruiterRepository;
+    private final JobSkillRepository jobSkillRepository;
 
     @Autowired
     public JobListingService(JobListingRepository jobListingRepository,
                              CompanyRepository companyRepository,
                              LocationRepository locationRepository,
-                             RecruiterRepository recruiterRepository) {
+                             RecruiterRepository recruiterRepository,
+                             JobSkillRepository jobSkillRepository) {
         this.jobListingRepository = jobListingRepository;
         this.companyRepository = companyRepository;
         this.locationRepository = locationRepository;
         this.recruiterRepository = recruiterRepository;
+        this.jobSkillRepository = jobSkillRepository;
     }
 
     @Override
@@ -159,7 +161,6 @@ public class JobListingService extends JobListingServiceGrpc.JobListingServiceIm
     @Transactional
     public void getJobListingsForRecruiter(GetJobListingsForRecruiterRequest request,
                                            StreamObserver<GetJobListingsForRecruiterResponse> responseObserver) {
-
         try {
             List<JobListing> listings = jobListingRepository.findByPostedBy_Id(request.getRecruiterId());
 
@@ -193,6 +194,30 @@ public class JobListingService extends JobListingServiceGrpc.JobListingServiceIm
             }
 
             responseObserver.onNext(builder.build());
+            responseObserver.onCompleted();
+
+        } catch (Exception e) {
+            responseObserver.onError(e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void getJobListingSkills(GetJobListingSkillsRequest request,
+                                           StreamObserver<GetJobListingSkillsResponse> responseObserver) {
+        try {
+            List<JobSkill> jobSkills = jobSkillRepository.findJobSkillsByJobId(request.getJobListingId());
+            List<JobSkillResponse> response = new ArrayList<>();
+
+            for(JobSkill jobSkill : jobSkills) {
+                JobSkillResponse jobSkillResponse = JobSkillResponse.newBuilder()
+                        .setId(jobSkill.getSkillId())
+                        .setPriority(jobSkill.getPriority())
+                        .build();
+                response.add(jobSkillResponse);
+            }
+
+            responseObserver.onNext(GetJobListingSkillsResponse.newBuilder().addAllSkills(response).build());
             responseObserver.onCompleted();
 
         } catch (Exception e) {
