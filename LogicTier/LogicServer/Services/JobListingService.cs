@@ -73,6 +73,49 @@ public class JobListingService
             .Select(MapToDto)
             .ToList();
     }
+
+    public async Task<List<JobListingSkillDto>> GetJobListingSkillsAsync(long jobId)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
+    
+        var request = new GetJobListingSkillsRequest()
+        {
+            JobListingId = jobId
+        };
+    
+        var reply = await client.GetJobListingSkillsAsync(request);
+    
+        List<JobListingSkillDto> skills = new();
+    
+        foreach (var skill in reply.Skills)
+        {
+            skills.Add(new  JobListingSkillDto()
+            {
+                Id = skill.Id,
+                Priority = skill.Priority,
+            });
+        }
+    
+        return skills;
+    }
+    
+    public async Task<List<JobListingDto>> GetJobListingsByCityAsync(string city)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
+    
+        var request = new GetJobListingsByCityRequest()
+        {
+            CityName = city
+        };
+    
+        var reply = await client.GetJobListingsByCityAsync(request);
+    
+        return reply.Listings
+            .Select(MapToDto)
+            .ToList();
+    }
     
     private JobListingDto MapToDto(JobListingResponse reply)
     {
@@ -108,31 +151,5 @@ public class JobListingService
             Address       = reply.Address,
             PostedById = postedById
         };
-    }
-
-    public async Task<List<JobListingSkillDto>> GetJobListingSkillsAsync(long jobId)
-    {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
-        var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
-    
-        var request = new GetJobListingSkillsRequest()
-        {
-            JobListingId = jobId
-        };
-    
-        var reply = await client.GetJobListingSkillsAsync(request);
-    
-        List<JobListingSkillDto> skills = new();
-    
-        foreach (var skill in reply.Skills)
-        {
-            skills.Add(new  JobListingSkillDto()
-            {
-                Id = skill.Id,
-                Priority = skill.Priority,
-            });
-        }
-    
-        return skills;
     }
 }

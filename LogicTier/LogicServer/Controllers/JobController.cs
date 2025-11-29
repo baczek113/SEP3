@@ -40,6 +40,13 @@ public class JobListingController : ControllerBase
         return Ok(result);
     }
     
+    [HttpGet("by-city/{city}")]
+    public async Task<ActionResult<List<JobListingDto>>> GetByCity(string city)
+    {
+        var result = await _jobListingService.GetJobListingsByCityAsync(city);
+        return Ok(result);
+    }
+    
     [HttpGet("job-skills/by-job-id/{jobId:long}")]
     public async Task<ActionResult<List<JobListingDto>>> GetSkillsForJob(long jobId)
     {

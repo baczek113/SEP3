@@ -225,6 +225,49 @@ public class JobListingService extends JobListingServiceGrpc.JobListingServiceIm
         }
     }
 
+    @Override
+    @Transactional
+    public void getJobListingsByCity(GetJobListingsByCityRequest request,
+                                    StreamObserver<JobListingsResponse> responseObserver) {
+        try {
+            List<JobListing> listings = jobListingRepository.findByLocation_CityIgnoreCase(request.getCityName());
+
+            JobListingsResponse.Builder builder =
+                    JobListingsResponse.newBuilder();
+
+            for (JobListing job : listings) {
+
+                JobListingResponse jobResponse = JobListingResponse.newBuilder()
+                        .setId(job.getId())
+                        .setTitle(safe(job.getTitle()))
+                        .setDescription(safe(job.getDescription()))
+                        .setDatePosted(job.getDatePosted().toString())
+                        .setSalary(job.getSalary() != null ? job.getSalary().toPlainString() : "")
+                        .setCompanyId(job.getCompany().getId())
+                        .setCity(job.getLocation().getCity())
+                        .setPostcode(
+                                job.getLocation().getPostcode() == null
+                                        ? ""
+                                        : job.getLocation().getPostcode()
+                        )
+                        .setAddress(
+                                job.getLocation().getAddress() == null
+                                        ? ""
+                                        : job.getLocation().getAddress()
+                        )
+                        .setPostedById(job.getPostedBy() != null ? job.getPostedBy().getId() : 0L)
+                        .build();
+
+                builder.addListings(jobResponse);
+            }
+
+            responseObserver.onNext(builder.build());
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            responseObserver.onError(e);
+        }
+    }
+
     private String safe(String val) {
         return val == null ? "" : val;
     }

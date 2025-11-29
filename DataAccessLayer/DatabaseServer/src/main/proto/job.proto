@@ -15,6 +15,9 @@ service JobListingService {
 
   rpc GetJobListingSkills (GetJobListingSkillsRequest)
       returns (GetJobListingSkillsResponse);
+
+  rpc GetJobListingsByCity (GetJobListingsByCityRequest)
+      returns (JobListingsResponse);
 }
 
 message CreateJobListingRequest {
@@ -68,4 +71,12 @@ message GetJobListingSkillsRequest {
 
 message GetJobListingSkillsResponse {
   repeated JobSkillResponse skills = 1;
+}
+
+message GetJobListingsByCityRequest {
+  string cityName = 1;
+}
+
+message JobListingsResponse {
+  repeated JobListingResponse listings = 1;
 }
