@@ -4,7 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="124ee155-6a89-44ef-8acb-cbea402897b8" name="Changes" comment="" />
+    <list default="true" id="124ee155-6a89-44ef-8acb-cbea402897b8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/databaseserver/Entities/Application.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/databaseserver/Entities/ApplicationStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/databaseserver/Repositories/ApplicationRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/databaseserver/Service/ApplicationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/proto/application.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/LogicServer.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/LogicServer.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/Services/ApplicantService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/Services/ApplicantService.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,8 +23,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -118,6 +129,7 @@
       <workItem from="1764246888414" duration="5972000" />
       <workItem from="1764413292559" duration="10874000" />
       <workItem from="1764429270566" duration="5867000" />
+      <workItem from="1764581416081" duration="8458000" />
     </task>
     <servers />
   </component>

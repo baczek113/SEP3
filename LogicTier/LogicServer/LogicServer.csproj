@@ -19,6 +19,7 @@
         <Protobuf Include="Proto\authentication.proto" GrpcServices="Client" OutputDir="GeneratedGrpc\" />
         <Protobuf Include="Proto\recruiter.proto" GrpcServices="Client" OutputDir="GeneratedGrpc\" />
         <Protobuf Include="Proto\job.proto" GrpcServices="Client" OutputDir="GeneratedGrpc\" />
+        <Protobuf Include="Proto\application.proto" GrpcServices="Client" OutputDir="GeneratedGrpc\" />
     </ItemGroup>
     <ItemGroup>
       <Folder Include="GeneratedGrpc\" />

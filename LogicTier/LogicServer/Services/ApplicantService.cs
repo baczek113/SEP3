@@ -3,10 +3,6 @@ using System.Security.Cryptography;
 using System.Text;
 using HireFire.Grpc;                    
 using LogicServer.DTOs.Applicant;
-using Grpc.Net.Client;
-using HireFire.Grpc;
-using LogicServer.DTOs.Applicant;
-using HireFire.Grpc;
 using LogicServer.DTOs.JobListing;
 using GrpcApplicantService = HireFire.Grpc.ApplicantService;
 
