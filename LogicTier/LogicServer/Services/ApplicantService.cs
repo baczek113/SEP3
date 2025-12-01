@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using HireFire.Grpc;                    
 using LogicServer.DTOs.Applicant;
+using LogicServer.DTOs.Application;
 using LogicServer.DTOs.JobListing;
 using GrpcApplicantService = HireFire.Grpc.ApplicantService;
 
@@ -13,12 +14,14 @@ public class ApplicantService
 {
     private readonly string _grpcAddress;
     private readonly JobListingService _jobListingService;
+    private readonly ApplicationService _applicationService;
 
-    public ApplicantService(IConfiguration config, JobListingService jobListingService)
+    public ApplicantService(IConfiguration config, JobListingService jobListingService, ApplicationService applicationService)
     {
         
         _grpcAddress = config["GrpcSettings:ApplicantServiceUrl"] ?? "http://localhost:9090";
         _jobListingService = jobListingService;
+        _applicationService = applicationService;
     }
 
     public async Task<ApplicantDto> CreateApplicantAsync(CreateApplicantDto dto)
@@ -126,14 +129,24 @@ public class ApplicantService
 
             var applicantResponse = await client.GetApplicantByIdAsync(request);
 
+            var userApplications = await _applicationService.GetApplicationsForApplicantAsync(userId);
+
+            List<ApplicationDto> applications = userApplications.Applications;
 
             List<ApplicantSkillResponse> applicantSkills = await GetApplicantSkillsAsync(userId);
+            
             List<JobListingDto> jobListingsInTheArea =
                 await _jobListingService.GetJobListingsByCityAsync(applicantResponse.City);
+            
             Dictionary<JobListingDto, int> jobListingScores = new Dictionary<JobListingDto, int>();
 
             foreach (var jobListing in jobListingsInTheArea)
             {
+                if (applications.Where(a => a.JobId == jobListing.Id).ToList().Count != 0)
+                {
+                    continue;
+                }
+                
                 int score = 0;
                 List<ApplicantSkillResponse> applicantSkillsMatchedWithJob = new();
                 List<JobListingSkillDto> jobListingSkills =

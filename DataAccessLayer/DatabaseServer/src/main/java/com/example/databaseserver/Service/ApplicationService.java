@@ -1,10 +1,10 @@
 package com.example.databaseserver.Service;
 
 
+import com.example.databaseserver.Entities.*;
 import com.example.databaseserver.Entities.Applicant;
-import com.example.databaseserver.Entities.ApplicationStatus;
-import com.example.databaseserver.Entities.JobListing;
 import com.example.databaseserver.Entities.Application;
+import com.example.databaseserver.Entities.ApplicationStatus;
 import com.example.databaseserver.Repositories.ApplicantRepository;
 import com.example.databaseserver.Repositories.ApplicationRepository;
 import com.example.databaseserver.Repositories.JobListingRepository;
@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @GrpcService
 public class ApplicationService extends ApplicationServiceGrpc.ApplicationServiceImplBase{
@@ -69,5 +71,109 @@ public class ApplicationService extends ApplicationServiceGrpc.ApplicationServic
                             .asRuntimeException()
             );
         }
+    }
+
+    @Override
+    @Transactional
+    public void getApplicationsForJob(GetApplicationsForJobRequest request,
+                                    StreamObserver<ApplicationsResponse> responseObserver) {
+        try {
+            List<Application> applications = applicationRepository.findApplicationsByJob_Id(request.getJobId());
+            List<ApplicationResponse> response = new ArrayList<>();
+
+            for(Application application : applications) {
+                ApplicationResponse applicationResponse = ApplicationResponse.newBuilder()
+                        .setId(application.getId())
+                        .setJobId(application.getJob().getId())
+                        .setApplicantId(application.getApplicant().getId())
+                        .setStatus(mapEntityToProtoStatus(application.getStatus()))
+                        .setSubmittedAt(application.getSubmittedAt().toString())
+                        .build();
+                response.add(applicationResponse);
+            }
+
+            responseObserver.onNext(ApplicationsResponse.newBuilder().addAllApplications(response).build());
+            responseObserver.onCompleted();
+
+        } catch (Exception e) {
+            responseObserver.onError(e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void getApplicationsForApplicant(GetApplicationsForApplicantRequest request,
+                                      StreamObserver<ApplicationsResponse> responseObserver) {
+        try {
+            List<Application> applications = applicationRepository.findApplicationsByApplicant_Id(request.getApplicantId());
+            List<ApplicationResponse> response = new ArrayList<>();
+
+            for(Application application : applications) {
+                ApplicationResponse applicationResponse = ApplicationResponse.newBuilder()
+                        .setId(application.getId())
+                        .setJobId(application.getJob().getId())
+                        .setApplicantId(application.getApplicant().getId())
+                        .setStatus(mapEntityToProtoStatus(application.getStatus()))
+                        .setSubmittedAt(application.getSubmittedAt().toString())
+                        .build();
+                response.add(applicationResponse);
+            }
+
+            responseObserver.onNext(ApplicationsResponse.newBuilder().addAllApplications(response).build());
+            responseObserver.onCompleted();
+
+        } catch (Exception e) {
+            responseObserver.onError(e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void acceptApplication(ChangeStatusRequest request,
+                                StreamObserver<ApplicationResponse> responseObserver)
+    {
+        try {
+            changeApplicationStatusHelper(request, ApplicationStatus.matched, responseObserver);
+        } catch (Exception e) {
+            responseObserver.onError(e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void rejectApplication(ChangeStatusRequest request,
+                                StreamObserver<ApplicationResponse> responseObserver)
+    {
+        try {
+            changeApplicationStatusHelper(request, ApplicationStatus.declined, responseObserver);
+        } catch (Exception e) {
+            responseObserver.onError(e);
+        }
+    }
+
+    private void changeApplicationStatusHelper(ChangeStatusRequest request, ApplicationStatus status, StreamObserver<ApplicationResponse> responseObserver)
+    {
+        Application application = applicationRepository.findById(request.getApplicationId())
+                .orElseThrow(() -> new RuntimeException("Application not found"));
+
+        application.setStatus(status);
+        applicationRepository.save(application);
+        ApplicationResponse response = ApplicationResponse.newBuilder()
+                .setId(application.getId())
+                .setJobId(application.getJob().getId())
+                .setApplicantId(application.getApplicant().getId())
+                .setStatus(mapEntityToProtoStatus(application.getStatus()))
+                .setSubmittedAt(application.getSubmittedAt().toString())
+                .build();
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    private com.example.databaseserver.generated.ApplicationStatus mapEntityToProtoStatus(ApplicationStatus status) {
+        return switch (status) {
+            case under_review -> com.example.databaseserver.generated.ApplicationStatus.UNDER_REVIEW;
+            case declined -> com.example.databaseserver.generated.ApplicationStatus.DECLINED;
+            case matched -> com.example.databaseserver.generated.ApplicationStatus.MATCHED;
+        };
     }
 }
