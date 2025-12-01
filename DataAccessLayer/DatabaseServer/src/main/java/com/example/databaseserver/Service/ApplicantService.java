@@ -14,6 +14,9 @@ import com.example.databaseserver.generated.ApplicantResponse;
 import com.example.databaseserver.generated.AddApplicantSkillRequest;
 import com.example.databaseserver.generated.ApplicantSkillResponse;
 import com.example.databaseserver.generated.SkillLevelProto;
+import com.example.databaseserver.generated.GetApplicantRequest;
+import com.example.databaseserver.generated.ApplicantSkillsResponse;
+import com.example.databaseserver.generated.GetApplicantSkillsRequest;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import jakarta.transaction.Transactional;
@@ -21,6 +24,10 @@ import net.devh.boot.grpc.server.service.GrpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @GrpcService
 public class ApplicantService extends ApplicantServiceGrpc.ApplicantServiceImplBase {
@@ -148,6 +155,92 @@ public class ApplicantService extends ApplicantServiceGrpc.ApplicantServiceImplB
                     .setLevel(mapEntityToProtoLevel(saved.getLevel()))
                     .build();
 
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+
+            responseObserver.onError(
+                    io.grpc.Status.INTERNAL
+                            .withDescription(e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName())
+                            .withCause(e)
+                            .asRuntimeException());
+        }
+    }
+
+    @Override
+    @Transactional
+    public void getApplicantSkills(GetApplicantSkillsRequest request,
+                                   StreamObserver<ApplicantSkillsResponse> responseObserver) {
+        try {
+            List<ApplicantSkill> skills = applicantSkillRepository.findByApplicant_Id(request.getApplicantId());
+            if(skills.isEmpty()) {
+                throw new RuntimeException("Applicant with id " + request.getApplicantId() + " has no skills");
+            }
+
+            List<ApplicantSkillResponse> skillsResponse = new ArrayList<>();
+            for(ApplicantSkill skill : skills) {
+                skillsResponse.add(ApplicantSkillResponse.newBuilder()
+                        .setId(skill.getId())
+                        .setApplicantId(request.getApplicantId())
+                        .setSkillId(skill.getSkill().getId())
+                        .setSkillName(skill.getSkill().getName())
+                        .setLevel(mapEntityToProtoLevel(skill.getLevel()))
+                        .build());
+            }
+            ApplicantSkillsResponse response = ApplicantSkillsResponse.newBuilder()
+                    .addAllSkills(skillsResponse)
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+
+            responseObserver.onError(
+                    io.grpc.Status.INTERNAL
+                            .withDescription(e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName())
+                            .withCause(e)
+                            .asRuntimeException());
+        }
+    }
+
+    @Override
+    @Transactional
+    public void getApplicantById(GetApplicantRequest request,
+                                   StreamObserver<ApplicantResponse> responseObserver) {
+        try {
+            Optional<Applicant> applicant = applicantRepository.findById(request.getId());
+            if(applicant.isEmpty()) {
+                responseObserver.onError(
+                        io.grpc.Status.NOT_FOUND
+                                .withDescription("No applicant with id: " + request.getId() + " found")
+                                .asRuntimeException());
+                return;
+            }
+            ApplicantResponse response = ApplicantResponse.newBuilder()
+                    .setId(applicant.get().getId())
+                    .setName(applicant.get().getUser().getName())
+                    .setEmail(applicant.get().getUser().getEmail())
+                    .setExperience(
+                            applicant.get().getExperience() == null
+                                    ? ""
+                                    : applicant.get().getExperience()
+                    )
+                    .setCity(applicant.get().getLocation().getCity())
+                    .setPostcode(
+                            applicant.get().getLocation().getPostcode() == null
+                                    ? ""
+                                    : applicant.get().getLocation().getPostcode()
+                    )
+                    .setAddress(
+                            applicant.get().getLocation().getAddress() == null
+                                    ? ""
+                                    : applicant.get().getLocation().getAddress()
+                    )
+                    .build();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
         }

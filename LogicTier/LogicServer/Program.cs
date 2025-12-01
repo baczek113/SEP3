@@ -12,6 +12,7 @@ builder.Services.AddSingleton<CompanyService>();
 builder.Services.AddSingleton<AuthenticationService>();
 builder.Services.AddSingleton<RecruiterService>();
 builder.Services.AddSingleton<JobListingService>();
+builder.Services.AddSingleton<ApplicationService>();
 
 var app = builder.Build();
 

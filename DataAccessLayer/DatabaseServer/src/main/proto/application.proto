@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+option java_package = "com.example.databaseserver.generated";
+option java_multiple_files = true;
+
+enum ApplicationStatus {
+  UNDER_REVIEW = 0;
+  DECLINED = 1;
+  MATCHED = 2;
+}
+
+
+service ApplicationService {
+  rpc CreateApplication (CreateApplicationRequest) returns (ApplicationResponse);
+  rpc GetApplicationsForJob (GetApplicationsForJobRequest) returns (ApplicationsResponse);
+  rpc AcceptApplication (ChangeStatusRequest) returns (ApplicationResponse);
+  rpc RejectApplication (ChangeStatusRequest) returns (ApplicationResponse);
+  rpc GetApplicationsForApplicant (GetApplicationsForApplicantRequest) returns (ApplicationsResponse);
+}
+
+
+message CreateApplicationRequest {
+  int64 job_id = 1;
+  int64 applicant_id = 2;
+}
+
+
+message ApplicationResponse {
+  int64 id = 1;
+  int64 job_id = 2;
+  int64 applicant_id = 3;
+  string submitted_at = 4;
+  ApplicationStatus status = 5;
+}
+
+message GetApplicationsForJobRequest {
+  int64 job_id = 1;
+}
+
+message ApplicationsResponse {
+  repeated ApplicationResponse applications = 1;
+}
+
+message ChangeStatusRequest {
+  int64 application_id = 1;
+}
+
+message GetApplicationsForApplicantRequest {
+  int64 applicant_id = 1;
+}

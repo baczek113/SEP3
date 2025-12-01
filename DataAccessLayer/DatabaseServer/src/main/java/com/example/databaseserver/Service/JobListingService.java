@@ -1,15 +1,23 @@
 package com.example.databaseserver.Service;
 
 import com.example.databaseserver.Entities.Company;
+import com.example.databaseserver.Entities.JobSkill;
 import com.example.databaseserver.Entities.Location;
 import com.example.databaseserver.Entities.JobListing;
 import com.example.databaseserver.Entities.Recruiter;
-import com.example.databaseserver.Repositories.CompanyRepository;
-import com.example.databaseserver.Repositories.LocationRepository;
-import com.example.databaseserver.Repositories.JobListingRepository;
-import com.example.databaseserver.Repositories.RecruiterRepository;
-import com.example.databaseserver.generated.*;
-
+import com.example.databaseserver.Repositories.*;
+import com.example.databaseserver.generated.JobListingServiceGrpc;
+import com.example.databaseserver.generated.CreateJobListingRequest;
+import com.example.databaseserver.generated.GetJobListingSkillsRequest;
+import com.example.databaseserver.generated.GetJobListingSkillsResponse;
+import com.example.databaseserver.generated.GetJobListingsByCityRequest;
+import com.example.databaseserver.generated.GetJobListingsForCompanyRequest;
+import com.example.databaseserver.generated.GetJobListingsForCompanyResponse;
+import com.example.databaseserver.generated.GetJobListingsForRecruiterRequest;
+import com.example.databaseserver.generated.GetJobListingsForRecruiterResponse;
+import com.example.databaseserver.generated.JobListingResponse;
+import com.example.databaseserver.generated.JobListingsResponse;
+import com.example.databaseserver.generated.JobSkillResponse;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import jakarta.transaction.Transactional;
@@ -18,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @GrpcService
@@ -27,16 +36,19 @@ public class JobListingService extends JobListingServiceGrpc.JobListingServiceIm
     private final CompanyRepository companyRepository;
     private final LocationRepository locationRepository;
     private final RecruiterRepository recruiterRepository;
+    private final JobSkillRepository jobSkillRepository;
 
     @Autowired
     public JobListingService(JobListingRepository jobListingRepository,
                              CompanyRepository companyRepository,
                              LocationRepository locationRepository,
-                             RecruiterRepository recruiterRepository) {
+                             RecruiterRepository recruiterRepository,
+                             JobSkillRepository jobSkillRepository) {
         this.jobListingRepository = jobListingRepository;
         this.companyRepository = companyRepository;
         this.locationRepository = locationRepository;
         this.recruiterRepository = recruiterRepository;
+        this.jobSkillRepository = jobSkillRepository;
     }
 
     @Override
@@ -159,7 +171,6 @@ public class JobListingService extends JobListingServiceGrpc.JobListingServiceIm
     @Transactional
     public void getJobListingsForRecruiter(GetJobListingsForRecruiterRequest request,
                                            StreamObserver<GetJobListingsForRecruiterResponse> responseObserver) {
-
         try {
             List<JobListing> listings = jobListingRepository.findByPostedBy_Id(request.getRecruiterId());
 
@@ -195,6 +206,73 @@ public class JobListingService extends JobListingServiceGrpc.JobListingServiceIm
             responseObserver.onNext(builder.build());
             responseObserver.onCompleted();
 
+        } catch (Exception e) {
+            responseObserver.onError(e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void getJobListingSkills(GetJobListingSkillsRequest request,
+                                           StreamObserver<GetJobListingSkillsResponse> responseObserver) {
+        try {
+            List<JobSkill> jobSkills = jobSkillRepository.findJobSkillsByJobId(request.getJobListingId());
+            List<JobSkillResponse> response = new ArrayList<>();
+
+            for(JobSkill jobSkill : jobSkills) {
+                JobSkillResponse jobSkillResponse = JobSkillResponse.newBuilder()
+                        .setId(jobSkill.getSkillId())
+                        .setPriority(jobSkill.getPriority())
+                        .build();
+                response.add(jobSkillResponse);
+            }
+
+            responseObserver.onNext(GetJobListingSkillsResponse.newBuilder().addAllSkills(response).build());
+            responseObserver.onCompleted();
+
+        } catch (Exception e) {
+            responseObserver.onError(e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void getJobListingsByCity(GetJobListingsByCityRequest request,
+                                    StreamObserver<JobListingsResponse> responseObserver) {
+        try {
+            List<JobListing> listings = jobListingRepository.findByLocation_CityIgnoreCase(request.getCityName());
+
+            JobListingsResponse.Builder builder =
+                    JobListingsResponse.newBuilder();
+
+            for (JobListing job : listings) {
+
+                JobListingResponse jobResponse = JobListingResponse.newBuilder()
+                        .setId(job.getId())
+                        .setTitle(safe(job.getTitle()))
+                        .setDescription(safe(job.getDescription()))
+                        .setDatePosted(job.getDatePosted().toString())
+                        .setSalary(job.getSalary() != null ? job.getSalary().toPlainString() : "")
+                        .setCompanyId(job.getCompany().getId())
+                        .setCity(job.getLocation().getCity())
+                        .setPostcode(
+                                job.getLocation().getPostcode() == null
+                                        ? ""
+                                        : job.getLocation().getPostcode()
+                        )
+                        .setAddress(
+                                job.getLocation().getAddress() == null
+                                        ? ""
+                                        : job.getLocation().getAddress()
+                        )
+                        .setPostedById(job.getPostedBy() != null ? job.getPostedBy().getId() : 0L)
+                        .build();
+
+                builder.addListings(jobResponse);
+            }
+
+            responseObserver.onNext(builder.build());
+            responseObserver.onCompleted();
         } catch (Exception e) {
             responseObserver.onError(e);
         }
