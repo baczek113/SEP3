@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using WebApp.DTOs.Applicant;
+using WebApp.DTOs.Job;
 
 namespace WebApp.Services;
 
@@ -33,6 +34,35 @@ public class HttpApplicantService: IApplicantService
         }
 
         return JsonSerializer.Deserialize<ApplicantSkillDto>(
+            response,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+        )!;
+    }
+
+    public async Task<List<ApplicantSkillDto>> GetApplicantSkillsAsync(long applicantId)
+    {
+        var httpResponse = await client.GetAsync($"api/applicant/skills/by-applicant/{applicantId}");
+        var response = await httpResponse.Content.ReadAsStringAsync();
+
+        if (!httpResponse.IsSuccessStatusCode)
+            throw new Exception(response);
+
+        return JsonSerializer.Deserialize<List<ApplicantSkillDto>>(
+            response,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+        )!;
+    }
+
+
+    public async Task<List<JobListingDto>> GetSuggestJobListingAsync(long applicantId)
+    {
+        var httpResponse = await client.GetAsync($"api/applicant/job-listings/by-applicant/{applicantId}");
+        var response = await httpResponse.Content.ReadAsStringAsync();
+
+        if (!httpResponse.IsSuccessStatusCode)
+            throw new Exception(response);
+
+        return JsonSerializer.Deserialize<List<JobListingDto>>(
             response,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
         )!;

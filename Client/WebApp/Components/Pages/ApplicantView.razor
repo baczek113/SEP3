@@ -1,0 +1,202 @@
+﻿@page "/applicant/dashboard"
+
+@using WebApp.DTOs.Job
+@using WebApp.DTOs.Application
+@using Microsoft.AspNetCore.Components.Web
+@using System.Security.Claims
+@using WebApp.Services
+
+@inject HttpApplicantService ApplicantService
+@inject HttpApplicationService ApplicationService
+@inject AuthenticationStateProvider AuthStateProvider
+
+<AuthorizeView Roles="applicant">
+    <Authorized Context="_">
+        <div class="dash-shell">
+            <div class="dash-card job-swipe-shell" tabindex="0" @onkeydown="HandleKeyDown">
+                <div class="dash-header">
+                    <div class="dash-title">
+                        <h2>Discover jobs</h2>
+                        <p>Use ← to skip, → to apply. Simple as Tinder.</p>
+                    </div>
+                </div>
+
+                <div class="dash-content">
+                    @if (isLoading)
+                    {
+                        <p class="dash-loading">Loading job matches...</p>
+                    }
+                    else if (!string.IsNullOrWhiteSpace(errorMessage))
+                    {
+                        <p class="dash-empty">@errorMessage</p>
+                    }
+                    else if (CurrentJob is null)
+                    {
+                        <div class="dash-empty">
+                            <h4>No more job listings right now</h4>
+                            <p>Check back later or update your skills.</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="job-card-main">
+                            <div class="job-card-header">
+                                <h3>@CurrentJob.Title</h3>
+
+                                <span class="job-location">
+                                    @CurrentJob.City
+                                </span>
+                            </div>
+
+                            @if (CurrentJob.Salary is not null)
+                            {
+                                <p class="job-salary">
+                                    @($"{CurrentJob.Salary:C0}")
+                                </p>
+                            }
+
+                            @if (!string.IsNullOrWhiteSpace(CurrentJob.Description))
+                            {
+                                <p class="job-description">
+                                    @CurrentJob.Description
+                                </p>
+                            }
+
+                            <div class="job-meta-row">
+                                <span class="job-meta-pill">
+                                    Posted @CurrentJob.DatePosted.ToShortDateString()
+                                </span>
+                                <span class="job-meta-pill subtle">
+                                    Job #@CurrentJob.Id
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="job-actions">
+                            <button class="job-btn job-btn-decline" @onclick="Decline">
+                                ❌ Skip<br /><span>Left arrow</span>
+                            </button>
+
+                            <button class="job-btn job-btn-accept" @onclick="AcceptAsync">
+                                ✅ Apply<br /><span>Right arrow</span>
+                            </button>
+                        </div>
+
+                        <p class="job-counter">
+                            @((currentIndex + 1)) / @jobListings.Count
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+    </Authorized>
+
+    <NotAuthorized>
+        <div class="dash-shell">
+            <div class="dash-card">
+                <p>You must be logged in as an applicant to see this page.</p>
+            </div>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private long _applicantId;
+    private List<JobListingDto> jobListings = new();
+    private int currentIndex = 0;
+    private bool isLoading = true;
+    private string? errorMessage;
+
+    private JobListingDto? CurrentJob =>
+        (currentIndex >= 0 && currentIndex < jobListings.Count)
+            ? jobListings[currentIndex]
+            : null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            isLoading = true;
+            errorMessage = null;
+
+            _applicantId = await ResolveApplicantIdAsync();
+            if (_applicantId == 0)
+            {
+                errorMessage = "Cannot resolve applicant id from user claims.";
+                return;
+            }
+
+            jobListings = await ApplicantService.GetSuggestJobListingAsync(_applicantId);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task<long> ResolveApplicantIdAsync()
+    {
+        var state = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = state.User;
+
+        // Dostosuj do swoich claimów (np. "sub", "nameidentifier", "applicant_id")
+        var idValue = user.FindFirst("applicant_id")?.Value
+                     ?? user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        return long.TryParse(idValue, out var id) ? id : 0;
+    }
+
+    private async Task AcceptAsync()
+    {
+        if (CurrentJob is null) return;
+
+        try
+        {
+            errorMessage = null;
+
+            var dto = new CreateApplicationDto
+            {
+                JobId = CurrentJob.Id,
+                ApplicantId = _applicantId
+            };
+
+            await ApplicationService.CreateAsync(dto);
+            MoveNext();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+    }
+
+    private void Decline()
+    {
+        // Tinder-style: decline = po prostu przejście dalej, bez zapisu w DB
+        MoveNext();
+    }
+
+    private void MoveNext()
+    {
+        currentIndex++;
+        if (currentIndex >= jobListings.Count)
+        {
+            currentIndex = jobListings.Count; // CurrentJob => null
+        }
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "ArrowRight")
+        {
+            await AcceptAsync();
+        }
+        else if (e.Key == "ArrowLeft")
+        {
+            Decline();
+        }
+    }
+}

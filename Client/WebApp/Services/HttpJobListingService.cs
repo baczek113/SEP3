@@ -53,4 +53,33 @@ public class HttpJobListingService : IJobListingService
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
         )!;
     }
+    
+    public async Task<List<JobListingDto>> GetByCityAsync(string city)
+    {
+        var httpResponse = await client.GetAsync($"api/joblisting/by-city/{city}");
+        var response = await httpResponse.Content.ReadAsStringAsync();
+
+        if (!httpResponse.IsSuccessStatusCode)
+            throw new Exception(response);
+
+        return JsonSerializer.Deserialize<List<JobListingDto>>(
+            response,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+        )!;
+    }
+
+    public async Task<List<JobListingDto>> GetSkillsForJobListingAsync(long jobListingId)
+    {
+        var httpResponse = await client.GetAsync($"api/joblisting/job-skills/by-job-id/{jobListingId}");
+        var response = await httpResponse.Content.ReadAsStringAsync();
+
+        if (!httpResponse.IsSuccessStatusCode)
+            throw new Exception(response);
+
+        return JsonSerializer.Deserialize<List<JobListingDto>>(
+            response,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+        )!;
+    }
+
 }

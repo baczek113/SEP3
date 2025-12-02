@@ -9,4 +9,8 @@ public interface IJobListingService
     public Task<List<JobListingDto>> GetByCompanyAsync(long recruiterId);
     
     public Task<List<JobListingDto>> GetByRecruiterAsync(long companyId);
+    
+    public Task<List<JobListingDto>> GetByCityAsync (String city);
+    
+    public Task<List<JobListingDto>> GetSkillsForJobListingAsync(long jobListingId);
 }

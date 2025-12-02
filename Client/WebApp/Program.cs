@@ -15,9 +15,9 @@ builder.Services.AddScoped<HttpApplicantService>();
 builder.Services.AddScoped<HttpCompanyService>();
 builder.Services.AddScoped<HttpRecruiterService>();
 builder.Services.AddScoped<AuthProvider>();
+builder.Services.AddScoped<HttpApplicationService>();
 builder.Services.AddScoped<AuthenticationStateProvider, AuthProvider>();
-builder.Services.AddScoped<AuthenticationStateProvider>(sp =>
-    sp.GetRequiredService<AuthProvider>());
+builder.Services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<AuthProvider>());
 builder.Services.AddScoped<HttpJobListingService>();
 builder.Services.AddAuthentication("Cookies").AddCookie();
 builder.Services.AddAuthorization();
