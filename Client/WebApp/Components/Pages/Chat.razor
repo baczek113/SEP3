@@ -1,0 +1,126 @@
+﻿@page "/chat/{JobId:long}/{ApplicantId:long}"
+@using System.Security.Claims
+@using Microsoft.AspNetCore.SignalR.Client
+@using WebApp.DTOs.Chat
+@inject NavigationManager Navigation
+@implements IAsyncDisposable
+@inject AuthenticationStateProvider AuthStateProvider
+@rendermode InteractiveServer
+@attribute [Authorize]
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger">
+        <strong>Chat Unavailable:</strong> @errorMessage
+    </div>
+}else
+{
+    <div class="chat-container">
+        <ul id="messagesList" style="list-style-type: none; padding: 0; height: 300px; overflow-y: auto;">
+            @foreach (var msg in messages)
+            {
+                var isMe = msg.SenderId == CurrentUserId;
+                <li class="mb-2 @(isMe ? "text-end" : "text-start")">
+                    <div class="d-inline-block p-2 rounded @(isMe ? "bg-primary text-white" : "bg-light border")">
+                        <strong>@msg.SenderName:</strong> @msg.Body
+                        <div class="small opacity-75">@msg.SendAt</div>
+                    </div>
+                </li>
+            }
+        </ul>
+        
+        <div class="form-group mt-3 d-flex gap-2">
+            <input @bind="messageInput" 
+                   @bind:event="oninput" 
+                   @onkeyup="HandleKeyUp"
+                   class="form-control" 
+                   placeholder="Type a message..." 
+                   disabled="@(!CanSend)" />
+                   
+            <button class="btn btn-primary" 
+                    @onclick="Send" 
+                    disabled="@(!CanSend || string.IsNullOrWhiteSpace(messageInput))">Send</button>
+        </div>
+    </div>
+}
+@code {
+    [Parameter] public long JobId { get; set; }
+    [Parameter] public long ApplicantId { get; set; }
+    private long CurrentUserId; 
+    private string CurrentUserName = string.Empty;
+    private HubConnection? _hubConnection;
+    private List<ChatMessageDto> messages = new();
+    private string? errorMessage;
+    private string? messageInput;
+    private long? activeApplicationId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        
+        if (user.Identity is null || !user.Identity.IsAuthenticated)
+        {
+            errorMessage = "You must be logged in to chat.";
+            return;
+        }
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            CurrentUserName = user.Identity.Name;
+            var idClaim = user.FindFirst(ClaimTypes.NameIdentifier);
+            if (idClaim != null && long.TryParse(idClaim.Value, out var parsedId))
+            {
+                CurrentUserId = parsedId;
+            }
+        }
+
+        _hubConnection = new HubConnectionBuilder()
+            .WithUrl("http://localhost:5177/chathub")
+            .WithAutomaticReconnect()
+            .Build();
+        //Live messages
+        _hubConnection.On<string, string, string, long>("ReceiveMessage", (user, body, time, senderId) =>
+        {
+            messages.Add(new ChatMessageDto{SenderName = user, Body = body, SendAt = time, SenderId = senderId});
+            InvokeAsync(StateHasChanged);
+        });
+        //History
+        _hubConnection.On<List<ChatMessageDto>, long>("ReceiveHistory", (history, appId) =>
+        {
+            activeApplicationId = appId;
+            messages.AddRange(history);
+            InvokeAsync(StateHasChanged);
+        });
+        _hubConnection.On<String>("ErrorMessage", (reason) =>
+        {
+            errorMessage = reason;
+            InvokeAsync(StateHasChanged);
+        });
+
+        await _hubConnection.StartAsync();
+        await _hubConnection.SendAsync("JoinChat", JobId, ApplicantId);
+    }
+
+    public async Task Send()
+    {
+        if(_hubConnection is not null && activeApplicationId.HasValue)
+        {
+            await _hubConnection.SendAsync("SendMessage", activeApplicationId.Value, messageInput, CurrentUserId);
+            messageInput = "";
+        }
+    }
+    public bool CanSend => _hubConnection?.State == HubConnectionState.Connected && activeApplicationId.HasValue;
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_hubConnection is not null)
+        {
+            await _hubConnection.DisposeAsync();
+        }
+    }
+    private async Task HandleKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter") await Send();
+    }
+
+}
