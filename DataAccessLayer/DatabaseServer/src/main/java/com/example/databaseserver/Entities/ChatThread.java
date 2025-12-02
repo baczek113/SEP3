@@ -15,10 +15,10 @@ public class ChatThread {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "applicant_id")
-    private Applicant applicant;
+    @JoinColumn(name = "application_id")
+    private Application application;
 
-    public ChatThread(Applicant applicant) {
-        this.applicant = applicant;
+    public ChatThread(Application application) {
+        this.application = application;
     }
 }

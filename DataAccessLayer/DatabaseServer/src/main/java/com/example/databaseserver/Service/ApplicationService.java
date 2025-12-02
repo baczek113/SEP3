@@ -8,12 +8,18 @@ import com.example.databaseserver.Entities.ApplicationStatus;
 import com.example.databaseserver.Repositories.ApplicantRepository;
 import com.example.databaseserver.Repositories.ApplicationRepository;
 import com.example.databaseserver.Repositories.JobListingRepository;
-import com.example.databaseserver.generated.*;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import jakarta.transaction.Transactional;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.example.databaseserver.generated.ApplicationServiceGrpc.*;
+import com.example.databaseserver.generated.ChangeStatusRequest;
+import com.example.databaseserver.generated.CreateApplicationRequest;
+import com.example.databaseserver.generated.GetApplicationsForApplicantRequest;
+import com.example.databaseserver.generated.GetApplicationsForJobRequest;
+import com.example.databaseserver.generated.ApplicationsResponse;
+import com.example.databaseserver.generated.ApplicationResponse;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -21,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @GrpcService
-public class ApplicationService extends ApplicationServiceGrpc.ApplicationServiceImplBase{
+public class ApplicationService extends com.example.databaseserver.generated.ApplicationServiceGrpc.ApplicationServiceImplBase{
 
     private final JobListingRepository jobListingRepository;
     private final ApplicantRepository applicantRepository;

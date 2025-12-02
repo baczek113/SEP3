@@ -38,7 +38,7 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
         try {
             GetMessagesResponse.Builder builder = GetMessagesResponse.newBuilder();
 
-            ChatThread thread = chatThreadRepository.findByApplicationId(request.getApplicationId());
+            ChatThread thread = chatThreadRepository.findByApplication_Id(request.getApplicationId());
 
             if (thread != null){
                 List<Message> messages = messageRepository.findByChatThreadOrderBySentAtAsc(thread);
@@ -65,7 +65,7 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
     @Transactional
     public void save(SaveMessagesRequest request, StreamObserver<SaveMessagesResponse> responseObserver ){
         try {
-            ChatThread thread = chatThreadRepository.findByApplicationId(request.getApplicationId());
+            ChatThread thread = chatThreadRepository.findByApplication_Id(request.getApplicationId());
 
             if (thread == null) {
                 throw new RuntimeException("Chat thread does not exist.");
