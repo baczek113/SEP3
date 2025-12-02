@@ -1,6 +1,7 @@
 using HireFire.Grpc;
 using LogicServer.Services;
 using ApplicantService = LogicServer.Services.ApplicantService;
+using ApplicationService = LogicServer.Services.ApplicationService;
 using AuthenticationService = LogicServer.Services.AuthenticationService;
 using CompanyService = LogicServer.Services.CompanyService;
 using JobListingService = LogicServer.Services.JobListingService;
@@ -16,6 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSignalR();
+builder.Services.AddSingleton<ApplicationService>();
 builder.Services.AddSingleton<RepresentativeService>();
 builder.Services.AddSingleton<ApplicantService>();
 builder.Services.AddSingleton<CompanyService>();
@@ -27,7 +29,6 @@ builder.Services.AddGrpcClient<ChatService.ChatServiceClient>(o =>
 {
     o.Address = new Uri(chatServiceUrl); 
 });
-builder.Services.AddSingleton<ApplicationService>();
 
 var app = builder.Build();
 
