@@ -1,4 +1,4 @@
-namespace LogicServer.DTOs.Job;
+namespace WebApp.DTOs.Job;
 
 public class JobListingSkillDto
 {

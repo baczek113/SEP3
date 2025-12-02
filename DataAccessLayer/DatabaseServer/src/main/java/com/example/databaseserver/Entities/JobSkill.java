@@ -4,22 +4,36 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.time.OffsetDateTime;
-
 @Entity
-@Table(name = "job_listing_skills")
+@Table(name = "job_listing_skills", schema = "hirefire")
 @Data
 @NoArgsConstructor
-@IdClass(JobSkillId.class)
 public class JobSkill {
 
     @Id
-    private Long jobId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Id
-    private Long skillId;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "job_id", nullable = false)
+    private JobListing jobListing;
 
-    @Column(nullable = false)
-    private String priority;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "skill_id", nullable = false)
+    private Skill skill;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
+    private JobSkillPriority priority;
+
+    public JobSkill(JobListing jobListing, Skill skill, JobSkillPriority priority) {
+        this.jobListing = jobListing;
+        this.skill = skill;
+        this.priority = priority;
+    }
+
+    public Long getId()                { return id; }
+    public JobListing getJobListing()  { return jobListing; }
+    public Skill getSkill()            { return skill; }
+    public JobSkillPriority getPriority() { return priority; }
 }
