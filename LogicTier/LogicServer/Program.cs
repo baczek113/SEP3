@@ -27,6 +27,8 @@ builder.Services.AddGrpcClient<ChatService.ChatServiceClient>(o =>
 {
     o.Address = new Uri(chatServiceUrl); 
 });
+builder.Services.AddSingleton<ApplicationService>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

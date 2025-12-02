@@ -12,4 +12,6 @@ public interface JobListingRepository extends JpaRepository<JobListing, Long> {
     List<JobListing> findByCompany_Id(Long companyId);
 
     List<JobListing> findByPostedBy_Id(Long recruiterId);
+
+    List<JobListing> findByLocation_CityIgnoreCase(String city);
 }

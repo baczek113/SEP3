@@ -1,6 +1,8 @@
-﻿using System.Globalization;
+﻿using System.Collections;
+using System.Globalization;
 using Grpc.Net.Client;
 using HireFire.Grpc;
+using LogicServer.DTOs.Job;
 using LogicServer.DTOs.JobListing;
 
 namespace LogicServer.Services;
@@ -72,6 +74,51 @@ public class JobListingService
             .Select(MapToDto)
             .ToList();
     }
+
+    public async Task<List<JobListingSkillDto>> GetJobListingSkillsAsync(long jobId)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
+
+        var request = new GetJobListingSkillsRequest
+        {
+            JobListingId = jobId
+        };
+
+        var reply = await client.GetJobListingSkillsAsync(request);
+
+        var skills = new List<JobListingSkillDto>();
+
+        foreach (var skill in reply.Skills)
+        {
+            skills.Add(new JobListingSkillDto
+            {
+                Id           = skill.Id,            
+                Priority     = skill.Priority,      
+                JobListingId = skill.JobListingId,
+                SkillId      = skill.SkillId,
+                SkillName    = skill.SkillName
+            });
+        }
+
+        return skills;
+    }
+    public async Task<List<JobListingDto>> GetJobListingsByCityAsync(string city)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
+    
+        var request = new GetJobListingsByCityRequest()
+        {
+            CityName = city
+        };
+    
+        var reply = await client.GetJobListingsByCityAsync(request);
+    
+        return reply.Listings
+            .Select(MapToDto)
+            .ToList();
+    }
     
     private JobListingDto MapToDto(JobListingResponse reply)
     {
@@ -108,4 +155,36 @@ public class JobListingService
             PostedById = postedById
         };
     }
+    public async Task<JobListingSkillDto> AddJobListingSkillAsync(AddJobListingSkillDto dto)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
+
+        if (string.IsNullOrWhiteSpace(dto.SkillName))
+            throw new ArgumentException("SkillName must not be empty.");
+
+        if (string.IsNullOrWhiteSpace(dto.Priority))
+            throw new ArgumentException("Priority must be 'must' or 'nice'.");
+
+        var request = new AddJobListingSkillRequest
+        {
+            JobListingId = dto.JobListingId,
+            SkillName    = dto.SkillName,
+            Category     = dto.Category ?? string.Empty,
+            Priority     = dto.Priority      
+        };
+
+        var reply = await client.AddJobListingSkillAsync(request);
+
+        
+        return new JobListingSkillDto
+        {
+            Id           = reply.Id,
+            Priority     = reply.Priority,
+            JobListingId = reply.JobListingId,
+            SkillId      = reply.SkillId,
+            SkillName    = reply.SkillName
+        };
+    }
+
 }

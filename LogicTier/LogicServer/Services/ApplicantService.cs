@@ -3,10 +3,9 @@ using System.Security.Cryptography;
 using System.Text;
 using HireFire.Grpc;                    
 using LogicServer.DTOs.Applicant;
-using Grpc.Net.Client;
-using HireFire.Grpc;
-using LogicServer.DTOs.Applicant;
-using HireFire.Grpc;
+using LogicServer.DTOs.Application;
+using LogicServer.DTOs.Job;
+using LogicServer.DTOs.JobListing;
 using GrpcApplicantService = HireFire.Grpc.ApplicantService;
 
 
@@ -15,11 +14,15 @@ namespace LogicServer.Services;
 public class ApplicantService
 {
     private readonly string _grpcAddress;
+    private readonly JobListingService _jobListingService;
+    private readonly ApplicationService _applicationService;
 
-    public ApplicantService(IConfiguration config)
+    public ApplicantService(IConfiguration config, JobListingService jobListingService, ApplicationService applicationService)
     {
         
         _grpcAddress = config["GrpcSettings:ApplicantServiceUrl"] ?? "http://localhost:9090";
+        _jobListingService = jobListingService;
+        _applicationService = applicationService;
     }
 
     public async Task<ApplicantDto> CreateApplicantAsync(CreateApplicantDto dto)
@@ -89,7 +92,117 @@ public class ApplicantService
             SkillName = reply.SkillName,
             Level = MapToDto(reply.Level)
         };
+    }
+
+    public async Task<List<ApplicantSkillResponse>> GetApplicantSkillsAsync(long userId)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new GrpcApplicantService.ApplicantServiceClient(channel);
+    
+    
+        var request = new GetApplicantSkillsRequest()
+        {
+            ApplicantId = userId,
+        };
+    
+        var reply = await client.GetApplicantSkillsAsync(request);
+
+        List<ApplicantSkillResponse> response = new();
+
+        foreach (var applicantSkill in reply.Skills)
+        {
+            response.Add(applicantSkill);
+        }
+
+        return response;
+    }
+
+    public async Task<List<JobListingDto>> GetSuggestedJobsAsync(long userId)
+{
+    using var channel = GrpcChannel.ForAddress(_grpcAddress);
+    var client = new GrpcApplicantService.ApplicantServiceClient(channel);
+
+    try
+    {
+        var request = new GetApplicantRequest
+        {
+            Id = userId,
+        };
+
+        var applicantResponse = await client.GetApplicantByIdAsync(request);
+
+        var userApplications = await _applicationService.GetApplicationsForApplicantAsync(userId);
+        List<ApplicationDto> applications = userApplications.Applications;
+
+        List<ApplicantSkillResponse> applicantSkills = await GetApplicantSkillsAsync(userId);
+
+        List<JobListingDto> jobListingsInTheArea =
+            await _jobListingService.GetJobListingsByCityAsync(applicantResponse.City);
+
+        Dictionary<JobListingDto, int> jobListingScores = new();
+
+        foreach (var jobListing in jobListingsInTheArea)
+        {
+            // jeśli już aplikował na ten job → pomijamy
+            if (applications.Any(a => a.JobId == jobListing.Id))
+            {
+                continue;
+            }
+
+            int score = 0;
+
+            List<ApplicantSkillResponse> applicantSkillsMatchedWithJob = new();
+            List<JobListingSkillDto> jobListingSkills =
+                await _jobListingService.GetJobListingSkillsAsync(jobListing.Id);
+
+            // 🔹 TU: porównujemy po SkillId, nie po Id
+            foreach (JobListingSkillDto skill in jobListingSkills)
+            {
+                var matches = applicantSkills
+                    .Where(a => a.SkillId == skill.SkillId)
+                    .ToList();
+
+                applicantSkillsMatchedWithJob.AddRange(matches);
+            }
+
+            foreach (ApplicantSkillResponse applicantSkill in applicantSkillsMatchedWithJob)
+            {
+                // 🔹 TU: też porównujemy po SkillId
+                string jobListingSkillPriorityString =
+                    jobListingSkills
+                        .First(skill => skill.SkillId == applicantSkill.SkillId)
+                        .Priority;
+
+                int jobListingSkillPriorityInt = 1;
+                if (jobListingSkillPriorityString == "must")
+                {
+                    jobListingSkillPriorityInt = 2;
+                }
+
+                score += MapToInt(applicantSkill.Level) * jobListingSkillPriorityInt;
+            }
+
+            if (score != 0)
+            {
+                jobListingScores[jobListing] = score;
+            }
+        }
+
+        List<JobListingDto> jobListingsResult = jobListingScores
+            .OrderByDescending(kv => kv.Value)
+            .Select(kv => kv.Key)
+            .ToList();
+
+        return jobListingsResult;
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e);
+        return new List<JobListingDto>();
+    }
 }
+
+    
     private static SkillLevelProto MapToProto(SkillLevelDto level) =>
         level switch
         {
@@ -111,7 +224,15 @@ public class ApplicantService
             SkillLevelProto.SkillLevelExpert   => SkillLevelDto.Expert,
             _                                  => SkillLevelDto.Beginner
         };
-
-
     
+    private static int MapToInt(SkillLevelProto proto) =>
+        proto switch
+        {
+            SkillLevelProto.SkillLevelBeginner => 1,
+            SkillLevelProto.SkillLevelJunior   => 2,
+            SkillLevelProto.SkillLevelMid      => 3,
+            SkillLevelProto.SkillLevelSenior   => 4,
+            SkillLevelProto.SkillLevelExpert   => 5,
+            _                                  => 1
+        };
 }
