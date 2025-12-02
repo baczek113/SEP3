@@ -1,0 +1,227 @@
+﻿@page "/joblisting/skills"
+@using WebApp.DTOs.Job
+@using WebApp.Services
+@inject HttpJobListingService HttpJobListingService
+@layout MainLayout
+@page "/joblisting/skills/{JobListingId:long}"
+@rendermode InteractiveServer
+
+
+<div class="skills-page">
+    <div class="skills-header">
+        <div class="skills-title">
+            <button type="button" class="add-skill-icon">
+                +
+            </button>
+            <div class="skills-title-text">
+                <h3>Define job skills</h3>
+                <p>
+                    Choose the skills and mark them as <strong>must</strong> or <strong>nice to have</strong>.
+                    They will be used to match applicants to this job.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    @if (selectedSkills.Any())
+    {
+        <div class="selected-skills-section">
+            <span class="selected-label">Selected skills:</span>
+            <div class="selected-skills-chips">
+                @foreach (var s in selectedSkills)
+                {
+                    <div class="selected-skill-item">
+                        <button class="skill-chip selected"
+                                type="button"
+                                @onclick="() => ToggleSkill(s.Skill)">
+                            @s.Skill.Name
+                            <span class="chip-remove">×</span>
+                        </button>
+
+                        <select class="skill-level-select" @bind="s.Priority">
+                            @foreach (var p in priorityOptions)
+                            {
+                                <option value="@p">@GetPriorityLabel(p)</option>
+                            }
+                        </select>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
+    <div class="skills-grid">
+        @foreach (var group in groupedSkills)
+        {
+            <div class="skill-category-card">
+                <div class="skill-category-header">
+                    <h4>@group.Key</h4>
+                    <p>@GetCategoryDescription(group.Key)</p>
+                </div>
+                <div class="skills-list">
+                    @foreach (var skill in group)
+                    {
+                        var isSelected = selectedSkills.Any(s => s.Skill.Name == skill.Name);
+
+                        <button type="button"
+                                class="skill-chip @(isSelected ? "selected" : "")"
+                                @onclick="() => ToggleSkill(skill)">
+                            @skill.Name
+                        </button>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="skills-actions">
+        <button class="save-skills-btn"
+                @onclick="SaveSkills"
+                disabled="@(!selectedSkills.Any() || isSaving)">
+            @(isSaving ? "Saving..." : "Save job skills")
+        </button>
+        <p class="hint-text">
+            You can update job skills anytime by adding new ones.
+        </p>
+    </div>
+
+    <div class="@($"notification-container {(notificationVisible ? "show" : "")}")">
+        <div class="@($"notification {notificationType}")">
+            @notificationMessage
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public long JobListingId { get; set; }
+
+    private bool isSaving = false;
+
+    private bool notificationVisible = false;
+    private string notificationMessage = string.Empty;
+    private string notificationType = string.Empty;
+
+    private record SkillOption(string Name, string Category);
+
+    // Gotowa lista – możesz potem wynieść do wspólnego miejsca, jeśli chcesz
+    private readonly List<SkillOption> allSkills = new()
+    {
+        new("C#",          "Backend"),
+        new("Java",        "Backend"),
+        new("Spring Boot", "Backend"),
+        new(".NET",        "Backend"),
+        new("SQL",         "Backend"),
+        new("PostgreSQL",  "Backend"),
+
+        new("JavaScript",  "Frontend"),
+        new("TypeScript",  "Frontend"),
+        new("React",       "Frontend"),
+        new("Blazor",      "Frontend"),
+        new("HTML/CSS",    "Frontend"),
+
+        new("Docker",      "DevOps"),
+        new("Kubernetes",  "DevOps"),
+        new("CI/CD",       "DevOps"),
+        new("Git",         "DevOps"),
+
+        new("Problem solving", "Soft skills"),
+        new("Teamwork",        "Soft skills"),
+        new("Communication",   "Soft skills"),
+        new("Leadership",      "Soft skills")
+    };
+
+    private ILookup<string, SkillOption> groupedSkills => allSkills.ToLookup(s => s.Category);
+
+    private class SelectedSkill
+    {
+        public SkillOption Skill { get; set; } = default!;
+        public string Priority { get; set; } = "must"; // "must" / "nice"
+    }
+
+    private List<SelectedSkill> selectedSkills = new();
+
+    private readonly string[] priorityOptions = new[] { "must", "nice" };
+
+    private void ToggleSkill(SkillOption skill)
+    {
+        var existing = selectedSkills.FirstOrDefault(s => s.Skill.Name == skill.Name);
+
+        if (existing is not null)
+        {
+            // odznaczenie – tylko w UI, backend na razie nie usuwa skilli
+            selectedSkills.Remove(existing);
+        }
+        else
+        {
+            selectedSkills.Add(new SelectedSkill
+            {
+                Skill = skill,
+                Priority = "must"
+            });
+        }
+    }
+
+    private string GetCategoryDescription(string category) => category switch
+    {
+        "Backend"      => "Technologies and tools used to build APIs and server-side logic.",
+        "Frontend"     => "Skills for building modern, interactive user interfaces.",
+        "DevOps"       => "Tools and practices for deployment, monitoring and automation.",
+        "Soft skills"  => "Human skills that make you a great teammate.",
+        _              => "Skills that make this job stand out."
+    };
+
+    private string GetPriorityLabel(string p) => p switch
+    {
+        "must" => "Must-have",
+        "nice" => "Nice to have",
+        _      => p
+    };
+
+    private async Task SaveSkills()
+    {
+        if (!selectedSkills.Any())
+            return;
+
+        isSaving = true;
+
+        try
+        {
+            foreach (var s in selectedSkills)
+            {
+                var dto = new AddJobListingSkillDto
+                {
+                    JobListingId = JobListingId,
+                    SkillName    = s.Skill.Name,
+                    Category     = s.Skill.Category,
+                    Priority     = s.Priority   // "must" / "nice"
+                };
+
+                await HttpJobListingService.AddSkillsForJobListing(dto);
+            }
+
+            ShowNotification("Skills have been added to this job.", "success");
+        }
+        catch (Exception ex)
+        {
+            ShowNotification($"Failed to save job skills: {ex.Message}", "error");
+        }
+        finally
+        {
+            isSaving = false;
+        }
+    }
+
+    private void ShowNotification(string message, string type)
+    {
+        notificationMessage = message;
+        notificationType = type;
+        notificationVisible = true;
+
+        _ = Task.Delay(3000).ContinueWith(_ =>
+        {
+            notificationVisible = false;
+            InvokeAsync(StateHasChanged);
+        });
+    }
+}

@@ -65,6 +65,10 @@ namespace HireFire.Grpc {
     static readonly grpc::Marshaller<global::HireFire.Grpc.GetJobListingsByCityRequest> __Marshaller_GetJobListingsByCityRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.GetJobListingsByCityRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::HireFire.Grpc.JobListingsResponse> __Marshaller_JobListingsResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.JobListingsResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::HireFire.Grpc.AddJobListingSkillRequest> __Marshaller_AddJobListingSkillRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.AddJobListingSkillRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::HireFire.Grpc.JobSkillResponse> __Marshaller_JobSkillResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.JobSkillResponse.Parser));
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::HireFire.Grpc.CreateJobListingRequest, global::HireFire.Grpc.JobListingResponse> __Method_CreateJobListing = new grpc::Method<global::HireFire.Grpc.CreateJobListingRequest, global::HireFire.Grpc.JobListingResponse>(
@@ -105,6 +109,14 @@ namespace HireFire.Grpc {
         "GetJobListingsByCity",
         __Marshaller_GetJobListingsByCityRequest,
         __Marshaller_JobListingsResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::HireFire.Grpc.AddJobListingSkillRequest, global::HireFire.Grpc.JobSkillResponse> __Method_AddJobListingSkill = new grpc::Method<global::HireFire.Grpc.AddJobListingSkillRequest, global::HireFire.Grpc.JobSkillResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "AddJobListingSkill",
+        __Marshaller_AddJobListingSkillRequest,
+        __Marshaller_JobSkillResponse);
 
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
@@ -238,6 +250,26 @@ namespace HireFire.Grpc {
       public virtual grpc::AsyncUnaryCall<global::HireFire.Grpc.JobListingsResponse> GetJobListingsByCityAsync(global::HireFire.Grpc.GetJobListingsByCityRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_GetJobListingsByCity, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::HireFire.Grpc.JobSkillResponse AddJobListingSkill(global::HireFire.Grpc.AddJobListingSkillRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return AddJobListingSkill(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::HireFire.Grpc.JobSkillResponse AddJobListingSkill(global::HireFire.Grpc.AddJobListingSkillRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_AddJobListingSkill, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::HireFire.Grpc.JobSkillResponse> AddJobListingSkillAsync(global::HireFire.Grpc.AddJobListingSkillRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return AddJobListingSkillAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::HireFire.Grpc.JobSkillResponse> AddJobListingSkillAsync(global::HireFire.Grpc.AddJobListingSkillRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_AddJobListingSkill, null, options, request);
       }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]

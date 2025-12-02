@@ -173,11 +173,35 @@
         }
     }
 
-    private void Decline()
+    private async Task Decline()
     {
-        // Tinder-style: decline = po prostu przejście dalej, bez zapisu w DB
-        MoveNext();
+        if (CurrentJob is null) return;
+
+        try
+        {
+            errorMessage = null;
+
+            // 1. Utwórz Application (status startowy = under_review)
+            var createDto = new CreateApplicationDto
+            {
+                JobId = CurrentJob.Id,
+                ApplicantId = _applicantId
+            };
+
+            var created = await ApplicationService.CreateAsync(createDto);
+
+            // 2. Zmień status na „declined”
+            await ApplicationService.RejectAsync(created.Id);
+
+            // 3. Przejdź do kolejnej oferty
+            MoveNext();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
     }
+
 
     private void MoveNext()
     {
@@ -187,7 +211,7 @@
             currentIndex = jobListings.Count; // CurrentJob => null
         }
     }
-
+    
     private async Task HandleKeyDown(KeyboardEventArgs e)
     {
         if (e.Key == "ArrowRight")
@@ -199,4 +223,5 @@
             Decline();
         }
     }
+
 }

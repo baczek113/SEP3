@@ -115,25 +115,21 @@
                 Nav.NavigateTo("/login");
                 return;
             }
-
-            // 🔹 POBRANIE REKRUTERA, ŻEBY USTAWIĆ COMPANY ID
+            
             var recruiter = await HttpRecruiterService.GetRecruiterByIdAsync(recruiterId);
-
-            if (recruiter == null || recruiter.WorksInCompanyId == 0)
-            {
-                ShowNotification("You must be assigned to a company before creating job listings.", "error");
-                return;
-            }
 
             jobListing.PostedById = recruiterId;
             jobListing.CompanyId = recruiter.WorksInCompanyId;
 
             var created = await HttpJobListingService.AddJobListing(jobListing);
 
-            ShowNotification("Job listing created successfully!", "success");
+            ShowNotification(message: "Job listing created successfully!", type: "success");
 
             await Task.Delay(800);
-            Nav.NavigateTo("/recruiter/dashboard");
+
+
+            Nav.NavigateTo($"/joblisting/skills/{created.Id}");
+
         }
         catch(Exception ex)
         {

@@ -38,24 +38,29 @@ namespace HireFire.Grpc {
             "ASADKAsyEy5Kb2JMaXN0aW5nUmVzcG9uc2UiOQohR2V0Sm9iTGlzdGluZ3NG",
             "b3JSZWNydWl0ZXJSZXF1ZXN0EhQKDHJlY3J1aXRlcl9pZBgBIAEoAyJPCiJH",
             "ZXRKb2JMaXN0aW5nc0ZvclJlY3J1aXRlclJlc3BvbnNlEikKDGpvYl9saXN0",
-            "aW5ncxgBIAMoCzITLkpvYkxpc3RpbmdSZXNwb25zZSIwChBKb2JTa2lsbFJl",
-            "c3BvbnNlEgoKAmlkGAEgASgDEhAKCHByaW9yaXR5GAIgASgJIjQKGkdldEpv",
-            "Ykxpc3RpbmdTa2lsbHNSZXF1ZXN0EhYKDmpvYl9saXN0aW5nX2lkGAEgASgD",
-            "IkAKG0dldEpvYkxpc3RpbmdTa2lsbHNSZXNwb25zZRIhCgZza2lsbHMYASAD",
-            "KAsyES5Kb2JTa2lsbFJlc3BvbnNlIi8KG0dldEpvYkxpc3RpbmdzQnlDaXR5",
-            "UmVxdWVzdBIQCghjaXR5TmFtZRgBIAEoCSI8ChNKb2JMaXN0aW5nc1Jlc3Bv",
-            "bnNlEiUKCGxpc3RpbmdzGAEgAygLMhMuSm9iTGlzdGluZ1Jlc3BvbnNlMrwD",
-            "ChFKb2JMaXN0aW5nU2VydmljZRJBChBDcmVhdGVKb2JMaXN0aW5nEhguQ3Jl",
-            "YXRlSm9iTGlzdGluZ1JlcXVlc3QaEy5Kb2JMaXN0aW5nUmVzcG9uc2USXwoY",
-            "R2V0Sm9iTGlzdGluZ3NGb3JDb21wYW55EiAuR2V0Sm9iTGlzdGluZ3NGb3JD",
-            "b21wYW55UmVxdWVzdBohLkdldEpvYkxpc3RpbmdzRm9yQ29tcGFueVJlc3Bv",
-            "bnNlEmUKGkdldEpvYkxpc3RpbmdzRm9yUmVjcnVpdGVyEiIuR2V0Sm9iTGlz",
-            "dGluZ3NGb3JSZWNydWl0ZXJSZXF1ZXN0GiMuR2V0Sm9iTGlzdGluZ3NGb3JS",
-            "ZWNydWl0ZXJSZXNwb25zZRJQChNHZXRKb2JMaXN0aW5nU2tpbGxzEhsuR2V0",
-            "Sm9iTGlzdGluZ1NraWxsc1JlcXVlc3QaHC5HZXRKb2JMaXN0aW5nU2tpbGxz",
-            "UmVzcG9uc2USSgoUR2V0Sm9iTGlzdGluZ3NCeUNpdHkSHC5HZXRKb2JMaXN0",
-            "aW5nc0J5Q2l0eVJlcXVlc3QaFC5Kb2JMaXN0aW5nc1Jlc3BvbnNlQhCqAg1I",
-            "aXJlRmlyZS5HcnBjYgZwcm90bzM="));
+            "aW5ncxgBIAMoCzITLkpvYkxpc3RpbmdSZXNwb25zZSJuChBKb2JTa2lsbFJl",
+            "c3BvbnNlEgoKAmlkGAEgASgDEhAKCHByaW9yaXR5GAIgASgJEhYKDmpvYl9s",
+            "aXN0aW5nX2lkGAMgASgDEhAKCHNraWxsX2lkGAQgASgDEhIKCnNraWxsX25h",
+            "bWUYBSABKAkiNAoaR2V0Sm9iTGlzdGluZ1NraWxsc1JlcXVlc3QSFgoOam9i",
+            "X2xpc3RpbmdfaWQYASABKAMiQAobR2V0Sm9iTGlzdGluZ1NraWxsc1Jlc3Bv",
+            "bnNlEiEKBnNraWxscxgBIAMoCzIRLkpvYlNraWxsUmVzcG9uc2UiLwobR2V0",
+            "Sm9iTGlzdGluZ3NCeUNpdHlSZXF1ZXN0EhAKCGNpdHlOYW1lGAEgASgJIjwK",
+            "E0pvYkxpc3RpbmdzUmVzcG9uc2USJQoIbGlzdGluZ3MYASADKAsyEy5Kb2JM",
+            "aXN0aW5nUmVzcG9uc2UiawoZQWRkSm9iTGlzdGluZ1NraWxsUmVxdWVzdBIW",
+            "Cg5qb2JfbGlzdGluZ19pZBgBIAEoAxISCgpza2lsbF9uYW1lGAIgASgJEhAK",
+            "CGNhdGVnb3J5GAMgASgJEhAKCHByaW9yaXR5GAQgASgJMoEEChFKb2JMaXN0",
+            "aW5nU2VydmljZRJBChBDcmVhdGVKb2JMaXN0aW5nEhguQ3JlYXRlSm9iTGlz",
+            "dGluZ1JlcXVlc3QaEy5Kb2JMaXN0aW5nUmVzcG9uc2USXwoYR2V0Sm9iTGlz",
+            "dGluZ3NGb3JDb21wYW55EiAuR2V0Sm9iTGlzdGluZ3NGb3JDb21wYW55UmVx",
+            "dWVzdBohLkdldEpvYkxpc3RpbmdzRm9yQ29tcGFueVJlc3BvbnNlEmUKGkdl",
+            "dEpvYkxpc3RpbmdzRm9yUmVjcnVpdGVyEiIuR2V0Sm9iTGlzdGluZ3NGb3JS",
+            "ZWNydWl0ZXJSZXF1ZXN0GiMuR2V0Sm9iTGlzdGluZ3NGb3JSZWNydWl0ZXJS",
+            "ZXNwb25zZRJQChNHZXRKb2JMaXN0aW5nU2tpbGxzEhsuR2V0Sm9iTGlzdGlu",
+            "Z1NraWxsc1JlcXVlc3QaHC5HZXRKb2JMaXN0aW5nU2tpbGxzUmVzcG9uc2US",
+            "SgoUR2V0Sm9iTGlzdGluZ3NCeUNpdHkSHC5HZXRKb2JMaXN0aW5nc0J5Q2l0",
+            "eVJlcXVlc3QaFC5Kb2JMaXN0aW5nc1Jlc3BvbnNlEkMKEkFkZEpvYkxpc3Rp",
+            "bmdTa2lsbBIaLkFkZEpvYkxpc3RpbmdTa2lsbFJlcXVlc3QaES5Kb2JTa2ls",
+            "bFJlc3BvbnNlQhCqAg1IaXJlRmlyZS5HcnBjYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -65,11 +70,12 @@ namespace HireFire.Grpc {
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.GetJobListingsForCompanyResponse), global::HireFire.Grpc.GetJobListingsForCompanyResponse.Parser, new[]{ "JobListings" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.GetJobListingsForRecruiterRequest), global::HireFire.Grpc.GetJobListingsForRecruiterRequest.Parser, new[]{ "RecruiterId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.GetJobListingsForRecruiterResponse), global::HireFire.Grpc.GetJobListingsForRecruiterResponse.Parser, new[]{ "JobListings" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.JobSkillResponse), global::HireFire.Grpc.JobSkillResponse.Parser, new[]{ "Id", "Priority" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.JobSkillResponse), global::HireFire.Grpc.JobSkillResponse.Parser, new[]{ "Id", "Priority", "JobListingId", "SkillId", "SkillName" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.GetJobListingSkillsRequest), global::HireFire.Grpc.GetJobListingSkillsRequest.Parser, new[]{ "JobListingId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.GetJobListingSkillsResponse), global::HireFire.Grpc.GetJobListingSkillsResponse.Parser, new[]{ "Skills" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.GetJobListingsByCityRequest), global::HireFire.Grpc.GetJobListingsByCityRequest.Parser, new[]{ "CityName" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.JobListingsResponse), global::HireFire.Grpc.JobListingsResponse.Parser, new[]{ "Listings" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.JobListingsResponse), global::HireFire.Grpc.JobListingsResponse.Parser, new[]{ "Listings" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.AddJobListingSkillRequest), global::HireFire.Grpc.AddJobListingSkillRequest.Parser, new[]{ "JobListingId", "SkillName", "Category", "Priority" }, null, null, null, null)
           }));
     }
     #endregion
@@ -1823,6 +1829,9 @@ namespace HireFire.Grpc {
     public JobSkillResponse(JobSkillResponse other) : this() {
       id_ = other.id_;
       priority_ = other.priority_;
+      jobListingId_ = other.jobListingId_;
+      skillId_ = other.skillId_;
+      skillName_ = other.skillName_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1856,6 +1865,42 @@ namespace HireFire.Grpc {
       }
     }
 
+    /// <summary>Field number for the "job_listing_id" field.</summary>
+    public const int JobListingIdFieldNumber = 3;
+    private long jobListingId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long JobListingId {
+      get { return jobListingId_; }
+      set {
+        jobListingId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "skill_id" field.</summary>
+    public const int SkillIdFieldNumber = 4;
+    private long skillId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long SkillId {
+      get { return skillId_; }
+      set {
+        skillId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "skill_name" field.</summary>
+    public const int SkillNameFieldNumber = 5;
+    private string skillName_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string SkillName {
+      get { return skillName_; }
+      set {
+        skillName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -1873,6 +1918,9 @@ namespace HireFire.Grpc {
       }
       if (Id != other.Id) return false;
       if (Priority != other.Priority) return false;
+      if (JobListingId != other.JobListingId) return false;
+      if (SkillId != other.SkillId) return false;
+      if (SkillName != other.SkillName) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1882,6 +1930,9 @@ namespace HireFire.Grpc {
       int hash = 1;
       if (Id != 0L) hash ^= Id.GetHashCode();
       if (Priority.Length != 0) hash ^= Priority.GetHashCode();
+      if (JobListingId != 0L) hash ^= JobListingId.GetHashCode();
+      if (SkillId != 0L) hash ^= SkillId.GetHashCode();
+      if (SkillName.Length != 0) hash ^= SkillName.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1908,6 +1959,18 @@ namespace HireFire.Grpc {
         output.WriteRawTag(18);
         output.WriteString(Priority);
       }
+      if (JobListingId != 0L) {
+        output.WriteRawTag(24);
+        output.WriteInt64(JobListingId);
+      }
+      if (SkillId != 0L) {
+        output.WriteRawTag(32);
+        output.WriteInt64(SkillId);
+      }
+      if (SkillName.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(SkillName);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1926,6 +1989,18 @@ namespace HireFire.Grpc {
         output.WriteRawTag(18);
         output.WriteString(Priority);
       }
+      if (JobListingId != 0L) {
+        output.WriteRawTag(24);
+        output.WriteInt64(JobListingId);
+      }
+      if (SkillId != 0L) {
+        output.WriteRawTag(32);
+        output.WriteInt64(SkillId);
+      }
+      if (SkillName.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(SkillName);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -1941,6 +2016,15 @@ namespace HireFire.Grpc {
       }
       if (Priority.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Priority);
+      }
+      if (JobListingId != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(JobListingId);
+      }
+      if (SkillId != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(SkillId);
+      }
+      if (SkillName.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(SkillName);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1959,6 +2043,15 @@ namespace HireFire.Grpc {
       }
       if (other.Priority.Length != 0) {
         Priority = other.Priority;
+      }
+      if (other.JobListingId != 0L) {
+        JobListingId = other.JobListingId;
+      }
+      if (other.SkillId != 0L) {
+        SkillId = other.SkillId;
+      }
+      if (other.SkillName.Length != 0) {
+        SkillName = other.SkillName;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1983,6 +2076,18 @@ namespace HireFire.Grpc {
             Priority = input.ReadString();
             break;
           }
+          case 24: {
+            JobListingId = input.ReadInt64();
+            break;
+          }
+          case 32: {
+            SkillId = input.ReadInt64();
+            break;
+          }
+          case 42: {
+            SkillName = input.ReadString();
+            break;
+          }
         }
       }
     #endif
@@ -2004,6 +2109,18 @@ namespace HireFire.Grpc {
           }
           case 18: {
             Priority = input.ReadString();
+            break;
+          }
+          case 24: {
+            JobListingId = input.ReadInt64();
+            break;
+          }
+          case 32: {
+            SkillId = input.ReadInt64();
+            break;
+          }
+          case 42: {
+            SkillName = input.ReadString();
             break;
           }
         }
@@ -2742,6 +2859,307 @@ namespace HireFire.Grpc {
             break;
           case 10: {
             listings_.AddEntriesFrom(ref input, _repeated_listings_codec);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class AddJobListingSkillRequest : pb::IMessage<AddJobListingSkillRequest>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<AddJobListingSkillRequest> _parser = new pb::MessageParser<AddJobListingSkillRequest>(() => new AddJobListingSkillRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<AddJobListingSkillRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::HireFire.Grpc.JobReflection.Descriptor.MessageTypes[11]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public AddJobListingSkillRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public AddJobListingSkillRequest(AddJobListingSkillRequest other) : this() {
+      jobListingId_ = other.jobListingId_;
+      skillName_ = other.skillName_;
+      category_ = other.category_;
+      priority_ = other.priority_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public AddJobListingSkillRequest Clone() {
+      return new AddJobListingSkillRequest(this);
+    }
+
+    /// <summary>Field number for the "job_listing_id" field.</summary>
+    public const int JobListingIdFieldNumber = 1;
+    private long jobListingId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long JobListingId {
+      get { return jobListingId_; }
+      set {
+        jobListingId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "skill_name" field.</summary>
+    public const int SkillNameFieldNumber = 2;
+    private string skillName_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string SkillName {
+      get { return skillName_; }
+      set {
+        skillName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "category" field.</summary>
+    public const int CategoryFieldNumber = 3;
+    private string category_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Category {
+      get { return category_; }
+      set {
+        category_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "priority" field.</summary>
+    public const int PriorityFieldNumber = 4;
+    private string priority_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Priority {
+      get { return priority_; }
+      set {
+        priority_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as AddJobListingSkillRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(AddJobListingSkillRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (JobListingId != other.JobListingId) return false;
+      if (SkillName != other.SkillName) return false;
+      if (Category != other.Category) return false;
+      if (Priority != other.Priority) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (JobListingId != 0L) hash ^= JobListingId.GetHashCode();
+      if (SkillName.Length != 0) hash ^= SkillName.GetHashCode();
+      if (Category.Length != 0) hash ^= Category.GetHashCode();
+      if (Priority.Length != 0) hash ^= Priority.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (JobListingId != 0L) {
+        output.WriteRawTag(8);
+        output.WriteInt64(JobListingId);
+      }
+      if (SkillName.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(SkillName);
+      }
+      if (Category.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Category);
+      }
+      if (Priority.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(Priority);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (JobListingId != 0L) {
+        output.WriteRawTag(8);
+        output.WriteInt64(JobListingId);
+      }
+      if (SkillName.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(SkillName);
+      }
+      if (Category.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Category);
+      }
+      if (Priority.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(Priority);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (JobListingId != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(JobListingId);
+      }
+      if (SkillName.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(SkillName);
+      }
+      if (Category.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Category);
+      }
+      if (Priority.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Priority);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(AddJobListingSkillRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.JobListingId != 0L) {
+        JobListingId = other.JobListingId;
+      }
+      if (other.SkillName.Length != 0) {
+        SkillName = other.SkillName;
+      }
+      if (other.Category.Length != 0) {
+        Category = other.Category;
+      }
+      if (other.Priority.Length != 0) {
+        Priority = other.Priority;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            JobListingId = input.ReadInt64();
+            break;
+          }
+          case 18: {
+            SkillName = input.ReadString();
+            break;
+          }
+          case 26: {
+            Category = input.ReadString();
+            break;
+          }
+          case 34: {
+            Priority = input.ReadString();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            JobListingId = input.ReadInt64();
+            break;
+          }
+          case 18: {
+            SkillName = input.ReadString();
+            break;
+          }
+          case 26: {
+            Category = input.ReadString();
+            break;
+          }
+          case 34: {
+            Priority = input.ReadString();
             break;
           }
         }

@@ -68,7 +68,7 @@ public class HttpJobListingService : IJobListingService
         )!;
     }
 
-    public async Task<List<JobListingDto>> GetSkillsForJobListingAsync(long jobListingId)
+    public async Task<List<JobListingSkillDto>> GetSkillsForJobListingAsync(long jobListingId)
     {
         var httpResponse = await client.GetAsync($"api/joblisting/job-skills/by-job-id/{jobListingId}");
         var response = await httpResponse.Content.ReadAsStringAsync();
@@ -76,7 +76,26 @@ public class HttpJobListingService : IJobListingService
         if (!httpResponse.IsSuccessStatusCode)
             throw new Exception(response);
 
-        return JsonSerializer.Deserialize<List<JobListingDto>>(
+        return JsonSerializer.Deserialize<List<JobListingSkillDto>>(
+            response,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+        )!;
+    }
+
+
+    public async Task<JobListingSkillDto> AddSkillsForJobListing(AddJobListingSkillDto request)
+    {
+        // zakładam, że JobListingId jest ustawione przed wywołaniem tej metody
+        var httpResponse = await client.PostAsJsonAsync(
+            $"api/joblisting/{request.JobListingId}/skills",
+            request);
+
+        var response = await httpResponse.Content.ReadAsStringAsync();
+
+        if (!httpResponse.IsSuccessStatusCode)
+            throw new Exception(response);
+
+        return JsonSerializer.Deserialize<JobListingSkillDto>(
             response,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
         )!;

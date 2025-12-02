@@ -7,7 +7,7 @@ CREATE SCHEMA IF NOT EXISTS HireFire;
 SET search_path TO HireFire;
 
 -- ---------- ENUM TYPES ----------
--- Zostawiamy tylko user_role
+
 CREATE TYPE user_role AS ENUM ('admin','company_representative','recruiter','applicant');
 
 -- ---------- BASE USER ----------
@@ -83,13 +83,15 @@ CREATE TABLE job_listing (
 );
 
 CREATE TABLE job_listing_skills (
+                                    id        BIGSERIAL PRIMARY KEY,
                                     job_id    BIGINT NOT NULL REFERENCES job_listing(id) ON DELETE CASCADE,
                                     skill_id  BIGINT NOT NULL REFERENCES skill(id) ON DELETE CASCADE,
                                     priority  VARCHAR(10) NOT NULL DEFAULT 'must',
                                     CONSTRAINT chk_job_skill_priority
                                         CHECK (priority IN ('must', 'nice')),
-                                    PRIMARY KEY (job_id, skill_id)
+                                    CONSTRAINT uq_job_skill UNIQUE (job_id, skill_id)
 );
+
 
 -- ---------- APPLICANTS & SKILLS ----------
 CREATE TABLE applicant_skill (

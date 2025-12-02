@@ -1,4 +1,5 @@
-﻿using LogicServer.Services;
+﻿using LogicServer.DTOs.Job;
+using LogicServer.Services;
 using Microsoft.AspNetCore.Mvc;
 using LogicServer.DTOs.JobListing;
 
@@ -48,9 +49,22 @@ public class JobListingController : ControllerBase
     }
     
     [HttpGet("job-skills/by-job-id/{jobId:long}")]
-    public async Task<ActionResult<List<JobListingDto>>> GetSkillsForJob(long jobId)
+    public async Task<ActionResult<List<JobListingSkillDto>>> GetSkillsForJob(long jobId)
     {
         var result = await _jobListingService.GetJobListingSkillsAsync(jobId);
         return Ok(result);
     }
+    [HttpPost("{jobId:long}/skills")]
+    public async Task<ActionResult<JobListingSkillDto>> AddSkillToJob(long jobId, [FromBody] AddJobListingSkillDto dto)
+    {
+        if (dto == null)
+            return BadRequest("Invalid data");
+        
+        dto.JobListingId = jobId;
+
+        var result = await _jobListingService.AddJobListingSkillAsync(dto);
+        return Ok(result);
+    }
+
+
 }
