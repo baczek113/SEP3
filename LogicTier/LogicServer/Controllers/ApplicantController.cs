@@ -74,4 +74,10 @@ public class ApplicantController : ControllerBase
         var result = await _service.GetSuggestedJobsAsync(applicantId);
         return Ok(result);
     }
+    [HttpGet("by-id/{applicantId:long}")]
+    public async Task<ActionResult<ApplicantDto>> GetApplicationsById(long applicantId)
+    {
+        var result = await _service.GetByIdAsync(applicantId);
+        return Ok(result);
+    }
 }
