@@ -6,6 +6,7 @@ using CompanyService = LogicServer.Services.CompanyService;
 using JobListingService = LogicServer.Services.JobListingService;
 using RecruiterService = LogicServer.Services.RecruiterService;
 using RepresentativeService = LogicServer.Services.RepresentativeService;
+using ApplicationService = LogicServer.Services.ApplicationService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,11 +24,12 @@ builder.Services.AddSingleton<AuthenticationService>();
 builder.Services.AddSingleton<RecruiterService>();
 builder.Services.AddSingleton<JobListingService>();
 builder.Services.AddSingleton<HubChatService>();
+builder.Services.AddSingleton<ApplicationService>();
 builder.Services.AddGrpcClient<ChatService.ChatServiceClient>(o =>
 {
     o.Address = new Uri(chatServiceUrl); 
 });
-builder.Services.AddSingleton<ApplicationService>();
+
 
 var app = builder.Build();
 

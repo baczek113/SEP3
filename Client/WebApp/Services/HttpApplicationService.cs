@@ -1,56 +1,83 @@
-﻿using WebApp.DTOs.Application;
+﻿using System.Text.Json;
+using WebApp.DTOs.Application;
+
+namespace WebApp.Services;
 
 public class HttpApplicationService : IApplicationService
 {
-    private readonly HttpClient _http;
-    private const string BaseUrl = "api/Application";
+    private readonly HttpClient client;
+    private const string BaseUrl = "api/application";
 
-    public HttpApplicationService(HttpClient http)
+    private static readonly JsonSerializerOptions JsonOptions = new()
     {
-        _http = http;
+        PropertyNameCaseInsensitive = true
+    };
+
+    public HttpApplicationService(HttpClient client)
+    {
+        this.client = client;
     }
 
-    public async Task<ApplicationDto> CreateAsync(CreateApplicationDto dto)
+    public async Task<ApplicationDto> CreateAsync(CreateApplicationDto request)
     {
-        var response = await _http.PostAsJsonAsync(BaseUrl, dto);
-        response.EnsureSuccessStatusCode();
-        return await response.Content.ReadFromJsonAsync<ApplicationDto>()
-               ?? throw new InvalidOperationException("Empty response body");
+        var httpResponse = await client.PostAsJsonAsync(BaseUrl, request);
+        var response = await httpResponse.Content.ReadAsStringAsync();
+
+        if (!httpResponse.IsSuccessStatusCode)
+            throw new Exception(response);
+
+        return JsonSerializer.Deserialize<ApplicationDto>(response, JsonOptions)!;
     }
 
-    public async Task<ICollection<ApplicationDto>> GetByJobAsync(long jobId)
+    public async Task<List<ApplicationDto>> GetByJobAsync(long jobId)
     {
-        var result =
-            await _http.GetFromJsonAsync<ICollection<ApplicationDto>>(
-                $"{BaseUrl}/applications/by-job/{jobId}");
+        var httpResponse = await client.GetAsync($"{BaseUrl}/applications/by-job/{jobId}");
+        var response = await httpResponse.Content.ReadAsStringAsync();
 
-        return result ?? Array.Empty<ApplicationDto>();
+        if (!httpResponse.IsSuccessStatusCode)
+            throw new Exception(response);
+
+        return JsonSerializer.Deserialize<List<ApplicationDto>>(response, JsonOptions)!;
     }
 
-    public async Task<ICollection<ApplicationDto>> GetByApplicantAsync(long applicantId)
-    {
-        var result =
-            await _http.GetFromJsonAsync<ICollection<ApplicationDto>>(
-                $"{BaseUrl}/applications/by-applicant/{applicantId}");
 
-        return result ?? Array.Empty<ApplicationDto>();
+
+    public async Task<List<ApplicationDto>> GetByApplicantAsync(long applicantId)
+    {
+        var httpResponse = await client.GetAsync($"{BaseUrl}/applications/by-applicant/{applicantId}");
+        var response = await httpResponse.Content.ReadAsStringAsync();
+
+        if (!httpResponse.IsSuccessStatusCode)
+            throw new Exception(response);
+
+        return JsonSerializer.Deserialize<List<ApplicationDto>>(response, JsonOptions)!;
     }
 
     public async Task AcceptAsync(long applicationId)
     {
-        var response = await _http.PostAsJsonAsync(
-            $"{BaseUrl}/accept-application",
-            new { applicationId });
+        var payload = new { applicationId };
 
-        response.EnsureSuccessStatusCode();
+        var httpResponse = await client.PostAsJsonAsync(
+            $"{BaseUrl}/accept-application",
+            payload);
+
+        var response = await httpResponse.Content.ReadAsStringAsync();
+
+        if (!httpResponse.IsSuccessStatusCode)
+            throw new Exception(response);
     }
 
     public async Task RejectAsync(long applicationId)
     {
-        var response = await _http.PostAsJsonAsync(
-            $"{BaseUrl}/reject-application",
-            new { applicationId });
+        var payload = new { applicationId };
 
-        response.EnsureSuccessStatusCode();
+        var httpResponse = await client.PostAsJsonAsync(
+            $"{BaseUrl}/reject-application",
+            payload);
+
+        var response = await httpResponse.Content.ReadAsStringAsync();
+
+        if (!httpResponse.IsSuccessStatusCode)
+            throw new Exception(response);
     }
 }
