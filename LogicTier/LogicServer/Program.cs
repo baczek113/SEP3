@@ -24,7 +24,6 @@ builder.Services.AddSingleton<CompanyService>();
 builder.Services.AddSingleton<AuthenticationService>();
 builder.Services.AddSingleton<RecruiterService>();
 builder.Services.AddSingleton<JobListingService>();
-builder.Services.AddSingleton<HubChatService>();
 builder.Services.AddGrpcClient<ChatService.ChatServiceClient>(o =>
 {
     o.Address = new Uri(chatServiceUrl); 
@@ -41,5 +40,7 @@ if (app.Environment.IsDevelopment())
 app.UseRouting();
 app.UseAuthorization();
 app.MapControllers();
+
+app.MapHub<HubChatService>("/chathub");
 
 app.Run();

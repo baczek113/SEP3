@@ -1,7 +1,9 @@
 package com.example.databaseserver.Service;
+import com.example.databaseserver.Entities.Application;
 import com.example.databaseserver.Entities.ChatThread;
 import com.example.databaseserver.Entities.Message;
 import com.example.databaseserver.Entities.User;
+import com.example.databaseserver.Repositories.ApplicationRepository;
 import com.example.databaseserver.Repositories.ChatThreadRepository;
 import com.example.databaseserver.Repositories.MessageRepository;
 import com.example.databaseserver.Repositories.UserRepository;
@@ -15,6 +17,8 @@ import com.example.databaseserver.generated.SaveMessagesResponse;
 import com.example.databaseserver.generated.ChatMessage;
 import com.example.databaseserver.generated.GetMessagesRequest;
 import com.example.databaseserver.generated.GetMessagesResponse;
+import com.example.databaseserver.generated.ChatHandshakeRequest;
+import com.example.databaseserver.generated.ChatHandshakeResponse;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -24,14 +28,36 @@ public class ChatService extends ChatServiceGrpc.ChatServiceImplBase {
     private final ChatThreadRepository chatThreadRepository;
     private final MessageRepository messageRepository;
     private final UserRepository userRepository;
+    private final ApplicationRepository applicationRepository;
 
     @Autowired
-    public ChatService(ChatThreadRepository chatThreadRepository, MessageRepository messageRepository, UserRepository userRepository) {
+    public ChatService(ChatThreadRepository chatThreadRepository, MessageRepository messageRepository, UserRepository userRepository, ApplicationRepository applicationRepository) {
         this.chatThreadRepository = chatThreadRepository;
         this.messageRepository = messageRepository;
         this.userRepository = userRepository;
+        this.applicationRepository = applicationRepository;
     }
 
+    @Override
+    @Transactional
+    public void getChatHandshake(ChatHandshakeRequest request, StreamObserver<ChatHandshakeResponse> responseObserver){
+        try {
+            Application app = applicationRepository.findByJobIdAndApplicantId(request.getJobId(), request.getApplicantId());
+            ChatHandshakeResponse response;
+            if (app != null){
+                 response = ChatHandshakeResponse.newBuilder()
+                        .setExists(true)
+                        .setApplicationId(app.getId())
+                        .build();
+            }else {
+                 response = ChatHandshakeResponse.newBuilder().setExists(false).build();
+            }
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }catch (Exception e){
+            responseObserver.onError(e);
+        }
+    }
     @Override
     @Transactional
     public void getMessages(GetMessagesRequest request, StreamObserver<GetMessagesResponse> responseObserver){
