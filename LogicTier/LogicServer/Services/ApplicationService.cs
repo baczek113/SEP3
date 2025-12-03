@@ -47,49 +47,59 @@ public class ApplicationService
         };
     }
     
-    public async Task<ApplicationsDto> GetApplicationsForJobAsync(long jobId)
+    public async Task<List<ApplicationDto>> GetApplicationsForJobAsync(long jobId)
     {
         using var channel = GrpcChannel.ForAddress(_grpcAddress);
         var client = new HireFire.Grpc.ApplicationService.ApplicationServiceClient(channel);
-    
+
         var request = new GetApplicationsForJobRequest()
         {
             JobId = jobId
         };
-    
+
         var reply = await client.GetApplicationsForJobAsync(request);
-        
-        List<ApplicationDto> applications = new List<ApplicationDto>();
-        
+
+        List<ApplicationDto> applications = new();
+
         foreach (var application in reply.Applications)
         {
-            DateTime dateSubmitted;
+            // poprawny parse SubmittedAt
             if (!DateTime.TryParse(
                     application.SubmittedAt,
                     CultureInfo.InvariantCulture,
                     DateTimeStyles.RoundtripKind,
-                    out dateSubmitted))
+                    out var dateSubmitted))
             {
                 dateSubmitted = DateTime.UtcNow;
             }
-            
-            applications.Add(new  ApplicationDto()
+
+            // KONWERSJA STATUSU ENUM DO STRINGA
+            string status = application.Status.ToString();
+
+            // 🔥 OBSŁUGA WSZYSTKICH MOŻLIWYCH FORMATÓW
+            bool isUnderReview =
+                status.Equals("under_review", StringComparison.OrdinalIgnoreCase) ||
+                status.Equals("UnderReview", StringComparison.OrdinalIgnoreCase) ||
+                status.Equals("APPLICATION_STATUS_UNDER_REVIEW", StringComparison.OrdinalIgnoreCase) ||
+                status.Equals("0"); // czasem enum = 0 → under review
+
+            if (isUnderReview)
             {
-                Id = application.Id,
-                ApplicantId = application.ApplicantId,
-                JobId = application.JobId,
-                SubmittedAt = dateSubmitted,
-                Status = application.Status.ToString(),
-            });
+                applications.Add(new ApplicationDto()
+                {
+                    Id = application.Id,
+                    ApplicantId = application.ApplicantId,
+                    JobId = application.JobId,
+                    SubmittedAt = dateSubmitted,
+                    Status = status
+                });
+            }
         }
-        
-        
-        return new ApplicationsDto()
-        {
-            Applications = applications
-        };
+
+        return applications;
     }
-    
+
+
     public async Task<ApplicationsDto> GetApplicationsForApplicantAsync(long applicantId)
     {
         using var channel = GrpcChannel.ForAddress(_grpcAddress);

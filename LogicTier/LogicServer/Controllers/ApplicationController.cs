@@ -86,22 +86,15 @@ public class ApplicationController : ControllerBase
     }
     
     [HttpGet("applications/by-job/{jobId:long}")]
-    public async Task<ActionResult<ApplicationDto>> GetApplicationByJob(long jobId)
+    public async Task<ActionResult<List<ApplicationsDto>>> GetApplicationsByJob(long jobId)
     {
-        try
-        {
-            var result = await _service.GetApplicationsForJobAsync(jobId);
-            return Ok(result);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Internal Server Error while fetching applications");
-            return StatusCode(500, e.Message);
-        }
+        var result = await _service.GetApplicationsForJobAsync(jobId);
+        return Ok(result);
     }
+
     
     [HttpGet("applications/by-applicant/{applicantId:long}")]
-    public async Task<ActionResult<ApplicationDto>> GetApplicationByApplicant(long applicantId)
+    public async Task<ActionResult<List<ApplicationDto>>> GetApplicationsByApplicant(long applicantId)
     {
         try
         {
@@ -114,4 +107,6 @@ public class ApplicationController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
+    
 }

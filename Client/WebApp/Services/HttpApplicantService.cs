@@ -68,4 +68,17 @@ public class HttpApplicantService: IApplicantService
         )!;
     }
 
+    public async Task<ApplicantDto> GetApplicantAsync(long applicantId)
+    {
+        var httpResponse = await client.GetAsync($"api/applicant/by-id/{applicantId}"); ;
+        var response = await httpResponse.Content.ReadAsStringAsync();
+        
+        if (!httpResponse.IsSuccessStatusCode)
+            throw new Exception(response);
+        return JsonSerializer.Deserialize<ApplicantDto>(
+            response,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+        )!;
+    }
+
 }

@@ -1,0 +1,257 @@
+﻿@page "/recruiter/job/{JobId:long}/applications"
+
+@using WebApp.DTOs.Application
+@using WebApp.DTOs.Applicant
+@using WebApp.Services
+
+@inject HttpApplicationService ApplicationService
+@inject HttpApplicantService  HttpApplicantService
+
+@layout MainLayout
+@rendermode InteractiveServer
+
+<AuthorizeView Roles="recruiter">
+    <Authorized Context="_">
+        <div class="dash-shell">
+            <div class="dash-card job-swipe-shell" tabindex="0" @onkeydown="HandleKeyDown">
+                <div class="dash-header">
+                    <div class="dash-title">
+                        <h2>Review applicants</h2>
+                        <p>Use ← to decline, → to match this applicant for the job.</p>
+                    </div>
+                </div>
+
+                <div class="dash-content">
+                    @if (isLoading)
+                    {
+                        <p class="dash-loading">Loading applications...</p>
+                    }
+                    else if (!string.IsNullOrWhiteSpace(errorMessage))
+                    {
+                        <p class="dash-empty">@errorMessage</p>
+                    }
+                    else if (CurrentApplication is null)
+                    {
+                        <div class="dash-empty">
+                            <p>Loaded applications: @applications.Count</p>
+                            <h4>No more applications to review</h4>
+                            <p>All candidates for this job have been processed.</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="job-card-main">
+                            <div class="job-card-header">
+                                <h3>
+                                    @(
+                                        currentApplicant is not null
+                                            ? currentApplicant.Name
+                                            : $"Applicant #{CurrentApplication.ApplicantId}"
+                                     )
+                                </h3>
+
+                                <span class="job-location">
+                                    Application ID: @CurrentApplication.Id
+                                </span>
+                            </div>
+
+                            <p class="job-description">
+                                Submitted at @CurrentApplication.SubmittedAt.ToLocalTime().ToString("g")
+                            </p>
+
+                            @if (currentApplicant is not null)
+                            {
+                                <div class="job-description">
+                                    <p>
+                                        <strong>Experience:</strong>
+                                        @currentApplicant.Experience
+                                    </p>
+                                    <p>
+                                        <strong>Location:</strong>
+                                        @currentApplicant.City
+                                        @if (!string.IsNullOrWhiteSpace(currentApplicant.Postcode))
+                                        {
+                                            @($" ({currentApplicant.Postcode})")
+                                        }
+                                    </p>
+                                </div>
+                            }
+
+                            @if (currentApplicantSkills.Any())
+                            {
+                                <div class="skills-inline" style="margin-top: 8px;">
+                                    @foreach (var s in currentApplicantSkills)
+                                    {
+                                        <span class="skill-chip selected">
+                                            @s.SkillName (@s.Level)
+                                        </span>
+                                    }
+                                </div>
+                            }
+
+                            <div class="job-meta-row" style="margin-top: 12px;">
+                                <span class="job-meta-pill">
+                                    Job ID: @CurrentApplication.JobId
+                                </span>
+                                <span class="job-meta-pill subtle">
+                                    Status: @CurrentApplication.Status
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="job-actions">
+                            <button class="job-btn job-btn-decline" @onclick="DeclineAsync">
+                                ❌ Decline<br /><span>Left arrow</span>
+                            </button>
+
+                            <button class="job-btn job-btn-accept" @onclick="AcceptAsync">
+                                ✅ Match<br /><span>Right arrow</span>
+                            </button>
+                        </div>
+
+                        <p class="job-counter">
+                            @((currentIndex + 1)) / @applications.Count
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+    </Authorized>
+
+    <NotAuthorized>
+        <div class="dash-shell">
+            <div class="dash-card">
+                <p>You must be logged in as a recruiter to see this page.</p>
+            </div>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    [Parameter]
+    public long JobId { get; set; }
+
+    private List<ApplicationDto> applications = new();
+    private int currentIndex = 0;
+    private bool isLoading = true;
+    private string? errorMessage;
+
+    private ApplicantDto? currentApplicant;
+    private List<ApplicantSkillDto> currentApplicantSkills = new();
+
+    private ApplicationDto? CurrentApplication =>
+        (currentIndex >= 0 && currentIndex < applications.Count)
+            ? applications[currentIndex]
+            : null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            isLoading = true;
+            errorMessage = null;
+
+            var all = await ApplicationService.GetByJobAsync(JobId);
+            applications = all.ToList();
+
+            if (applications.Any())
+            {
+                await LoadCurrentApplicantAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task LoadCurrentApplicantAsync()
+    {
+        if (CurrentApplication is null)
+        {
+            currentApplicant = null;
+            currentApplicantSkills.Clear();
+            return;
+        }
+
+        try
+        {
+            currentApplicant =
+                await HttpApplicantService.GetApplicantAsync(CurrentApplication.ApplicantId);
+
+            currentApplicantSkills =
+                (await HttpApplicantService.GetApplicantSkillsAsync(CurrentApplication.ApplicantId))
+                .ToList();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Failed to load applicant details: " + ex.Message;
+        }
+    }
+
+    private async Task AcceptAsync()
+    {
+        if (CurrentApplication is null) return;
+
+        try
+        {
+            errorMessage = null;
+            await ApplicationService.AcceptAsync(CurrentApplication.Id);
+            await MoveNextAsync();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+    }
+
+    private async Task DeclineAsync()
+    {
+        if (CurrentApplication is null) return;
+
+        try
+        {
+            errorMessage = null;
+            await ApplicationService.RejectAsync(CurrentApplication.Id);
+            await MoveNextAsync();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+    }
+
+    private async Task MoveNextAsync()
+    {
+        currentIndex++;
+
+        if (currentIndex >= applications.Count)
+        {
+            currentIndex = applications.Count; // CurrentApplication => null
+            currentApplicant = null;
+            currentApplicantSkills.Clear();
+        }
+        else
+        {
+            await LoadCurrentApplicantAsync();
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "ArrowRight")
+        {
+            await AcceptAsync();
+        }
+        else if (e.Key == "ArrowLeft")
+        {
+            await DeclineAsync();
+        }
+    }
+}

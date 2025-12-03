@@ -235,4 +235,33 @@ public class ApplicantService
             SkillLevelProto.SkillLevelExpert   => 5,
             _                                  => 1
         };
+    public async Task<ApplicantDto?> GetByIdAsync(long applicantId)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new HireFire.Grpc.ApplicantService.ApplicantServiceClient(channel);
+
+        var request = new GetApplicantRequest
+        {
+            Id = applicantId
+        };
+
+        var reply = await client.GetApplicantByIdAsync(request);
+
+        if (reply.Id == 0)
+            return null;
+
+        return new ApplicantDto
+        {
+            Id         = reply.Id,
+            Name       = reply.Name,
+            Email      = reply.Email,
+            Experience = reply.Experience,
+            City       = reply.City,
+            Postcode   = reply.Postcode,
+            Address    = reply.Address
+        };
+    }
+
+
+    
 }
