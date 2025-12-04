@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity;
 using WebApp.Authentication;
 using WebApp.Components;
 using WebApp.Services;

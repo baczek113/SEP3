@@ -6,11 +6,14 @@ import com.example.databaseserver.Entities.Location;
 import com.example.databaseserver.Repositories.CompanyRepository;
 import com.example.databaseserver.Repositories.LocationRepository;
 import com.example.databaseserver.Repositories.RepresentativeRepository;
+import com.example.databaseserver.generated.ApproveCompanyRequest;
+import com.example.databaseserver.generated.CompanyResponse;
 import com.example.databaseserver.generated.CompanyServiceGrpc;
 import com.example.databaseserver.generated.CreateCompanyRequest;
-import com.example.databaseserver.generated.CompanyResponse;
 import com.example.databaseserver.generated.GetCompaniesForRepresentativeRequest;
 import com.example.databaseserver.generated.GetCompaniesForRepresentativeResponse;
+import com.example.databaseserver.generated.GetCompaniesToApproveRequest;
+import com.example.databaseserver.generated.GetCompaniesToApproveResponse;
 import io.grpc.stub.StreamObserver;
 import jakarta.transaction.Transactional;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -63,27 +66,7 @@ public class CompanyService extends CompanyServiceGrpc.CompanyServiceImplBase {
 
             Company savedCompany = companyRepository.save(company);
 
-
-            CompanyResponse.Builder builder = CompanyResponse.newBuilder()
-                    .setId(savedCompany.getId())
-                    .setName(savedCompany.getName())
-                    .setDescription(savedCompany.getDescription() == null ? "" : savedCompany.getDescription())
-                    .setWebsite(savedCompany.getWebsite() == null ? "" : savedCompany.getWebsite())
-                    .setIsApproved(savedCompany.isApproved());
-
-            if (savedCompany.getLocation() != null) {
-                builder.setCity(savedCompany.getLocation().getCity() == null ? "" : savedCompany.getLocation().getCity())
-                        .setPostcode(savedCompany.getLocation().getPostcode() == null ? "" : savedCompany.getLocation().getPostcode())
-                        .setAddress(savedCompany.getLocation().getAddress() == null ? "" : savedCompany.getLocation().getAddress());
-            }
-
-            if (savedCompany.getCompanyRepresentative() != null) {
-                builder.setCompanyRepresentativeId(savedCompany.getCompanyRepresentative().getId());
-            } else {
-                builder.setCompanyRepresentativeId(0L);
-            }
-
-            CompanyResponse response = builder.build();
+            CompanyResponse response = toCompanyResponse(savedCompany);
 
             responseObserver.onNext(response);
             responseObserver.onCompleted();
@@ -92,6 +75,7 @@ public class CompanyService extends CompanyServiceGrpc.CompanyServiceImplBase {
             responseObserver.onError(e);
         }
     }
+
     @Override
     @Transactional
     public void getCompaniesForRepresentative(
@@ -108,37 +92,85 @@ public class CompanyService extends CompanyServiceGrpc.CompanyServiceImplBase {
                     GetCompaniesForRepresentativeResponse.newBuilder();
 
             for (Company company : companies) {
-                Location loc = company.getLocation();
-
-                CompanyResponse companyResponse = CompanyResponse.newBuilder()
-                        .setId(company.getId())
-                        .setName(safe(company.getName()))
-                        .setDescription(safe(company.getDescription()))
-                        .setWebsite(safe(company.getWebsite()))
-                        .setIsApproved(company.isApproved())
-                        .setCity(loc != null ? safe(loc.getCity()) : "")
-                        .setPostcode(loc != null ? safe(loc.getPostcode()) : "")
-                        .setAddress(loc != null ? safe(loc.getAddress()) : "")
-                        .setCompanyRepresentativeId(
-                                company.getCompanyRepresentative() != null
-                                        ? company.getCompanyRepresentative().getId()
-                                        : 0L
-                        )
-                        .build();
-
-                responseBuilder.addCompanies(companyResponse);
+                responseBuilder.addCompanies(toCompanyResponse(company));
             }
 
             responseObserver.onNext(responseBuilder.build());
             responseObserver.onCompleted();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             responseObserver.onError(e);
         }
+    }
+
+    @Override
+    @Transactional
+    public void getCompaniesToApprove(
+            GetCompaniesToApproveRequest request,
+            StreamObserver<GetCompaniesToApproveResponse> responseObserver) {
+
+        try {
+            List<Company> companies = companyRepository.findByApprovedFalse();
+
+            GetCompaniesToApproveResponse.Builder responseBuilder =
+                    GetCompaniesToApproveResponse.newBuilder();
+
+            for (Company company : companies) {
+                responseBuilder.addCompanies(toCompanyResponse(company));
+            }
+
+            responseObserver.onNext(responseBuilder.build());
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            responseObserver.onError(e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void approveCompany(
+            ApproveCompanyRequest request,
+            StreamObserver<CompanyResponse> responseObserver) {
+
+        try {
+            long companyId = request.getCompanyId();
+
+            Company company = companyRepository.findById(companyId)
+                    .orElseThrow(() ->
+                            new IllegalArgumentException("Company not found with id: " + companyId));
+
+            if (!company.isApproved()) {
+                company.setApproved(true);
+                company = companyRepository.save(company);
+            }
+
+            CompanyResponse response = toCompanyResponse(company);
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            responseObserver.onError(e);
+        }
+    }
+
+    // === HELPER: mapowanie encji JPA -> protobuf ===
+    private CompanyResponse toCompanyResponse(Company company) {
+        Location loc = company.getLocation();
+        CompanyRepresentative rep = company.getCompanyRepresentative();
+
+        return CompanyResponse.newBuilder()
+                .setId(company.getId())
+                .setName(safe(company.getName()))
+                .setDescription(safe(company.getDescription()))
+                .setWebsite(safe(company.getWebsite()))
+                .setIsApproved(company.isApproved())
+                .setCity(loc != null ? safe(loc.getCity()) : "")
+                .setPostcode(loc != null ? safe(loc.getPostcode()) : "")
+                .setAddress(loc != null ? safe(loc.getAddress()) : "")
+                .setCompanyRepresentativeId(rep != null ? rep.getId() : 0L)
+                .build();
     }
 
     private String safe(String value) {
         return value == null ? "" : value;
     }
-
 }

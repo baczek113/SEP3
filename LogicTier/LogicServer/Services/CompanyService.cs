@@ -35,42 +35,95 @@ public class CompanyService
 
         return new CompanyDto
         {
-            Id                     = reply.Id,
-            Name                   = reply.Name,
-            Description            = string.IsNullOrWhiteSpace(reply.Description) ? null : reply.Description,
-            Website                = string.IsNullOrWhiteSpace(reply.Website) ? null : reply.Website,
-            IsApproved             = reply.IsApproved,
-            City                   = reply.City,
-            Postcode               = string.IsNullOrWhiteSpace(reply.Postcode) ? null : reply.Postcode,
-            Address                = string.IsNullOrWhiteSpace(reply.Address) ? null : reply.Address,
+            Id                      = reply.Id,
+            Name                    = reply.Name,
+            Description             = string.IsNullOrWhiteSpace(reply.Description) ? null : reply.Description,
+            Website                 = string.IsNullOrWhiteSpace(reply.Website) ? null : reply.Website,
+            IsApproved              = reply.IsApproved,
+            City                    = reply.City,
+            Postcode                = string.IsNullOrWhiteSpace(reply.Postcode) ? null : reply.Postcode,
+            Address                 = string.IsNullOrWhiteSpace(reply.Address) ? null : reply.Address,
             CompanyRepresentativeId = reply.CompanyRepresentativeId
         };
     }
-     public async Task<List<CompanyDto>> GetCompaniesForRepresentativeAsync(long representativeId)
-     {
-         using var channel = GrpcChannel.ForAddress(_grpcAddress);
-         var client = new HireFire.Grpc.CompanyService.CompanyServiceClient(channel);
-     
-         var request = new GetCompaniesForRepresentativeRequest
-         {
-             CompanyRepresentativeId = representativeId
-         };
-     
-         var reply = await client.GetCompaniesForRepresentativeAsync(request);
-         
-         return reply.Companies
-             .Select(c => new CompanyDto
-             {
-                 Id                      = c.Id,
-                 Name                    = c.Name,
-                 Description             = string.IsNullOrWhiteSpace(c.Description) ? null : c.Description,
-                 Website                 = string.IsNullOrWhiteSpace(c.Website) ? null : c.Website,
-                 IsApproved              = c.IsApproved,
-                 City                    = c.City,
-                 Postcode                = string.IsNullOrWhiteSpace(c.Postcode) ? null : c.Postcode,
-                 Address                 = string.IsNullOrWhiteSpace(c.Address) ? null : c.Address,
-                 CompanyRepresentativeId = c.CompanyRepresentativeId
-             })
-             .ToList();
-     }
+
+    public async Task<List<CompanyDto>> GetCompaniesForRepresentativeAsync(long representativeId)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new HireFire.Grpc.CompanyService.CompanyServiceClient(channel);
+
+        var request = new GetCompaniesForRepresentativeRequest
+        {
+            CompanyRepresentativeId = representativeId
+        };
+
+        var reply = await client.GetCompaniesForRepresentativeAsync(request);
+
+        return reply.Companies
+            .Select(c => new CompanyDto
+            {
+                Id                      = c.Id,
+                Name                    = c.Name,
+                Description             = string.IsNullOrWhiteSpace(c.Description) ? null : c.Description,
+                Website                 = string.IsNullOrWhiteSpace(c.Website) ? null : c.Website,
+                IsApproved              = c.IsApproved,
+                City                    = c.City,
+                Postcode                = string.IsNullOrWhiteSpace(c.Postcode) ? null : c.Postcode,
+                Address                 = string.IsNullOrWhiteSpace(c.Address) ? null : c.Address,
+                CompanyRepresentativeId = c.CompanyRepresentativeId
+            })
+            .ToList();
+    }
+
+    
+    public async Task<List<CompanyDto>> GetCompaniesToApproveAsync()
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new HireFire.Grpc.CompanyService.CompanyServiceClient(channel);
+
+        var request = new GetCompaniesToApproveRequest();
+
+        var reply = await client.GetCompaniesToApproveAsync(request);
+
+        return reply.Companies
+            .Select(c => new CompanyDto
+            {
+                Id                      = c.Id,
+                Name                    = c.Name,
+                Description             = string.IsNullOrWhiteSpace(c.Description) ? null : c.Description,
+                Website                 = string.IsNullOrWhiteSpace(c.Website) ? null : c.Website,
+                IsApproved              = c.IsApproved,
+                City                    = c.City,
+                Postcode                = string.IsNullOrWhiteSpace(c.Postcode) ? null : c.Postcode,
+                Address                 = string.IsNullOrWhiteSpace(c.Address) ? null : c.Address,
+                CompanyRepresentativeId = c.CompanyRepresentativeId
+            })
+            .ToList();
+    }
+    
+    public async Task<CompanyDto> ApproveCompanyAsync(long companyId)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new HireFire.Grpc.CompanyService.CompanyServiceClient(channel);
+
+        var request = new ApproveCompanyRequest
+        {
+            CompanyId = companyId
+        };
+
+        var reply = await client.ApproveCompanyAsync(request);
+
+        return new CompanyDto
+        {
+            Id                      = reply.Id,
+            Name                    = reply.Name,
+            Description             = string.IsNullOrWhiteSpace(reply.Description) ? null : reply.Description,
+            Website                 = string.IsNullOrWhiteSpace(reply.Website) ? null : reply.Website,
+            IsApproved              = reply.IsApproved,
+            City                    = reply.City,
+            Postcode                = string.IsNullOrWhiteSpace(reply.Postcode) ? null : reply.Postcode,
+            Address                 = string.IsNullOrWhiteSpace(reply.Address) ? null : reply.Address,
+            CompanyRepresentativeId = reply.CompanyRepresentativeId
+        };
+    }
 }

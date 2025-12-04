@@ -6,6 +6,12 @@ service CompanyService {
   rpc CreateCompany (CreateCompanyRequest) returns (CompanyResponse);
   rpc GetCompaniesForRepresentative (GetCompaniesForRepresentativeRequest)
       returns (GetCompaniesForRepresentativeResponse);
+
+  rpc GetCompaniesToApprove (GetCompaniesToApproveRequest)
+      returns (GetCompaniesToApproveResponse);
+
+  rpc ApproveCompany (ApproveCompanyRequest)
+      returns (CompanyResponse);
 }
 
 message CreateCompanyRequest {
@@ -41,3 +47,15 @@ message GetCompaniesForRepresentativeRequest {
 message GetCompaniesForRepresentativeResponse {
   repeated CompanyResponse companies = 1;
 }
+
+message GetCompaniesToApproveRequest {
+}
+
+message GetCompaniesToApproveResponse {
+  repeated CompanyResponse companies = 1;
+}
+
+message ApproveCompanyRequest {
+  int64 company_id = 1;
+}
+
