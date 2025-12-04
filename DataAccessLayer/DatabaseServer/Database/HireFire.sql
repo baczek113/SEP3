@@ -128,3 +128,10 @@ CREATE TABLE message (
                          body       TEXT NOT NULL,
                          sent_at    TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+INSERT INTO HireFire.users (email, password, role, name)
+VALUES (
+           'admin@hirefire.local',
+           '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918',
+           'admin',
+           'Admin'
+       );

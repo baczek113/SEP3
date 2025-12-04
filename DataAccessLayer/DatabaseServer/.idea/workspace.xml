@@ -5,21 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="124ee155-6a89-44ef-8acb-cbea402897b8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../../Client/WebApp/Components/Pages/ReviewingApplications.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Client/WebApp/Components/Pages/ReviewingApplications.razor.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/WebApp/Components/Pages/RecruiterView.razor" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/WebApp/Components/Pages/RecruiterView.razor" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/WebApp/Services/HttpApplicantService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/WebApp/Services/HttpApplicantService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/WebApp/Services/HttpApplicationService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/WebApp/Services/HttpApplicationService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/WebApp/Services/IApplicantService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/WebApp/Services/IApplicantService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/WebApp/Services/IApplicationService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/WebApp/Services/IApplicationService.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Client/WebApp/Components/Pages/AdminView.razor" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../Client/WebApp/Components/Pages/AdminView.razor.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/WebApp/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/WebApp/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/WebApp/Services/HttpCompanyService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/WebApp/Services/HttpCompanyService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Client/WebApp/Services/ICompanyService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/WebApp/Services/ICompanyService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/Controllers/ApplicantController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/Controllers/ApplicantController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/Controllers/ApplicationController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/Controllers/ApplicationController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/Chat.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/Chat.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/ChatGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/ChatGrpc.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/Services/ApplicantService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/Services/ApplicantService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Database/HireFire.sql" beforeDir="false" afterPath="$PROJECT_DIR$/Database/HireFire.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/databaseserver/Repositories/CompanyRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/databaseserver/Repositories/CompanyRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/databaseserver/Service/CompanyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/databaseserver/Service/CompanyService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/proto/company.proto" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/proto/company.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/Controllers/CompanyController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/Controllers/CompanyController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/Company.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/Company.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/CompanyGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/CompanyGrpc.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/Proto/Company.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/Proto/Company.proto" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/Services/ApplicationService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/Services/ApplicationService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/Services/CompanyService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/Services/CompanyService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/appsettings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,30 +75,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Spring Boot.DatabaseServerApplication.executor": "Run",
-    "git-widget-placeholder": "Admin-functionality",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.keymap",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.DatabaseServerApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Admin-functionality&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="DatabaseServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="liberica-21" />
@@ -148,6 +150,8 @@
       <workItem from="1764666941101" duration="78000" />
       <workItem from="1764667031551" duration="8398000" />
       <workItem from="1764758102041" duration="8165000" />
+      <workItem from="1764795720233" duration="201000" />
+      <workItem from="1764838296887" duration="5021000" />
     </task>
     <servers />
   </component>

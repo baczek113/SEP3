@@ -63,7 +63,7 @@ public class ApplicationService
 
         foreach (var application in reply.Applications)
         {
-            // poprawny parse SubmittedAt
+            
             if (!DateTime.TryParse(
                     application.SubmittedAt,
                     CultureInfo.InvariantCulture,
@@ -73,15 +73,14 @@ public class ApplicationService
                 dateSubmitted = DateTime.UtcNow;
             }
 
-            // KONWERSJA STATUSU ENUM DO STRINGA
+            
             string status = application.Status.ToString();
-
-            // 🔥 OBSŁUGA WSZYSTKICH MOŻLIWYCH FORMATÓW
+            
             bool isUnderReview =
                 status.Equals("under_review", StringComparison.OrdinalIgnoreCase) ||
                 status.Equals("UnderReview", StringComparison.OrdinalIgnoreCase) ||
                 status.Equals("APPLICATION_STATUS_UNDER_REVIEW", StringComparison.OrdinalIgnoreCase) ||
-                status.Equals("0"); // czasem enum = 0 → under review
+                status.Equals("0");
 
             if (isUnderReview)
             {

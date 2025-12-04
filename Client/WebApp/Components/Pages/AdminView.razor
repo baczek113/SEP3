@@ -1,0 +1,118 @@
+﻿@page "/admin"
+@layout MainLayout
+@rendermode InteractiveServer
+
+@using WebApp.DTOs.Company
+@using WebApp.Services
+@using Microsoft.AspNetCore.Components.Authorization
+
+@inject HttpCompanyService CompanyService
+@inject NavigationManager Nav
+
+<AuthorizeView Roles="admin">
+    <Authorized>
+        <div class="dash-shell">
+            <div class="dash-card">
+                <div class="dash-header">
+                    <div class="dash-title">
+                        <h2>Company Approvals</h2>
+                        <p>Below is the list of companies waiting for admin approval.</p>
+                    </div>
+                </div>
+
+                <div class="dash-content">
+                    @if (isLoading)
+                    {
+                        <div class="dash-loading">Loading pending companies...</div>
+                    }
+                    else if (pendingCompanies is null || pendingCompanies.Count == 0)
+                    {
+                        <div class="dash-empty">
+                            <h4>No companies awaiting approval 🎉</h4>
+                            <p>All registered companies are already approved.</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="company-list">
+                            @foreach (var company in pendingCompanies)
+                            {
+                                <div class="company-card approval-card">
+
+                                    <div class="company-card-header">
+                                        <h3>@company.Name</h3>
+                                        @if (!string.IsNullOrWhiteSpace(company.City))
+                                        {
+                                            <span class="company-location">@company.City @company.Postcode</span>
+                                        }
+                                    </div>
+
+                                    @if (!string.IsNullOrWhiteSpace(company.Description))
+                                    {
+                                        <p class="company-description">@company.Description</p>
+                                    }
+
+                                    <div class="company-meta">
+                                        @if (!string.IsNullOrWhiteSpace(company.Website))
+                                        {
+                                            <a href="@company.Website" target="_blank" rel="noopener noreferrer">
+                                                Visit website
+                                            </a>
+                                        }
+
+                                        <button class="primary-btn approve-btn"
+                                                disabled="@processingIds.Contains(company.Id)"
+                                                @onclick="() => Approve(company.Id)">
+                                            @if (processingIds.Contains(company.Id))
+                                            {
+                                                <span>Approving...</span>
+                                            }
+                                            else
+                                            {
+                                                <span>Approve</span>
+                                            }
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>You must be logged in as an admin to view this page.</p>
+        <a href="/login" class="primary-btn">Go to login</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private List<CompanyDto> pendingCompanies = new();
+    private HashSet<long> processingIds = new();
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        pendingCompanies = await CompanyService.GetCompaniesToApproveAsync();
+        isLoading = false;
+    }
+
+    private async Task Approve(long companyId)
+    {
+        processingIds.Add(companyId);
+        StateHasChanged();
+
+        try
+        {
+            var updated = await CompanyService.ApproveCompany(companyId);
+            pendingCompanies.RemoveAll(c => c.Id == companyId);
+        }
+        finally
+        {
+            processingIds.Remove(companyId);
+            StateHasChanged();
+        }
+    }
+}

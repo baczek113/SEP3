@@ -34,4 +34,19 @@ public class CompanyController : ControllerBase
         var result = await _companyService.GetCompaniesForRepresentativeAsync(representativeId);
         return Ok(result);
     }
+
+    [HttpGet("to-approve")]
+    public async Task<ActionResult<List<CompanyDto>>> GetCompaniesToApprove()
+    {
+        var result = await _companyService.GetCompaniesToApproveAsync();
+        return Ok(result);
+    }
+
+    [HttpPost("{id:long}/approve")]
+    public async Task<ActionResult<CompanyDto>> ApproveCompany(long id)
+    {
+        var result = await _companyService.ApproveCompanyAsync(id);
+        return Ok(result);
+    }
+
 }
