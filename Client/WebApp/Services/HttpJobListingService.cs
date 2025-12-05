@@ -26,6 +26,30 @@ public class HttpJobListingService : IJobListingService
         )!;
     }
     
+    public async Task<RemoveJobListingResponseDto> DeleteJobListingAsync(long jobListingId)
+    {
+        var response = await client.DeleteAsync($"api/Job/{jobListingId}");
+
+        if (!response.IsSuccessStatusCode)
+        {
+            return new RemoveJobListingResponseDto
+            {
+                Success = false,
+                Message = "Failed to delete job listing."
+            };
+        }
+
+        var result = await response.Content.ReadFromJsonAsync<RemoveJobListingResponseDto>();
+
+        return result ?? new RemoveJobListingResponseDto
+        {
+            Success = false,
+            Message = "Unexpected error occurred."
+        };
+    }
+    
+    
+    
     public async Task<List<JobListingDto>> GetByCompanyAsync(long companyId)
     {
         var httpResponse = await client.GetAsync($"api/joblisting/by-company/{companyId}");

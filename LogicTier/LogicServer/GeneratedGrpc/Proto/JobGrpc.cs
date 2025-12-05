@@ -50,6 +50,10 @@ namespace HireFire.Grpc {
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::HireFire.Grpc.JobListingResponse> __Marshaller_JobListingResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.JobListingResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::HireFire.Grpc.RemoveJobListingRequest> __Marshaller_RemoveJobListingRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.RemoveJobListingRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::HireFire.Grpc.RemoveJobListingResponse> __Marshaller_RemoveJobListingResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.RemoveJobListingResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::HireFire.Grpc.GetJobListingsForCompanyRequest> __Marshaller_GetJobListingsForCompanyRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.GetJobListingsForCompanyRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::HireFire.Grpc.GetJobListingsForCompanyResponse> __Marshaller_GetJobListingsForCompanyResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.GetJobListingsForCompanyResponse.Parser));
@@ -73,6 +77,14 @@ namespace HireFire.Grpc {
         "CreateJobListing",
         __Marshaller_CreateJobListingRequest,
         __Marshaller_JobListingResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::HireFire.Grpc.RemoveJobListingRequest, global::HireFire.Grpc.RemoveJobListingResponse> __Method_RemoveJobListing = new grpc::Method<global::HireFire.Grpc.RemoveJobListingRequest, global::HireFire.Grpc.RemoveJobListingResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "RemoveJobListing",
+        __Marshaller_RemoveJobListingRequest,
+        __Marshaller_RemoveJobListingResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::HireFire.Grpc.GetJobListingsForCompanyRequest, global::HireFire.Grpc.GetJobListingsForCompanyResponse> __Method_GetJobListingsForCompany = new grpc::Method<global::HireFire.Grpc.GetJobListingsForCompanyRequest, global::HireFire.Grpc.GetJobListingsForCompanyResponse>(
@@ -158,6 +170,26 @@ namespace HireFire.Grpc {
       public virtual grpc::AsyncUnaryCall<global::HireFire.Grpc.JobListingResponse> CreateJobListingAsync(global::HireFire.Grpc.CreateJobListingRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_CreateJobListing, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::HireFire.Grpc.RemoveJobListingResponse RemoveJobListing(global::HireFire.Grpc.RemoveJobListingRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return RemoveJobListing(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::HireFire.Grpc.RemoveJobListingResponse RemoveJobListing(global::HireFire.Grpc.RemoveJobListingRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_RemoveJobListing, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::HireFire.Grpc.RemoveJobListingResponse> RemoveJobListingAsync(global::HireFire.Grpc.RemoveJobListingRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return RemoveJobListingAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::HireFire.Grpc.RemoveJobListingResponse> RemoveJobListingAsync(global::HireFire.Grpc.RemoveJobListingRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_RemoveJobListing, null, options, request);
       }
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::HireFire.Grpc.GetJobListingsForCompanyResponse GetJobListingsForCompany(global::HireFire.Grpc.GetJobListingsForCompanyRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))

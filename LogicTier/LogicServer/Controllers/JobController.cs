@@ -1,6 +1,7 @@
-﻿using LogicServer.Services;
+﻿using HireFire.Grpc;
 using Microsoft.AspNetCore.Mvc;
 using LogicServer.DTOs.JobListing;
+using JobListingService = LogicServer.Services.JobListingService;
 
 namespace LogicServer.Controllers;
 
@@ -23,6 +24,22 @@ public class JobListingController : ControllerBase
 
         var result = await _jobListingService.CreateJobListingAsync(dto);
         return Ok(result);
+    }
+
+    [HttpDelete("{id:long}")]
+    public async Task<IActionResult> DeleteJobListing(long id)
+    {
+        var dto = new RemoveJobListingRequestDto
+        {
+            Id = id
+        };
+
+        var result = await _jobListingService.RemoveJobListingAsync(dto);
+        
+        if (!result.Success)
+            return NotFound(new { message = result.Message });
+
+        return Ok(new { message = result.Message });
     }
 
   

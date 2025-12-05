@@ -32,35 +32,41 @@ namespace HireFire.Grpc {
             "CgV0aXRsZRgCIAEoCRITCgtkZXNjcmlwdGlvbhgDIAEoCRITCgtkYXRlX3Bv",
             "c3RlZBgEIAEoCRIOCgZzYWxhcnkYBSABKAkSDAoEY2l0eRgGIAEoCRIQCghw",
             "b3N0Y29kZRgHIAEoCRIPCgdhZGRyZXNzGAggASgJEhIKCmNvbXBhbnlfaWQY",
-            "CSABKAMSFAoMcG9zdGVkX2J5X2lkGAogASgDIjUKH0dldEpvYkxpc3Rpbmdz",
-            "Rm9yQ29tcGFueVJlcXVlc3QSEgoKY29tcGFueV9pZBgBIAEoAyJNCiBHZXRK",
-            "b2JMaXN0aW5nc0ZvckNvbXBhbnlSZXNwb25zZRIpCgxqb2JfbGlzdGluZ3MY",
-            "ASADKAsyEy5Kb2JMaXN0aW5nUmVzcG9uc2UiOQohR2V0Sm9iTGlzdGluZ3NG",
-            "b3JSZWNydWl0ZXJSZXF1ZXN0EhQKDHJlY3J1aXRlcl9pZBgBIAEoAyJPCiJH",
-            "ZXRKb2JMaXN0aW5nc0ZvclJlY3J1aXRlclJlc3BvbnNlEikKDGpvYl9saXN0",
-            "aW5ncxgBIAMoCzITLkpvYkxpc3RpbmdSZXNwb25zZSIwChBKb2JTa2lsbFJl",
-            "c3BvbnNlEgoKAmlkGAEgASgDEhAKCHByaW9yaXR5GAIgASgJIjQKGkdldEpv",
-            "Ykxpc3RpbmdTa2lsbHNSZXF1ZXN0EhYKDmpvYl9saXN0aW5nX2lkGAEgASgD",
-            "IkAKG0dldEpvYkxpc3RpbmdTa2lsbHNSZXNwb25zZRIhCgZza2lsbHMYASAD",
-            "KAsyES5Kb2JTa2lsbFJlc3BvbnNlIi8KG0dldEpvYkxpc3RpbmdzQnlDaXR5",
-            "UmVxdWVzdBIQCghjaXR5TmFtZRgBIAEoCSI8ChNKb2JMaXN0aW5nc1Jlc3Bv",
-            "bnNlEiUKCGxpc3RpbmdzGAEgAygLMhMuSm9iTGlzdGluZ1Jlc3BvbnNlMrwD",
-            "ChFKb2JMaXN0aW5nU2VydmljZRJBChBDcmVhdGVKb2JMaXN0aW5nEhguQ3Jl",
-            "YXRlSm9iTGlzdGluZ1JlcXVlc3QaEy5Kb2JMaXN0aW5nUmVzcG9uc2USXwoY",
-            "R2V0Sm9iTGlzdGluZ3NGb3JDb21wYW55EiAuR2V0Sm9iTGlzdGluZ3NGb3JD",
-            "b21wYW55UmVxdWVzdBohLkdldEpvYkxpc3RpbmdzRm9yQ29tcGFueVJlc3Bv",
-            "bnNlEmUKGkdldEpvYkxpc3RpbmdzRm9yUmVjcnVpdGVyEiIuR2V0Sm9iTGlz",
-            "dGluZ3NGb3JSZWNydWl0ZXJSZXF1ZXN0GiMuR2V0Sm9iTGlzdGluZ3NGb3JS",
-            "ZWNydWl0ZXJSZXNwb25zZRJQChNHZXRKb2JMaXN0aW5nU2tpbGxzEhsuR2V0",
-            "Sm9iTGlzdGluZ1NraWxsc1JlcXVlc3QaHC5HZXRKb2JMaXN0aW5nU2tpbGxz",
-            "UmVzcG9uc2USSgoUR2V0Sm9iTGlzdGluZ3NCeUNpdHkSHC5HZXRKb2JMaXN0",
-            "aW5nc0J5Q2l0eVJlcXVlc3QaFC5Kb2JMaXN0aW5nc1Jlc3BvbnNlQhCqAg1I",
-            "aXJlRmlyZS5HcnBjYgZwcm90bzM="));
+            "CSABKAMSFAoMcG9zdGVkX2J5X2lkGAogASgDIiUKF1JlbW92ZUpvYkxpc3Rp",
+            "bmdSZXF1ZXN0EgoKAmlkGAEgASgDIjwKGFJlbW92ZUpvYkxpc3RpbmdSZXNw",
+            "b25zZRIPCgdzdWNjZXNzGAEgASgIEg8KB21lc3NhZ2UYAiABKAkiNQofR2V0",
+            "Sm9iTGlzdGluZ3NGb3JDb21wYW55UmVxdWVzdBISCgpjb21wYW55X2lkGAEg",
+            "ASgDIk0KIEdldEpvYkxpc3RpbmdzRm9yQ29tcGFueVJlc3BvbnNlEikKDGpv",
+            "Yl9saXN0aW5ncxgBIAMoCzITLkpvYkxpc3RpbmdSZXNwb25zZSI5CiFHZXRK",
+            "b2JMaXN0aW5nc0ZvclJlY3J1aXRlclJlcXVlc3QSFAoMcmVjcnVpdGVyX2lk",
+            "GAEgASgDIk8KIkdldEpvYkxpc3RpbmdzRm9yUmVjcnVpdGVyUmVzcG9uc2US",
+            "KQoMam9iX2xpc3RpbmdzGAEgAygLMhMuSm9iTGlzdGluZ1Jlc3BvbnNlIjAK",
+            "EEpvYlNraWxsUmVzcG9uc2USCgoCaWQYASABKAMSEAoIcHJpb3JpdHkYAiAB",
+            "KAkiNAoaR2V0Sm9iTGlzdGluZ1NraWxsc1JlcXVlc3QSFgoOam9iX2xpc3Rp",
+            "bmdfaWQYASABKAMiQAobR2V0Sm9iTGlzdGluZ1NraWxsc1Jlc3BvbnNlEiEK",
+            "BnNraWxscxgBIAMoCzIRLkpvYlNraWxsUmVzcG9uc2UiLwobR2V0Sm9iTGlz",
+            "dGluZ3NCeUNpdHlSZXF1ZXN0EhAKCGNpdHlOYW1lGAEgASgJIjwKE0pvYkxp",
+            "c3RpbmdzUmVzcG9uc2USJQoIbGlzdGluZ3MYASADKAsyEy5Kb2JMaXN0aW5n",
+            "UmVzcG9uc2UyhQQKEUpvYkxpc3RpbmdTZXJ2aWNlEkEKEENyZWF0ZUpvYkxp",
+            "c3RpbmcSGC5DcmVhdGVKb2JMaXN0aW5nUmVxdWVzdBoTLkpvYkxpc3RpbmdS",
+            "ZXNwb25zZRJHChBSZW1vdmVKb2JMaXN0aW5nEhguUmVtb3ZlSm9iTGlzdGlu",
+            "Z1JlcXVlc3QaGS5SZW1vdmVKb2JMaXN0aW5nUmVzcG9uc2USXwoYR2V0Sm9i",
+            "TGlzdGluZ3NGb3JDb21wYW55EiAuR2V0Sm9iTGlzdGluZ3NGb3JDb21wYW55",
+            "UmVxdWVzdBohLkdldEpvYkxpc3RpbmdzRm9yQ29tcGFueVJlc3BvbnNlEmUK",
+            "GkdldEpvYkxpc3RpbmdzRm9yUmVjcnVpdGVyEiIuR2V0Sm9iTGlzdGluZ3NG",
+            "b3JSZWNydWl0ZXJSZXF1ZXN0GiMuR2V0Sm9iTGlzdGluZ3NGb3JSZWNydWl0",
+            "ZXJSZXNwb25zZRJQChNHZXRKb2JMaXN0aW5nU2tpbGxzEhsuR2V0Sm9iTGlz",
+            "dGluZ1NraWxsc1JlcXVlc3QaHC5HZXRKb2JMaXN0aW5nU2tpbGxzUmVzcG9u",
+            "c2USSgoUR2V0Sm9iTGlzdGluZ3NCeUNpdHkSHC5HZXRKb2JMaXN0aW5nc0J5",
+            "Q2l0eVJlcXVlc3QaFC5Kb2JMaXN0aW5nc1Jlc3BvbnNlQhCqAg1IaXJlRmly",
+            "ZS5HcnBjYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.CreateJobListingRequest), global::HireFire.Grpc.CreateJobListingRequest.Parser, new[]{ "Title", "Description", "Salary", "CompanyId", "PostedById", "City", "Postcode", "Address" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.JobListingResponse), global::HireFire.Grpc.JobListingResponse.Parser, new[]{ "Id", "Title", "Description", "DatePosted", "Salary", "City", "Postcode", "Address", "CompanyId", "PostedById" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.RemoveJobListingRequest), global::HireFire.Grpc.RemoveJobListingRequest.Parser, new[]{ "Id" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.RemoveJobListingResponse), global::HireFire.Grpc.RemoveJobListingResponse.Parser, new[]{ "Success", "Message" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.GetJobListingsForCompanyRequest), global::HireFire.Grpc.GetJobListingsForCompanyRequest.Parser, new[]{ "CompanyId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.GetJobListingsForCompanyResponse), global::HireFire.Grpc.GetJobListingsForCompanyResponse.Parser, new[]{ "JobListings" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.GetJobListingsForRecruiterRequest), global::HireFire.Grpc.GetJobListingsForRecruiterRequest.Parser, new[]{ "RecruiterId" }, null, null, null, null),
@@ -1049,6 +1055,429 @@ namespace HireFire.Grpc {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class RemoveJobListingRequest : pb::IMessage<RemoveJobListingRequest>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<RemoveJobListingRequest> _parser = new pb::MessageParser<RemoveJobListingRequest>(() => new RemoveJobListingRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<RemoveJobListingRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::HireFire.Grpc.JobReflection.Descriptor.MessageTypes[2]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public RemoveJobListingRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public RemoveJobListingRequest(RemoveJobListingRequest other) : this() {
+      id_ = other.id_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public RemoveJobListingRequest Clone() {
+      return new RemoveJobListingRequest(this);
+    }
+
+    /// <summary>Field number for the "id" field.</summary>
+    public const int IdFieldNumber = 1;
+    private long id_;
+    /// <summary>
+    /// Job-listing ID
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long Id {
+      get { return id_; }
+      set {
+        id_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as RemoveJobListingRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(RemoveJobListingRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Id != other.Id) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Id != 0L) hash ^= Id.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Id != 0L) {
+        output.WriteRawTag(8);
+        output.WriteInt64(Id);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Id != 0L) {
+        output.WriteRawTag(8);
+        output.WriteInt64(Id);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Id != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(Id);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(RemoveJobListingRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Id != 0L) {
+        Id = other.Id;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            Id = input.ReadInt64();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            Id = input.ReadInt64();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class RemoveJobListingResponse : pb::IMessage<RemoveJobListingResponse>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<RemoveJobListingResponse> _parser = new pb::MessageParser<RemoveJobListingResponse>(() => new RemoveJobListingResponse());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<RemoveJobListingResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::HireFire.Grpc.JobReflection.Descriptor.MessageTypes[3]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public RemoveJobListingResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public RemoveJobListingResponse(RemoveJobListingResponse other) : this() {
+      success_ = other.success_;
+      message_ = other.message_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public RemoveJobListingResponse Clone() {
+      return new RemoveJobListingResponse(this);
+    }
+
+    /// <summary>Field number for the "success" field.</summary>
+    public const int SuccessFieldNumber = 1;
+    private bool success_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Success {
+      get { return success_; }
+      set {
+        success_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "message" field.</summary>
+    public const int MessageFieldNumber = 2;
+    private string message_ = "";
+    /// <summary>
+    /// Optional
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Message {
+      get { return message_; }
+      set {
+        message_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as RemoveJobListingResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(RemoveJobListingResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Success != other.Success) return false;
+      if (Message != other.Message) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Success != false) hash ^= Success.GetHashCode();
+      if (Message.Length != 0) hash ^= Message.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Success != false) {
+        output.WriteRawTag(8);
+        output.WriteBool(Success);
+      }
+      if (Message.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(Message);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Success != false) {
+        output.WriteRawTag(8);
+        output.WriteBool(Success);
+      }
+      if (Message.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(Message);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Success != false) {
+        size += 1 + 1;
+      }
+      if (Message.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Message);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(RemoveJobListingResponse other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Success != false) {
+        Success = other.Success;
+      }
+      if (other.Message.Length != 0) {
+        Message = other.Message;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            Success = input.ReadBool();
+            break;
+          }
+          case 18: {
+            Message = input.ReadString();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            Success = input.ReadBool();
+            break;
+          }
+          case 18: {
+            Message = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class GetJobListingsForCompanyRequest : pb::IMessage<GetJobListingsForCompanyRequest>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -1063,7 +1492,7 @@ namespace HireFire.Grpc {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HireFire.Grpc.JobReflection.Descriptor.MessageTypes[2]; }
+      get { return global::HireFire.Grpc.JobReflection.Descriptor.MessageTypes[4]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1253,7 +1682,7 @@ namespace HireFire.Grpc {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HireFire.Grpc.JobReflection.Descriptor.MessageTypes[3]; }
+      get { return global::HireFire.Grpc.JobReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1432,7 +1861,7 @@ namespace HireFire.Grpc {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HireFire.Grpc.JobReflection.Descriptor.MessageTypes[4]; }
+      get { return global::HireFire.Grpc.JobReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1622,7 +2051,7 @@ namespace HireFire.Grpc {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HireFire.Grpc.JobReflection.Descriptor.MessageTypes[5]; }
+      get { return global::HireFire.Grpc.JobReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1801,7 +2230,7 @@ namespace HireFire.Grpc {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HireFire.Grpc.JobReflection.Descriptor.MessageTypes[6]; }
+      get { return global::HireFire.Grpc.JobReflection.Descriptor.MessageTypes[8]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2028,7 +2457,7 @@ namespace HireFire.Grpc {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HireFire.Grpc.JobReflection.Descriptor.MessageTypes[7]; }
+      get { return global::HireFire.Grpc.JobReflection.Descriptor.MessageTypes[9]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2218,7 +2647,7 @@ namespace HireFire.Grpc {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HireFire.Grpc.JobReflection.Descriptor.MessageTypes[8]; }
+      get { return global::HireFire.Grpc.JobReflection.Descriptor.MessageTypes[10]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2397,7 +2826,7 @@ namespace HireFire.Grpc {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HireFire.Grpc.JobReflection.Descriptor.MessageTypes[9]; }
+      get { return global::HireFire.Grpc.JobReflection.Descriptor.MessageTypes[11]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2587,7 +3016,7 @@ namespace HireFire.Grpc {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HireFire.Grpc.JobReflection.Descriptor.MessageTypes[10]; }
+      get { return global::HireFire.Grpc.JobReflection.Descriptor.MessageTypes[12]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

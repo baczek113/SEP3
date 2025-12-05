@@ -18,6 +18,8 @@ import com.example.databaseserver.generated.GetJobListingsForRecruiterResponse;
 import com.example.databaseserver.generated.JobListingResponse;
 import com.example.databaseserver.generated.JobListingsResponse;
 import com.example.databaseserver.generated.JobSkillResponse;
+import com.example.databaseserver.generated.RemoveJobListingRequest;
+import com.example.databaseserver.generated.RemoveJobListingResponse;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import jakarta.transaction.Transactional;
@@ -119,6 +121,46 @@ public class JobListingService extends JobListingServiceGrpc.JobListingServiceIm
         }
     }
 
+    @Override
+    @Transactional
+    public void removeJobListing(RemoveJobListingRequest request,
+                                 StreamObserver<RemoveJobListingResponse> responseObserver)
+    {
+        try {
+            long id = request.getId();
+
+            boolean exists = jobListingRepository.existsById(id);
+
+            if (!exists) {
+                RemoveJobListingResponse response = RemoveJobListingResponse.newBuilder()
+                        .setSuccess(false)
+                        .setMessage("Job listing not found.")
+                        .build();
+
+                responseObserver.onNext(response);
+                responseObserver.onCompleted();
+                return;
+            }
+
+            jobListingRepository.deleteById(id);
+
+            RemoveJobListingResponse response = RemoveJobListingResponse.newBuilder()
+                    .setSuccess(true)
+                    .setMessage("Job listing deleted successfully.")
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+
+        } catch (Exception e) {
+            responseObserver.onError(
+                    Status.UNKNOWN
+                            .withDescription(e.getMessage())
+                            .withCause(e)
+                            .asRuntimeException()
+            );
+        }
+    }
 
 
     @Override
@@ -165,6 +207,8 @@ public class JobListingService extends JobListingServiceGrpc.JobListingServiceIm
             responseObserver.onError(e);
         }
     }
+
+
 
 
     @Override
