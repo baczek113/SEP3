@@ -1,0 +1,140 @@
+﻿@page "/job/remove-job-listing-by-list"
+@using WebApp.DTOs.Job
+@using WebApp.Services
+@using System.Security.Claims
+@inject IJobListingService JobListingService
+@inject AuthenticationStateProvider AuthStateProvider
+
+<div class="dash-shell">
+    <div class="dash-card">
+
+        <div class="dash-header">
+            <div class="dash-title">
+                <h2>Your Job Listings</h2>
+                <p>Manage and remove your posted job listings.</p>
+            </div>
+        </div>
+
+        @if (JobListings == null)
+        {
+            <p class="dash-loading">Loading job listings...</p>
+        }
+        else if (!JobListings.Any())
+        {
+            <div class="dash-empty">
+                <h4>No job listings found.</h4>
+                <p>You have not created any job listings yet.</p>
+            </div>
+        }
+        else
+        {
+            <div class="list-container">
+                @foreach (var job in JobListings)
+                {
+                    <div class="company-card">
+
+                        <div class="company-card-header">
+                            <h3>@job.Title</h3>
+                            <span class="company-location">@job.City</span>
+                        </div>
+
+                        <p class="company-description">@job.Description</p>
+
+                        <div class="company-meta">
+                            <span>Date Posted: @job.DatePosted.ToShortDateString()</span>
+
+                            <button class="delete-btn"
+                                    @onclick="() => ConfirmDelete(job.Id)">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        @if (ShowConfirm)
+        {
+            <div class="confirm-overlay">
+                <div class="confirm-box">
+                    <p>Are you sure you want to delete this job listing?</p>
+
+                    <div class="confirm-actions">
+                        <button class="submit-btn primary-btn" @onclick="DeleteConfirmed">Yes</button>
+                        <button class="submit-btn cancel-btn" @onclick="CancelDelete">No</button>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(StatusMessage))
+        {
+            <div class="@StatusClass alert-box">
+                @StatusMessage
+            </div>
+        }
+
+    </div>
+</div>
+
+
+@code {
+    private List<JobListingDto>? JobListings;
+    private long PendingDeleteId;
+    private bool ShowConfirm = false;
+
+    private string StatusMessage = "";
+    private string StatusClass = "alert-info";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadListings();
+    }
+
+    private async Task LoadListings()
+    {
+        // 🔥 Get logged-in recruiter ID from authentication system
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        var idClaim = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier);
+
+        if (idClaim is null)
+        {
+            StatusMessage = "Error: Unable to determine recruiter identity.";
+            StatusClass = "alert-danger";
+            return;
+        }
+
+        long recruiterId = long.Parse(idClaim.Value);
+
+        // 🔥 Load job listings for THIS recruiter (dynamic, not hardcoded)
+        JobListings = await JobListingService.GetByRecruiterAsync(recruiterId);
+    }
+
+    private void ConfirmDelete(long jobId)
+    {
+        PendingDeleteId = jobId;
+        ShowConfirm = true;
+    }
+
+    private void CancelDelete()
+    {
+        ShowConfirm = false;
+        PendingDeleteId = 0;
+    }
+
+    private async Task DeleteConfirmed()
+    {
+        ShowConfirm = false;
+
+        var result = await JobListingService.DeleteJobListingAsync(PendingDeleteId);
+
+        StatusMessage = result.Message;
+        StatusClass = result.Success ? "alert-success" : "alert-danger";
+
+        if (result.Success)
+            await LoadListings();
+    }
+}
+

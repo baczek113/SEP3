@@ -1,0 +1,58 @@
+﻿@page "/job/remove-job-listing-by-id"
+@using WebApp.Services
+@inject IJobListingService JobListingService
+
+<div class="register-shell">
+    <div class="register-card">
+
+        <!-- Page Header -->
+        <div class="register-header">
+            <h2>Remove Job Listing</h2>
+            <p>Enter the ID of the job listing you want to delete.</p>
+        </div>
+
+        <!-- Input Form -->
+        <div class="form-grid">
+            <div class="form-group full-width">
+                <label>Job Listing ID</label>
+                <input class="form-control"
+                       type="number"
+                       @bind="JobId"
+                       placeholder="Enter job listing ID..." />
+            </div>
+        </div>
+
+        <button class="submit-btn primary-btn" @onclick="RemoveJob">
+            Delete Job Listing
+        </button>
+
+        @if (!string.IsNullOrWhiteSpace(StatusMessage))
+        {
+            <div class="@StatusClass alert-container">
+                @StatusMessage
+            </div>
+        }
+
+    </div>
+</div>
+
+@code {
+    private long JobId;
+    private string StatusMessage = string.Empty;
+    private string StatusClass = "alert-info";
+
+    private async Task RemoveJob()
+    {
+        if (JobId <= 0)
+        {
+            StatusMessage = "Please enter a valid Job Listing ID.";
+            StatusClass = "alert-warning";
+            return;
+        }
+
+        var result = await JobListingService.DeleteJobListingAsync(JobId);
+
+        StatusMessage = result.Message;
+        StatusClass = result.Success ? "alert-success" : "alert-danger";
+    }
+}
