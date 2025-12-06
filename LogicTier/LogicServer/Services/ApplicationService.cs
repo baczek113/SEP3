@@ -83,17 +83,14 @@ public class ApplicationService
                 status.Equals("APPLICATION_STATUS_UNDER_REVIEW", StringComparison.OrdinalIgnoreCase) ||
                 status.Equals("0"); // czasem enum = 0 → under review
 
-            if (isUnderReview)
+            applications.Add(new ApplicationDto()
             {
-                applications.Add(new ApplicationDto()
-                {
-                    Id = application.Id,
-                    ApplicantId = application.ApplicantId,
-                    JobId = application.JobId,
-                    SubmittedAt = dateSubmitted,
-                    Status = status
-                });
-            }
+                Id = application.Id,
+                ApplicantId = application.ApplicantId,
+                JobId = application.JobId,
+                SubmittedAt = dateSubmitted,
+                Status = status
+            });
         }
 
         return applications;

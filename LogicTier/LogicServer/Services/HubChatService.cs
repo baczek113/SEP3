@@ -18,15 +18,7 @@ public class HubChatService : Hub
     {
         
         try
-        {            
-            var userId = long.Parse(Context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var role = Context.User.FindFirst(ClaimTypes.Role)?.Value;
-            
-            if (role == "applicant" && userId != applicantId)
-            {
-                throw new HubException("You cannot view other people's chats.");
-            }
-            
+        {          
             var handshakeRequest = new ChatHandshakeRequest { JobId = jobId, ApplicantId = applicantId };
             var handshakeResponse = await _grpcClient.GetChatHandshakeAsync(handshakeRequest);
             if (!handshakeResponse.Exists)
@@ -42,14 +34,14 @@ public class HubChatService : Hub
             
             var request = new GetMessagesRequest{ApplicationId = applicationId};
             var response = await _grpcClient.GetMessagesAsync(request);
-
-            var history = response.Messages.Select(m => new ChatMessageDTO
+            
+            var history = response?.Messages.Select(m => new ChatMessageDTO
             {
                 SenderName = m.SenderName,
                 Body = m.Body,
                 SendAt = m.SendAt, 
                 SenderId = m.SenderId
-            });
+            }).ToList() ?? new List<ChatMessageDTO>();
             await Clients.Caller.SendAsync("ReceiveHistory", history, applicationId);
 
         }

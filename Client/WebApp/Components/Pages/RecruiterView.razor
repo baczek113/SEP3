@@ -47,14 +47,12 @@
                         <div class="job-list">
                             @foreach (var job in jobListings)
                             {
-                                <div class="job-card"
-                                     @onclick="@(() => NavigateToJob(job.Id))"
-                                     style="cursor: pointer;">
+                                <div class="job-card">
                                     <div class="job-card-header">
                                         <h3>@job.Title</h3>
                                         @if (!string.IsNullOrWhiteSpace(job.DatePosted.ToString()))
                                         {
-                                            <span class="job-date">@job.DatePosted</span>
+                                            <span class="job-date">@job.DatePosted.ToShortDateString()</span>
                                         }
                                     </div>
 
@@ -69,6 +67,17 @@
                                             <span class="job-salary">Salary: @job.Salary</span>
                                         }
                                         <span class="job-id">ID: @job.Id</span>
+                                    </div>
+
+                                    <div class="job-actions-row mt-3 d-flex gap-2">
+                                        <!-- Button 1: Review Pending Applications (The Swiper) -->
+                                        <a href="/recruiter/job/@job.Id/applications" class="btn btn-outline-primary flex-grow-1">
+                                            🔍 Review
+                                        </a>
+                                        
+                                        <a href="/recruiter/job/@job.Id/matches" class="btn btn-success flex-grow-1">
+                                            💬 Matches
+                                        </a>
                                     </div>
                                 </div>
                             }
@@ -109,11 +118,4 @@
 
         isLoading = false;
     }
-
-    private void NavigateToJob(long id)
-    {
-        Nav.NavigateTo($"/recruiter/job/{id}/applications");
-
-    }
-
 }

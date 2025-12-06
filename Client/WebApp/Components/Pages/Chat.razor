@@ -75,16 +75,16 @@
         }
 
         _hubConnection = new HubConnectionBuilder()
-            .WithUrl("http://localhost:5177/chathub")
+            .WithUrl("http://localhost:5177/hub/chat")
             .WithAutomaticReconnect()
             .Build();
-        //Live messages
+        
         _hubConnection.On<string, string, string, long>("ReceiveMessage", (user, body, time, senderId) =>
         {
             messages.Add(new ChatMessageDto{SenderName = user, Body = body, SendAt = time, SenderId = senderId});
             InvokeAsync(StateHasChanged);
         });
-        //History
+        
         _hubConnection.On<List<ChatMessageDto>, long>("ReceiveHistory", (history, appId) =>
         {
             activeApplicationId = appId;
