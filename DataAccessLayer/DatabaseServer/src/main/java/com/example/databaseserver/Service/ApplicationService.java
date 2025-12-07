@@ -7,6 +7,7 @@ import com.example.databaseserver.Entities.Application;
 import com.example.databaseserver.Entities.ApplicationStatus;
 import com.example.databaseserver.Repositories.ApplicantRepository;
 import com.example.databaseserver.Repositories.ApplicationRepository;
+import com.example.databaseserver.Repositories.ChatThreadRepository;
 import com.example.databaseserver.Repositories.JobListingRepository;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
@@ -32,12 +33,14 @@ public class ApplicationService extends com.example.databaseserver.generated.App
     private final JobListingRepository jobListingRepository;
     private final ApplicantRepository applicantRepository;
     private final ApplicationRepository applicationRepository;
+    private final ChatThreadRepository chatThreadRepository;
 
     @Autowired
-    public ApplicationService(JobListingRepository jobListingRepository, ApplicantRepository applicantRepository, ApplicationRepository applicationRepository) {
+    public ApplicationService(JobListingRepository jobListingRepository, ApplicantRepository applicantRepository, ApplicationRepository applicationRepository, ChatThreadRepository chatThreadRepository) {
         this.jobListingRepository = jobListingRepository;
         this.applicantRepository = applicantRepository;
         this.applicationRepository = applicationRepository;
+        this.chatThreadRepository = chatThreadRepository;
     }
 
     @Override
@@ -164,6 +167,12 @@ public class ApplicationService extends com.example.databaseserver.generated.App
 
         application.setStatus(status);
         applicationRepository.save(application);
+
+        if(status == ApplicationStatus.matched && chatThreadRepository.findByApplication_Id(application.getId()) == null){
+            ChatThread chatThread = new ChatThread(application);
+            chatThreadRepository.save(chatThread);
+        }
+
         ApplicationResponse response = ApplicationResponse.newBuilder()
                 .setId(application.getId())
                 .setJobId(application.getJob().getId())
