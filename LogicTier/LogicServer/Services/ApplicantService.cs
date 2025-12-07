@@ -94,6 +94,34 @@ public class ApplicantService
         };
     }
 
+    public async Task<RemoveApplicantResponseDto> RemoveApplicantAsync(long id)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new HireFire.Grpc.ApplicantService.ApplicantServiceClient(channel);
+
+        var request = new RemoveApplicantRequest { Id = id };
+
+        try
+        {
+            var reply = await client.RemoveApplicantAsync(request);
+
+            return new RemoveApplicantResponseDto
+            {
+                Success = reply.Success,
+                Message = reply.Message
+            };
+        }
+        catch (Exception ex)
+        {
+            return new RemoveApplicantResponseDto
+            {
+                Success = false,
+                Message = $"Error deleting applicant: {ex.Message}"
+            };
+        }
+    }
+
+    
     public async Task<List<ApplicantSkillResponse>> GetApplicantSkillsAsync(long userId)
     {
         using var channel = GrpcChannel.ForAddress(_grpcAddress);

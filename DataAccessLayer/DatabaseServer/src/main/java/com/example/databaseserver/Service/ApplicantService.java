@@ -8,15 +8,7 @@ import com.example.databaseserver.Entities.Skill;
 import com.example.databaseserver.Entities.SkillLevel;
 import com.example.databaseserver.Entities.UserRole;
 import com.example.databaseserver.Repositories.*;
-import com.example.databaseserver.generated.ApplicantServiceGrpc;
-import com.example.databaseserver.generated.CreateApplicantRequest;
-import com.example.databaseserver.generated.ApplicantResponse;
-import com.example.databaseserver.generated.AddApplicantSkillRequest;
-import com.example.databaseserver.generated.ApplicantSkillResponse;
-import com.example.databaseserver.generated.SkillLevelProto;
-import com.example.databaseserver.generated.GetApplicantRequest;
-import com.example.databaseserver.generated.ApplicantSkillsResponse;
-import com.example.databaseserver.generated.GetApplicantSkillsRequest;
+import com.example.databaseserver.generated.*;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import jakarta.transaction.Transactional;
@@ -32,6 +24,7 @@ import java.util.Optional;
 @GrpcService
 public class ApplicantService extends ApplicantServiceGrpc.ApplicantServiceImplBase {
 
+    private final ApplicationRepository applicationRepository;
     private final ApplicantRepository applicantRepository;
     private final LocationRepository locationRepository;
     private final SkillRepository skillRepository;
@@ -40,7 +33,8 @@ public class ApplicantService extends ApplicantServiceGrpc.ApplicantServiceImplB
     private static final Logger log = LoggerFactory.getLogger(ApplicantService.class);
 
     @Autowired
-    public ApplicantService(ApplicantRepository applicantRepository, LocationRepository locationRepository, ApplicantSkillRepository applicantSkillRepository, SkillRepository skillRepository, UserRepository userRepository) {
+    public ApplicantService(ApplicationRepository applicationRepository, ApplicantRepository applicantRepository, LocationRepository locationRepository, ApplicantSkillRepository applicantSkillRepository, SkillRepository skillRepository, UserRepository userRepository) {
+        this.applicationRepository = applicationRepository;
         this.applicantRepository = applicantRepository;
         this.locationRepository = locationRepository;
         this.applicantSkillRepository = applicantSkillRepository;
@@ -115,6 +109,62 @@ public class ApplicantService extends ApplicantServiceGrpc.ApplicantServiceImplB
                     .asRuntimeException());
         }
     }
+
+
+    @Override
+    @Transactional
+    public void removeApplicant(RemoveApplicantRequest request,
+                                StreamObserver<RemoveApplicantResponse> responseObserver)
+    {
+        try {
+            long id = request.getId();
+
+            // Check if applicant exists
+            var applicantOpt = applicantRepository.findById(id);
+            if (applicantOpt.isEmpty()) {
+                RemoveApplicantResponse response = RemoveApplicantResponse.newBuilder()
+                        .setSuccess(false)
+                        .setMessage("Applicant with id " + id + " not found.")
+                        .build();
+
+                responseObserver.onNext(response);
+                responseObserver.onCompleted();
+                return;
+            }
+
+            // 1) Delete applications for this applicant (if cascade is not already configured)
+            applicationRepository.deleteByApplicantId(id);
+
+            // 2) Delete applicant skills
+            applicantSkillRepository.deleteByApplicantId(id);
+
+            // 3) Delete applicant itself
+            applicantRepository.deleteById(id);
+
+            // 4) Optionally delete user / auth row if Applicant is linked to User
+            // userRepository.deleteById(id);  // only if this matches your schema
+
+            RemoveApplicantResponse response = RemoveApplicantResponse.newBuilder()
+                    .setSuccess(true)
+                    .setMessage("Applicant account deleted successfully.")
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            responseObserver.onError(
+                    Status.UNKNOWN
+                            .withDescription(e.getMessage())
+                            .withCause(e)
+                            .asRuntimeException()
+            );
+        }
+    }
+
+
+
     @Override
     @Transactional
     public void addApplicantSkill(AddApplicantSkillRequest request,

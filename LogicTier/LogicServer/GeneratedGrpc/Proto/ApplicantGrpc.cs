@@ -50,6 +50,10 @@ namespace HireFire.Grpc {
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::HireFire.Grpc.ApplicantResponse> __Marshaller_ApplicantResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.ApplicantResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::HireFire.Grpc.RemoveApplicantRequest> __Marshaller_RemoveApplicantRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.RemoveApplicantRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::HireFire.Grpc.RemoveApplicantResponse> __Marshaller_RemoveApplicantResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.RemoveApplicantResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::HireFire.Grpc.AddApplicantSkillRequest> __Marshaller_AddApplicantSkillRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.AddApplicantSkillRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::HireFire.Grpc.ApplicantSkillResponse> __Marshaller_ApplicantSkillResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.ApplicantSkillResponse.Parser));
@@ -67,6 +71,14 @@ namespace HireFire.Grpc {
         "CreateApplicant",
         __Marshaller_CreateApplicantRequest,
         __Marshaller_ApplicantResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::HireFire.Grpc.RemoveApplicantRequest, global::HireFire.Grpc.RemoveApplicantResponse> __Method_RemoveApplicant = new grpc::Method<global::HireFire.Grpc.RemoveApplicantRequest, global::HireFire.Grpc.RemoveApplicantResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "RemoveApplicant",
+        __Marshaller_RemoveApplicantRequest,
+        __Marshaller_RemoveApplicantResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::HireFire.Grpc.AddApplicantSkillRequest, global::HireFire.Grpc.ApplicantSkillResponse> __Method_AddApplicantSkill = new grpc::Method<global::HireFire.Grpc.AddApplicantSkillRequest, global::HireFire.Grpc.ApplicantSkillResponse>(
@@ -144,6 +156,26 @@ namespace HireFire.Grpc {
       public virtual grpc::AsyncUnaryCall<global::HireFire.Grpc.ApplicantResponse> CreateApplicantAsync(global::HireFire.Grpc.CreateApplicantRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_CreateApplicant, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::HireFire.Grpc.RemoveApplicantResponse RemoveApplicant(global::HireFire.Grpc.RemoveApplicantRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return RemoveApplicant(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::HireFire.Grpc.RemoveApplicantResponse RemoveApplicant(global::HireFire.Grpc.RemoveApplicantRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_RemoveApplicant, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::HireFire.Grpc.RemoveApplicantResponse> RemoveApplicantAsync(global::HireFire.Grpc.RemoveApplicantRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return RemoveApplicantAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::HireFire.Grpc.RemoveApplicantResponse> RemoveApplicantAsync(global::HireFire.Grpc.RemoveApplicantRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_RemoveApplicant, null, options, request);
       }
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::HireFire.Grpc.ApplicantSkillResponse AddApplicantSkill(global::HireFire.Grpc.AddApplicantSkillRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))

@@ -4,59 +4,62 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="124ee155-6a89-44ef-8acb-cbea402897b8" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../../Client/WebApp/Components/Pages/AdminView.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../Client/WebApp/Components/Pages/AdminView.razor.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/WebApp/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/WebApp/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/WebApp/Services/HttpCompanyService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/WebApp/Services/HttpCompanyService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Client/WebApp/Services/ICompanyService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Client/WebApp/Services/ICompanyService.cs" afterDir="false" />
+    <list default="true" id="2c2cb0cc-5698-47f4-ae34-58cd00e9a764" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../../.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/copilot.data.migration.agent.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/copilot.data.migration.ask.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/copilot.data.migration.ask2agent.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/copilot.data.migration.edit.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/indexLayout.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/projectSettingsUpdater.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/DataAccessLayer.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/DataAccessLayer.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/copilot.data.migration.agent.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/copilot.data.migration.ask.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/copilot.data.migration.ask2agent.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/copilot.data.migration.edit.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Database/HireFire.sql" beforeDir="false" afterPath="$PROJECT_DIR$/Database/HireFire.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/databaseserver/Repositories/CompanyRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/databaseserver/Repositories/CompanyRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/databaseserver/Service/CompanyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/databaseserver/Service/CompanyService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/proto/company.proto" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/proto/company.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/Controllers/CompanyController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/Controllers/CompanyController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/databaseserver/Repositories/ApplicantSkillRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/databaseserver/Repositories/ApplicantSkillRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/databaseserver/Repositories/ApplicationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/databaseserver/Repositories/ApplicationRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/databaseserver/Service/ApplicantService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/databaseserver/Service/ApplicantService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/proto/applicant.proto" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/proto/applicant.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/Controllers/ApplicantController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/Controllers/ApplicantController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/Applicant.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/Applicant.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/ApplicantGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/ApplicantGrpc.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/Application.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/Application.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/ApplicationGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/ApplicationGrpc.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/Authentication.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/Authentication.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/AuthenticationGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/AuthenticationGrpc.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/Chat.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/Chat.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/ChatGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/ChatGrpc.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/Company.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/Company.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/CompanyGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/CompanyGrpc.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/Proto/Company.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/Proto/Company.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/Services/ApplicationService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/Services/ApplicationService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/Services/CompanyService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/Services/CompanyService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/Job.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/Job.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/JobGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/JobGrpc.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/Recruiter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/Recruiter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/RecruiterGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/RecruiterGrpc.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/Representative.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/Representative.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/RepresentativeGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/GeneratedGrpc/Proto/RepresentativeGrpc.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/Proto/applicant.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/Proto/applicant.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LogicTier/LogicServer/Services/ApplicantService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../LogicTier/LogicServer/Services/ApplicantService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Interface" />
-        <option value="Class" />
-        <option value="Enum" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$/../.." value="main" />
+        <entry key="$PROJECT_DIR$/../.." value="remove-applicant" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;baczek113&quot;
-  }
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/baczek113/SEP3.git&quot;,
-    &quot;accountId&quot;: &quot;ef27636a-fa6c-49b1-ab7c-6119e6674c9c&quot;
-  }
-}</component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -65,47 +68,34 @@
     </option>
   </component>
   <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 3
 }</component>
-  <component name="ProjectId" id="34gpMCHeCqKznJkebC6a3pVGY2K" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
+  <component name="ProjectId" id="36RPi5yCfpLwrNriwKD4H0pfzc6" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;Spring Boot.DatabaseServerApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Admin-functionality&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.DatabaseServerApplication.executor": "Run",
+    "git-widget-placeholder": "remove-applicant",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/sheik/OneDrive - ViaUC/VIA University/Subjects and Education/Semester Projects/SEP3-Project and Documentation/Appendicies/F - Source Code/SEP3/DataAccessLayer/DatabaseServer",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="DatabaseServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <option name="ALTERNATIVE_JRE_PATH" value="liberica-21" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-      <envs>
-        <env name="DB_PASSWORD" value="zaq1@WSX" />
-      </envs>
       <module name="DatabaseServer" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.databaseserver.DatabaseServerApplication" />
       <method v="2">
@@ -116,54 +106,24 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.23892.409" />
-        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-IU-252.23892.409" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.27397.103" />
       </set>
     </attachedChunks>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="124ee155-6a89-44ef-8acb-cbea402897b8" name="Changes" comment="" />
-      <created>1761645021356</created>
+      <changelist id="2c2cb0cc-5698-47f4-ae34-58cd00e9a764" name="Changes" comment="" />
+      <created>1764966535569</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1761645021356</updated>
-      <workItem from="1761645022452" duration="817000" />
-      <workItem from="1761827428366" duration="2000" />
-      <workItem from="1762155520246" duration="9000" />
-      <workItem from="1762173003726" duration="3372000" />
-      <workItem from="1762176495473" duration="4708000" />
-      <workItem from="1762328534418" duration="773000" />
-      <workItem from="1762761323886" duration="294000" />
-      <workItem from="1762853399576" duration="1424000" />
-      <workItem from="1763025692930" duration="5738000" />
-      <workItem from="1763230038401" duration="24000" />
-      <workItem from="1763230069056" duration="15472000" />
-      <workItem from="1763452725512" duration="3444000" />
-      <workItem from="1763461824929" duration="550000" />
-      <workItem from="1764146700726" duration="235000" />
-      <workItem from="1764246888414" duration="5972000" />
-      <workItem from="1764413292559" duration="10874000" />
-      <workItem from="1764429270566" duration="5867000" />
-      <workItem from="1764581416081" duration="13917000" />
-      <workItem from="1764666941101" duration="78000" />
-      <workItem from="1764667031551" duration="8398000" />
-      <workItem from="1764758102041" duration="8165000" />
-      <workItem from="1764795720233" duration="201000" />
-      <workItem from="1764838296887" duration="5021000" />
+      <updated>1764966535569</updated>
+      <workItem from="1764966537466" duration="176000" />
+      <workItem from="1764966867370" duration="2806000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="changes to be restored" />
-    <option name="LAST_COMMIT_MESSAGE" value="changes to be restored" />
-  </component>
-  <component name="XSLT-Support.FileAssociations.UIState">
-    <expand />
-    <select />
   </component>
 </project>

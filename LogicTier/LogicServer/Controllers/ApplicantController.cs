@@ -43,6 +43,18 @@ public class ApplicantController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+
+    [HttpDelete("{id:long}")]
+    public async Task<ActionResult> DeleteApplicant(long id)
+    {
+        var result = await _service.RemoveApplicantAsync(id);
+
+        if (!result.Success)
+            return NotFound(new { message = result.Message });
+
+        return Ok(new { message = result.Message });
+    }
+
     
     [HttpPost("skills")]
     public async Task<ActionResult<ApplicantSkillDto>> AddSkill([FromBody] AddApplicantSkillDto dto)
