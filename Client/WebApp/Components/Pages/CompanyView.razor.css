@@ -58,6 +58,31 @@
     color: #2b6cb0;
 }
 
+.company-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.edit-company-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 9px 18px;
+    border-radius: 999px;
+    border: 1px solid #cbd5e0;
+    background-color: #ffffff;
+    font-weight: 700;
+    color: #1a202c;
+    text-decoration: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.edit-company-btn:hover {
+    background-color: #f8fafc;
+    border-color: #94a3b8;
+    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
+}
+
 .company-detail-content {
     margin-top: 8px;
     display: flex;

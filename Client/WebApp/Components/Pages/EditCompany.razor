@@ -1,0 +1,213 @@
+@page "/company/{CompanyId:long}/edit"
+@layout MainLayout
+@rendermode InteractiveServer
+
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@using WebApp.DTOs.Company
+@using WebApp.Services
+
+@inject HttpCompanyService CompanyService
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager Nav
+
+<AuthorizeView Roles="company_representative">
+    <Authorized>
+        <div class="register-shell">
+            <div class="register-card">
+                <div class="register-header edit-header">
+                    <div class="edit-title">
+                        <span class="company-detail-label">Edit company profile</span>
+                        <h2>Edit Company</h2>
+                        <p>Update your company details so candidates see the latest information.</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="ghost-btn" type="button" @onclick="@(() => Nav.NavigateTo($"/company/{CompanyId}"))">
+                            Cancel
+                        </button>
+                        <button form="edit-company-form" class="primary-btn pill-btn" type="submit">
+                            Save changes
+                        </button>
+                    </div>
+                </div>
+
+                <div class="register-form-area">
+                    @if (isLoading)
+                    {
+                        <div class="dash-loading">
+                            Loading company information...
+                        </div>
+                    }
+                    else if (loadError)
+                    {
+                        <div class="dash-empty">
+                            <h4>Unable to load company</h4>
+                            <p>@loadErrorMessage</p>
+                            <a href="/company-representative/dashboard" class="primary-btn dash-register-btn">
+                                Back to dashboard
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <EditForm Id="edit-company-form" Model="@companyProfile" OnValidSubmit="HandleCompanySubmit">
+                            <ChildContent Context="formContext">
+                                <DataAnnotationsValidator/>
+                                <ValidationSummary/>
+
+                                <div class="form-grid">
+                                    <div class="form-group full-width">
+                                        <label for="c-name">Company Name</label>
+                                        <InputText id="c-name" class="form-control" @bind-Value="companyProfile.Name"/>
+                                        <ValidationMessage For="@(() => companyProfile.Name)" class="validation-message"/>
+                                    </div>
+
+                                    <div class="form-group full-width">
+                                        <label for="c-website">Website</label>
+                                        <InputText id="c-website" class="form-control" @bind-Value="companyProfile.Website"/>
+                                        <ValidationMessage For="@(() => companyProfile.Website)" class="validation-message"/>
+                                    </div>
+
+                                    <div class="form-group full-width">
+                                        <label for="c-description">Description</label>
+                                        <InputTextArea id="c-description" class="form-control" @bind-Value="companyProfile.Description"/>
+                                        <ValidationMessage For="@(() => companyProfile.Description)" class="validation-message"/>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="c-city">City</label>
+                                        <InputText id="c-city" class="form-control" @bind-Value="companyProfile.City"/>
+                                        <ValidationMessage For="@(() => companyProfile.City)" class="validation-message"/>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="c-postcode">Postcode</label>
+                                        <InputText id="c-postcode" class="form-control" @bind-Value="companyProfile.Postcode"/>
+                                        <ValidationMessage For="@(() => companyProfile.Postcode)" class="validation-message"/>
+                                    </div>
+
+                                    <div class="form-group full-width">
+                                        <label for="c-address">Address</label>
+                                        <InputText id="c-address" class="form-control" @bind-Value="companyProfile.Address"/>
+                                        <ValidationMessage For="@(() => companyProfile.Address)" class="validation-message"/>
+                                    </div>
+                                </div>
+                            </ChildContent>
+                        </EditForm>
+
+                        <div class="@($"notification-container {(notificationVisible ? "show" : "")}")">
+                            <div class="@($"notification {notificationType}")">
+                                @notificationMessage
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>You must be logged in as a company representative to edit a company.</p>
+        <a href="/login">Go to login</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    [Parameter] public long CompanyId { get; set; }
+
+    private UpdateCompanyDto companyProfile = new();
+    private bool isLoading = true;
+    private bool loadError;
+    private string loadErrorMessage = "We couldn't find that company.";
+
+    private bool notificationVisible;
+    private string notificationMessage = string.Empty;
+    private string notificationType = string.Empty;
+
+    private long representativeId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCompany();
+    }
+
+    private async Task LoadCompany()
+    {
+        isLoading = true;
+        loadError = false;
+
+        try
+        {
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+            var idClaim = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!long.TryParse(idClaim, out representativeId) || representativeId <= 0)
+            {
+                loadError = true;
+                loadErrorMessage = "You must be logged in as a company representative to edit a company.";
+                return;
+            }
+
+            var myCompanies = await CompanyService.GetMyCompaniesAsync(representativeId);
+            var company = myCompanies.FirstOrDefault(c => c.Id == CompanyId);
+
+            if (company is null)
+            {
+                loadError = true;
+                loadErrorMessage = "Company not found or you do not have access to it.";
+                return;
+            }
+
+            companyProfile = new UpdateCompanyDto
+            {
+                Id = company.Id,
+                Name = company.Name,
+                Description = company.Description,
+                Website = company.Website,
+                City = company.City,
+                Postcode = company.Postcode,
+                Address = company.Address,
+                CompanyRepresentativeId = representativeId
+            };
+        }
+        catch
+        {
+            loadError = true;
+            loadErrorMessage = "Failed to load company details. Please try again.";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task HandleCompanySubmit()
+    {
+        try
+        {
+            companyProfile.CompanyRepresentativeId = representativeId;
+            var updated = await CompanyService.UpdateCompanyAsync(companyProfile);
+            ShowNotification("Company details updated successfully.", "success");
+
+            await Task.Delay(800);
+            Nav.NavigateTo($"/company/{updated.Id}", true);
+        }
+        catch (Exception ex)
+        {
+            ShowNotification($"Failed to update company: {ex.Message}", "error");
+        }
+    }
+
+    private void ShowNotification(string message, string type)
+    {
+        notificationMessage = message;
+        notificationType = type;
+        notificationVisible = true;
+
+        _ = Task.Delay(3000).ContinueWith(_ =>
+        {
+            notificationVisible = false;
+            InvokeAsync(StateHasChanged);
+        });
+    }
+}

@@ -50,6 +50,8 @@ namespace HireFire.Grpc {
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::HireFire.Grpc.CompanyResponse> __Marshaller_CompanyResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.CompanyResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::HireFire.Grpc.UpdateCompanyRequest> __Marshaller_UpdateCompanyRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.UpdateCompanyRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::HireFire.Grpc.GetCompaniesForRepresentativeRequest> __Marshaller_GetCompaniesForRepresentativeRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.GetCompaniesForRepresentativeRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::HireFire.Grpc.GetCompaniesForRepresentativeResponse> __Marshaller_GetCompaniesForRepresentativeResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.GetCompaniesForRepresentativeResponse.Parser));
@@ -66,6 +68,14 @@ namespace HireFire.Grpc {
         __ServiceName,
         "CreateCompany",
         __Marshaller_CreateCompanyRequest,
+        __Marshaller_CompanyResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::HireFire.Grpc.UpdateCompanyRequest, global::HireFire.Grpc.CompanyResponse> __Method_UpdateCompany = new grpc::Method<global::HireFire.Grpc.UpdateCompanyRequest, global::HireFire.Grpc.CompanyResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "UpdateCompany",
+        __Marshaller_UpdateCompanyRequest,
         __Marshaller_CompanyResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
@@ -144,6 +154,26 @@ namespace HireFire.Grpc {
       public virtual grpc::AsyncUnaryCall<global::HireFire.Grpc.CompanyResponse> CreateCompanyAsync(global::HireFire.Grpc.CreateCompanyRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_CreateCompany, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::HireFire.Grpc.CompanyResponse UpdateCompany(global::HireFire.Grpc.UpdateCompanyRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return UpdateCompany(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::HireFire.Grpc.CompanyResponse UpdateCompany(global::HireFire.Grpc.UpdateCompanyRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_UpdateCompany, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::HireFire.Grpc.CompanyResponse> UpdateCompanyAsync(global::HireFire.Grpc.UpdateCompanyRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return UpdateCompanyAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::HireFire.Grpc.CompanyResponse> UpdateCompanyAsync(global::HireFire.Grpc.UpdateCompanyRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_UpdateCompany, null, options, request);
       }
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::HireFire.Grpc.GetCompaniesForRepresentativeResponse GetCompaniesForRepresentative(global::HireFire.Grpc.GetCompaniesForRepresentativeRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))

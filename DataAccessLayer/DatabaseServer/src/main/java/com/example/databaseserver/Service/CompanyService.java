@@ -1,5 +1,6 @@
 package com.example.databaseserver.Service;
 
+import com.example.databaseserver.DTOs.UpdateCompanyDto;
 import com.example.databaseserver.Entities.Company;
 import com.example.databaseserver.Entities.CompanyRepresentative;
 import com.example.databaseserver.Entities.Location;
@@ -14,6 +15,7 @@ import com.example.databaseserver.generated.GetCompaniesForRepresentativeRequest
 import com.example.databaseserver.generated.GetCompaniesForRepresentativeResponse;
 import com.example.databaseserver.generated.GetCompaniesToApproveRequest;
 import com.example.databaseserver.generated.GetCompaniesToApproveResponse;
+import com.example.databaseserver.generated.UpdateCompanyRequest;
 import io.grpc.stub.StreamObserver;
 import jakarta.transaction.Transactional;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -71,6 +73,58 @@ public class CompanyService extends CompanyServiceGrpc.CompanyServiceImplBase {
             responseObserver.onNext(response);
             responseObserver.onCompleted();
 
+        } catch (Exception e) {
+            responseObserver.onError(e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void updateCompany(UpdateCompanyRequest request,
+                              StreamObserver<CompanyResponse> responseObserver) {
+
+        try {
+            long companyId = request.getCompanyId();
+
+            Company company = companyRepository.findById(companyId)
+                    .orElseThrow(() ->
+                            new IllegalArgumentException("Company not found with id: " + companyId));
+
+            CompanyRepresentative representative = company.getCompanyRepresentative();
+            long requesterRepId = request.getCompanyRepresentativeId();
+            if (representative != null && requesterRepId != 0 && representative.getId() != requesterRepId) {
+                throw new IllegalArgumentException("You are not allowed to update this company.");
+            }
+
+            UpdateCompanyDto dto = new UpdateCompanyDto(
+                    companyId,
+                    request.getName(),
+                    request.getDescription(),
+                    request.getWebsite(),
+                    request.getCity(),
+                    request.getPostcode(),
+                    request.getAddress(),
+                    requesterRepId
+            );
+
+            company.setName(dto.getName());
+            company.setDescription(dto.getDescription());
+            company.setWebsite(dto.getWebsite());
+
+            Location location = company.getLocation();
+            if (location == null) {
+                location = new Location();
+            }
+            location.setCity(dto.getCity());
+            location.setPostcode(dto.getPostcode());
+            location.setAddress(dto.getAddress());
+            location = locationRepository.save(location);
+
+            company.setLocation(location);
+            Company savedCompany = companyRepository.save(company);
+
+            responseObserver.onNext(toCompanyResponse(savedCompany));
+            responseObserver.onCompleted();
         } catch (Exception e) {
             responseObserver.onError(e);
         }

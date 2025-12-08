@@ -55,6 +55,8 @@ namespace HireFire.Grpc {
     static readonly grpc::Marshaller<global::HireFire.Grpc.GetRecruitersForCompanyResponse> __Marshaller_GetRecruitersForCompanyResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.GetRecruitersForCompanyResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::HireFire.Grpc.GetRecruiterByIdRequest> __Marshaller_GetRecruiterByIdRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.GetRecruiterByIdRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::HireFire.Grpc.UpdateRecruiterRequest> __Marshaller_UpdateRecruiterRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::HireFire.Grpc.UpdateRecruiterRequest.Parser));
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::HireFire.Grpc.RegisterRecruiterRequest, global::HireFire.Grpc.RecruiterResponse> __Method_RegisterRecruiter = new grpc::Method<global::HireFire.Grpc.RegisterRecruiterRequest, global::HireFire.Grpc.RecruiterResponse>(
@@ -78,6 +80,14 @@ namespace HireFire.Grpc {
         __ServiceName,
         "GetRecruiterById",
         __Marshaller_GetRecruiterByIdRequest,
+        __Marshaller_RecruiterResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::HireFire.Grpc.UpdateRecruiterRequest, global::HireFire.Grpc.RecruiterResponse> __Method_UpdateRecruiter = new grpc::Method<global::HireFire.Grpc.UpdateRecruiterRequest, global::HireFire.Grpc.RecruiterResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "UpdateRecruiter",
+        __Marshaller_UpdateRecruiterRequest,
         __Marshaller_RecruiterResponse);
 
     /// <summary>Service descriptor</summary>
@@ -172,6 +182,26 @@ namespace HireFire.Grpc {
       public virtual grpc::AsyncUnaryCall<global::HireFire.Grpc.RecruiterResponse> GetRecruiterByIdAsync(global::HireFire.Grpc.GetRecruiterByIdRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_GetRecruiterById, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::HireFire.Grpc.RecruiterResponse UpdateRecruiter(global::HireFire.Grpc.UpdateRecruiterRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return UpdateRecruiter(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::HireFire.Grpc.RecruiterResponse UpdateRecruiter(global::HireFire.Grpc.UpdateRecruiterRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_UpdateRecruiter, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::HireFire.Grpc.RecruiterResponse> UpdateRecruiterAsync(global::HireFire.Grpc.UpdateRecruiterRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return UpdateRecruiterAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::HireFire.Grpc.RecruiterResponse> UpdateRecruiterAsync(global::HireFire.Grpc.UpdateRecruiterRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_UpdateRecruiter, null, options, request);
       }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]

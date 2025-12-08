@@ -8,9 +8,9 @@ namespace LogicServer.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CompanyController : ControllerBase
-{
-    private readonly CompanyService _companyService;
+    public class CompanyController : ControllerBase
+    {
+        private readonly CompanyService _companyService;
 
     public CompanyController(CompanyService companyService)
     {
@@ -26,6 +26,20 @@ public class CompanyController : ControllerBase
         var result = await _companyService.CreateCompanyAsync(dto);
         return Ok(result);
 
+    }
+
+    [HttpPut("{companyId:long}")]
+    public async Task<ActionResult<CompanyDto>> UpdateCompany(long companyId, [FromBody] UpdateCompanyDto dto)
+    {
+        if (dto == null || dto.Id != companyId)
+            return BadRequest("Mismatched company id.");
+
+        var result = await _companyService.UpdateCompanyAsync(dto);
+
+        if (result is null)
+            return NotFound($"Company with ID {companyId} not found or you do not have access.");
+
+        return Ok(result);
     }
     
     [HttpGet("by-representative/{representativeId:long}")]
