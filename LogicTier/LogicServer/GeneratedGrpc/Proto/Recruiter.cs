@@ -34,13 +34,19 @@ namespace HireFire.Grpc {
             "ASgDIjQKHkdldFJlY3J1aXRlcnNGb3JDb21wYW55UmVxdWVzdBISCgpjb21w",
             "YW55X2lkGAEgASgDIkkKH0dldFJlY3J1aXRlcnNGb3JDb21wYW55UmVzcG9u",
             "c2USJgoKcmVjcnVpdGVycxgBIAMoCzISLlJlY3J1aXRlclJlc3BvbnNlIiUK",
-            "F0dldFJlY3J1aXRlckJ5SWRSZXF1ZXN0EgoKAmlkGAEgASgDMvYBChBSZWNy",
-            "dWl0ZXJTZXJ2aWNlEkIKEVJlZ2lzdGVyUmVjcnVpdGVyEhkuUmVnaXN0ZXJS",
-            "ZWNydWl0ZXJSZXF1ZXN0GhIuUmVjcnVpdGVyUmVzcG9uc2USXAoXR2V0UmVj",
-            "cnVpdGVyc0ZvckNvbXBhbnkSHy5HZXRSZWNydWl0ZXJzRm9yQ29tcGFueVJl",
-            "cXVlc3QaIC5HZXRSZWNydWl0ZXJzRm9yQ29tcGFueVJlc3BvbnNlEkAKEEdl",
-            "dFJlY3J1aXRlckJ5SWQSGC5HZXRSZWNydWl0ZXJCeUlkUmVxdWVzdBoSLlJl",
-            "Y3J1aXRlclJlc3BvbnNlQhCqAg1IaXJlRmlyZS5HcnBjYgZwcm90bzM="));
+            "F0dldFJlY3J1aXRlckJ5SWRSZXF1ZXN0EgoKAmlkGAEgASgDIqwBChZVcGRh",
+            "dGVSZWNydWl0ZXJSZXF1ZXN0EhQKDHJlY3J1aXRlcl9pZBgBIAEoAxINCgVl",
+            "bWFpbBgCIAEoCRIMCgRuYW1lGAMgASgJEhUKDXBhc3N3b3JkX2hhc2gYBCAB",
+            "KAkSEAoIcG9zaXRpb24YBSABKAkSGwoTd29ya3NfaW5fY29tcGFueV9pZBgG",
+            "IAEoAxIZChFyZXByZXNlbnRhdGl2ZV9pZBgHIAEoAzK2AgoQUmVjcnVpdGVy",
+            "U2VydmljZRJCChFSZWdpc3RlclJlY3J1aXRlchIZLlJlZ2lzdGVyUmVjcnVp",
+            "dGVyUmVxdWVzdBoSLlJlY3J1aXRlclJlc3BvbnNlElwKF0dldFJlY3J1aXRl",
+            "cnNGb3JDb21wYW55Eh8uR2V0UmVjcnVpdGVyc0ZvckNvbXBhbnlSZXF1ZXN0",
+            "GiAuR2V0UmVjcnVpdGVyc0ZvckNvbXBhbnlSZXNwb25zZRJAChBHZXRSZWNy",
+            "dWl0ZXJCeUlkEhguR2V0UmVjcnVpdGVyQnlJZFJlcXVlc3QaEi5SZWNydWl0",
+            "ZXJSZXNwb25zZRI+Cg9VcGRhdGVSZWNydWl0ZXISFy5VcGRhdGVSZWNydWl0",
+            "ZXJSZXF1ZXN0GhIuUmVjcnVpdGVyUmVzcG9uc2VCEKoCDUhpcmVGaXJlLkdy",
+            "cGNiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -48,7 +54,8 @@ namespace HireFire.Grpc {
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.RecruiterResponse), global::HireFire.Grpc.RecruiterResponse.Parser, new[]{ "Id", "Email", "Name", "Position", "HiredById", "WorksInCompanyId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.GetRecruitersForCompanyRequest), global::HireFire.Grpc.GetRecruitersForCompanyRequest.Parser, new[]{ "CompanyId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.GetRecruitersForCompanyResponse), global::HireFire.Grpc.GetRecruitersForCompanyResponse.Parser, new[]{ "Recruiters" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.GetRecruiterByIdRequest), global::HireFire.Grpc.GetRecruiterByIdRequest.Parser, new[]{ "Id" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.GetRecruiterByIdRequest), global::HireFire.Grpc.GetRecruiterByIdRequest.Parser, new[]{ "Id" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.UpdateRecruiterRequest), global::HireFire.Grpc.UpdateRecruiterRequest.Parser, new[]{ "RecruiterId", "Email", "Name", "PasswordHash", "Position", "WorksInCompanyId", "RepresentativeId" }, null, null, null, null)
           }));
     }
     #endregion
@@ -1355,6 +1362,418 @@ namespace HireFire.Grpc {
             break;
           case 8: {
             Id = input.ReadInt64();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class UpdateRecruiterRequest : pb::IMessage<UpdateRecruiterRequest>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<UpdateRecruiterRequest> _parser = new pb::MessageParser<UpdateRecruiterRequest>(() => new UpdateRecruiterRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<UpdateRecruiterRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::HireFire.Grpc.RecruiterReflection.Descriptor.MessageTypes[5]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public UpdateRecruiterRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public UpdateRecruiterRequest(UpdateRecruiterRequest other) : this() {
+      recruiterId_ = other.recruiterId_;
+      email_ = other.email_;
+      name_ = other.name_;
+      passwordHash_ = other.passwordHash_;
+      position_ = other.position_;
+      worksInCompanyId_ = other.worksInCompanyId_;
+      representativeId_ = other.representativeId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public UpdateRecruiterRequest Clone() {
+      return new UpdateRecruiterRequest(this);
+    }
+
+    /// <summary>Field number for the "recruiter_id" field.</summary>
+    public const int RecruiterIdFieldNumber = 1;
+    private long recruiterId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long RecruiterId {
+      get { return recruiterId_; }
+      set {
+        recruiterId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "email" field.</summary>
+    public const int EmailFieldNumber = 2;
+    private string email_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Email {
+      get { return email_; }
+      set {
+        email_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "name" field.</summary>
+    public const int NameFieldNumber = 3;
+    private string name_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Name {
+      get { return name_; }
+      set {
+        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "password_hash" field.</summary>
+    public const int PasswordHashFieldNumber = 4;
+    private string passwordHash_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string PasswordHash {
+      get { return passwordHash_; }
+      set {
+        passwordHash_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "position" field.</summary>
+    public const int PositionFieldNumber = 5;
+    private string position_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Position {
+      get { return position_; }
+      set {
+        position_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "works_in_company_id" field.</summary>
+    public const int WorksInCompanyIdFieldNumber = 6;
+    private long worksInCompanyId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long WorksInCompanyId {
+      get { return worksInCompanyId_; }
+      set {
+        worksInCompanyId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "representative_id" field.</summary>
+    public const int RepresentativeIdFieldNumber = 7;
+    private long representativeId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long RepresentativeId {
+      get { return representativeId_; }
+      set {
+        representativeId_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as UpdateRecruiterRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(UpdateRecruiterRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (RecruiterId != other.RecruiterId) return false;
+      if (Email != other.Email) return false;
+      if (Name != other.Name) return false;
+      if (PasswordHash != other.PasswordHash) return false;
+      if (Position != other.Position) return false;
+      if (WorksInCompanyId != other.WorksInCompanyId) return false;
+      if (RepresentativeId != other.RepresentativeId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (RecruiterId != 0L) hash ^= RecruiterId.GetHashCode();
+      if (Email.Length != 0) hash ^= Email.GetHashCode();
+      if (Name.Length != 0) hash ^= Name.GetHashCode();
+      if (PasswordHash.Length != 0) hash ^= PasswordHash.GetHashCode();
+      if (Position.Length != 0) hash ^= Position.GetHashCode();
+      if (WorksInCompanyId != 0L) hash ^= WorksInCompanyId.GetHashCode();
+      if (RepresentativeId != 0L) hash ^= RepresentativeId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (RecruiterId != 0L) {
+        output.WriteRawTag(8);
+        output.WriteInt64(RecruiterId);
+      }
+      if (Email.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(Email);
+      }
+      if (Name.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Name);
+      }
+      if (PasswordHash.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(PasswordHash);
+      }
+      if (Position.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(Position);
+      }
+      if (WorksInCompanyId != 0L) {
+        output.WriteRawTag(48);
+        output.WriteInt64(WorksInCompanyId);
+      }
+      if (RepresentativeId != 0L) {
+        output.WriteRawTag(56);
+        output.WriteInt64(RepresentativeId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (RecruiterId != 0L) {
+        output.WriteRawTag(8);
+        output.WriteInt64(RecruiterId);
+      }
+      if (Email.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(Email);
+      }
+      if (Name.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Name);
+      }
+      if (PasswordHash.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(PasswordHash);
+      }
+      if (Position.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(Position);
+      }
+      if (WorksInCompanyId != 0L) {
+        output.WriteRawTag(48);
+        output.WriteInt64(WorksInCompanyId);
+      }
+      if (RepresentativeId != 0L) {
+        output.WriteRawTag(56);
+        output.WriteInt64(RepresentativeId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (RecruiterId != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(RecruiterId);
+      }
+      if (Email.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Email);
+      }
+      if (Name.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+      }
+      if (PasswordHash.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(PasswordHash);
+      }
+      if (Position.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Position);
+      }
+      if (WorksInCompanyId != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(WorksInCompanyId);
+      }
+      if (RepresentativeId != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(RepresentativeId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(UpdateRecruiterRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.RecruiterId != 0L) {
+        RecruiterId = other.RecruiterId;
+      }
+      if (other.Email.Length != 0) {
+        Email = other.Email;
+      }
+      if (other.Name.Length != 0) {
+        Name = other.Name;
+      }
+      if (other.PasswordHash.Length != 0) {
+        PasswordHash = other.PasswordHash;
+      }
+      if (other.Position.Length != 0) {
+        Position = other.Position;
+      }
+      if (other.WorksInCompanyId != 0L) {
+        WorksInCompanyId = other.WorksInCompanyId;
+      }
+      if (other.RepresentativeId != 0L) {
+        RepresentativeId = other.RepresentativeId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            RecruiterId = input.ReadInt64();
+            break;
+          }
+          case 18: {
+            Email = input.ReadString();
+            break;
+          }
+          case 26: {
+            Name = input.ReadString();
+            break;
+          }
+          case 34: {
+            PasswordHash = input.ReadString();
+            break;
+          }
+          case 42: {
+            Position = input.ReadString();
+            break;
+          }
+          case 48: {
+            WorksInCompanyId = input.ReadInt64();
+            break;
+          }
+          case 56: {
+            RepresentativeId = input.ReadInt64();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            RecruiterId = input.ReadInt64();
+            break;
+          }
+          case 18: {
+            Email = input.ReadString();
+            break;
+          }
+          case 26: {
+            Name = input.ReadString();
+            break;
+          }
+          case 34: {
+            PasswordHash = input.ReadString();
+            break;
+          }
+          case 42: {
+            Position = input.ReadString();
+            break;
+          }
+          case 48: {
+            WorksInCompanyId = input.ReadInt64();
+            break;
+          }
+          case 56: {
+            RepresentativeId = input.ReadInt64();
             break;
           }
         }

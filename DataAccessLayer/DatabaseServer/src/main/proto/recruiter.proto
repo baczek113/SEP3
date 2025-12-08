@@ -12,6 +12,8 @@ service RecruiterService {
       returns (GetRecruitersForCompanyResponse);
 
   rpc GetRecruiterById (GetRecruiterByIdRequest) returns (RecruiterResponse);
+
+  rpc UpdateRecruiter (UpdateRecruiterRequest) returns (RecruiterResponse);
 }
 
 message RegisterRecruiterRequest {
@@ -42,4 +44,14 @@ message GetRecruitersForCompanyResponse {
 
 message GetRecruiterByIdRequest {
   int64 id = 1;
+}
+
+message UpdateRecruiterRequest {
+  int64 recruiter_id = 1;
+  string email = 2;
+  string name = 3;
+  string password_hash = 4;
+  string position = 5;
+  int64 works_in_company_id = 6;
+  int64 representative_id = 7;
 }

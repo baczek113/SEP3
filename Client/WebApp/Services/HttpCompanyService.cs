@@ -35,6 +35,18 @@ public class HttpCompanyService: ICompanyService
         return JsonSerializer.Deserialize<List<CompanyDto>>(response, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
     }
 
+    public async Task<CompanyDto> UpdateCompanyAsync(UpdateCompanyDto request)
+    {
+        var httpResponse = await client.PutAsJsonAsync($"api/company/{request.Id}", request);
+        var response = await httpResponse.Content.ReadAsStringAsync();
+
+        if (!httpResponse.IsSuccessStatusCode)
+            throw new Exception($"Status {httpResponse.StatusCode}: {response}");
+
+        return JsonSerializer.Deserialize<CompanyDto>(response,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
+    }
+
     public async Task<List<CompanyDto>> GetCompaniesToApproveAsync()
     {
         var httpResponse = await client.GetAsync($"api/company/to-approve");

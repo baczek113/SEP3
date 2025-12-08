@@ -28,29 +28,36 @@ namespace HireFire.Grpc {
             "dBIMCgRuYW1lGAEgASgJEhMKC2Rlc2NyaXB0aW9uGAIgASgJEg8KB3dlYnNp",
             "dGUYAyABKAkSDAoEY2l0eRgEIAEoCRIQCghwb3N0Y29kZRgFIAEoCRIPCgdh",
             "ZGRyZXNzGAYgASgJEiEKGWNvbXBhbnlfcmVwcmVzZW50YXRpdmVfaWQYByAB",
-            "KAMiugEKD0NvbXBhbnlSZXNwb25zZRIKCgJpZBgBIAEoAxIMCgRuYW1lGAIg",
-            "ASgJEhMKC2Rlc2NyaXB0aW9uGAMgASgJEg8KB3dlYnNpdGUYBCABKAkSEwoL",
-            "aXNfYXBwcm92ZWQYBSABKAgSDAoEY2l0eRgGIAEoCRIQCghwb3N0Y29kZRgH",
-            "IAEoCRIPCgdhZGRyZXNzGAggASgJEiEKGWNvbXBhbnlfcmVwcmVzZW50YXRp",
-            "dmVfaWQYCSABKAMiSQokR2V0Q29tcGFuaWVzRm9yUmVwcmVzZW50YXRpdmVS",
-            "ZXF1ZXN0EiEKGWNvbXBhbnlfcmVwcmVzZW50YXRpdmVfaWQYASABKAMiTAol",
-            "R2V0Q29tcGFuaWVzRm9yUmVwcmVzZW50YXRpdmVSZXNwb25zZRIjCgljb21w",
-            "YW5pZXMYASADKAsyEC5Db21wYW55UmVzcG9uc2UiHgocR2V0Q29tcGFuaWVz",
-            "VG9BcHByb3ZlUmVxdWVzdCJECh1HZXRDb21wYW5pZXNUb0FwcHJvdmVSZXNw",
-            "b25zZRIjCgljb21wYW5pZXMYASADKAsyEC5Db21wYW55UmVzcG9uc2UiKwoV",
-            "QXBwcm92ZUNvbXBhbnlSZXF1ZXN0EhIKCmNvbXBhbnlfaWQYASABKAMyzgIK",
-            "DkNvbXBhbnlTZXJ2aWNlEjgKDUNyZWF0ZUNvbXBhbnkSFS5DcmVhdGVDb21w",
-            "YW55UmVxdWVzdBoQLkNvbXBhbnlSZXNwb25zZRJuCh1HZXRDb21wYW5pZXNG",
-            "b3JSZXByZXNlbnRhdGl2ZRIlLkdldENvbXBhbmllc0ZvclJlcHJlc2VudGF0",
-            "aXZlUmVxdWVzdBomLkdldENvbXBhbmllc0ZvclJlcHJlc2VudGF0aXZlUmVz",
-            "cG9uc2USVgoVR2V0Q29tcGFuaWVzVG9BcHByb3ZlEh0uR2V0Q29tcGFuaWVz",
-            "VG9BcHByb3ZlUmVxdWVzdBoeLkdldENvbXBhbmllc1RvQXBwcm92ZVJlc3Bv",
-            "bnNlEjoKDkFwcHJvdmVDb21wYW55EhYuQXBwcm92ZUNvbXBhbnlSZXF1ZXN0",
-            "GhAuQ29tcGFueVJlc3BvbnNlQhCqAg1IaXJlRmlyZS5HcnBjYgZwcm90bzM="));
+            "KAMisgEKFFVwZGF0ZUNvbXBhbnlSZXF1ZXN0EhIKCmNvbXBhbnlfaWQYASAB",
+            "KAMSDAoEbmFtZRgCIAEoCRITCgtkZXNjcmlwdGlvbhgDIAEoCRIPCgd3ZWJz",
+            "aXRlGAQgASgJEgwKBGNpdHkYBSABKAkSEAoIcG9zdGNvZGUYBiABKAkSDwoH",
+            "YWRkcmVzcxgHIAEoCRIhChljb21wYW55X3JlcHJlc2VudGF0aXZlX2lkGAgg",
+            "ASgDIroBCg9Db21wYW55UmVzcG9uc2USCgoCaWQYASABKAMSDAoEbmFtZRgC",
+            "IAEoCRITCgtkZXNjcmlwdGlvbhgDIAEoCRIPCgd3ZWJzaXRlGAQgASgJEhMK",
+            "C2lzX2FwcHJvdmVkGAUgASgIEgwKBGNpdHkYBiABKAkSEAoIcG9zdGNvZGUY",
+            "ByABKAkSDwoHYWRkcmVzcxgIIAEoCRIhChljb21wYW55X3JlcHJlc2VudGF0",
+            "aXZlX2lkGAkgASgDIkkKJEdldENvbXBhbmllc0ZvclJlcHJlc2VudGF0aXZl",
+            "UmVxdWVzdBIhChljb21wYW55X3JlcHJlc2VudGF0aXZlX2lkGAEgASgDIkwK",
+            "JUdldENvbXBhbmllc0ZvclJlcHJlc2VudGF0aXZlUmVzcG9uc2USIwoJY29t",
+            "cGFuaWVzGAEgAygLMhAuQ29tcGFueVJlc3BvbnNlIh4KHEdldENvbXBhbmll",
+            "c1RvQXBwcm92ZVJlcXVlc3QiRAodR2V0Q29tcGFuaWVzVG9BcHByb3ZlUmVz",
+            "cG9uc2USIwoJY29tcGFuaWVzGAEgAygLMhAuQ29tcGFueVJlc3BvbnNlIisK",
+            "FUFwcHJvdmVDb21wYW55UmVxdWVzdBISCgpjb21wYW55X2lkGAEgASgDMogD",
+            "Cg5Db21wYW55U2VydmljZRI4Cg1DcmVhdGVDb21wYW55EhUuQ3JlYXRlQ29t",
+            "cGFueVJlcXVlc3QaEC5Db21wYW55UmVzcG9uc2USOAoNVXBkYXRlQ29tcGFu",
+            "eRIVLlVwZGF0ZUNvbXBhbnlSZXF1ZXN0GhAuQ29tcGFueVJlc3BvbnNlEm4K",
+            "HUdldENvbXBhbmllc0ZvclJlcHJlc2VudGF0aXZlEiUuR2V0Q29tcGFuaWVz",
+            "Rm9yUmVwcmVzZW50YXRpdmVSZXF1ZXN0GiYuR2V0Q29tcGFuaWVzRm9yUmVw",
+            "cmVzZW50YXRpdmVSZXNwb25zZRJWChVHZXRDb21wYW5pZXNUb0FwcHJvdmUS",
+            "HS5HZXRDb21wYW5pZXNUb0FwcHJvdmVSZXF1ZXN0Gh4uR2V0Q29tcGFuaWVz",
+            "VG9BcHByb3ZlUmVzcG9uc2USOgoOQXBwcm92ZUNvbXBhbnkSFi5BcHByb3Zl",
+            "Q29tcGFueVJlcXVlc3QaEC5Db21wYW55UmVzcG9uc2VCEKoCDUhpcmVGaXJl",
+            "LkdycGNiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.CreateCompanyRequest), global::HireFire.Grpc.CreateCompanyRequest.Parser, new[]{ "Name", "Description", "Website", "City", "Postcode", "Address", "CompanyRepresentativeId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.UpdateCompanyRequest), global::HireFire.Grpc.UpdateCompanyRequest.Parser, new[]{ "CompanyId", "Name", "Description", "Website", "City", "Postcode", "Address", "CompanyRepresentativeId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.CompanyResponse), global::HireFire.Grpc.CompanyResponse.Parser, new[]{ "Id", "Name", "Description", "Website", "IsApproved", "City", "Postcode", "Address", "CompanyRepresentativeId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.GetCompaniesForRepresentativeRequest), global::HireFire.Grpc.GetCompaniesForRepresentativeRequest.Parser, new[]{ "CompanyRepresentativeId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::HireFire.Grpc.GetCompaniesForRepresentativeResponse), global::HireFire.Grpc.GetCompaniesForRepresentativeResponse.Parser, new[]{ "Companies" }, null, null, null, null),
@@ -476,6 +483,455 @@ namespace HireFire.Grpc {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class UpdateCompanyRequest : pb::IMessage<UpdateCompanyRequest>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<UpdateCompanyRequest> _parser = new pb::MessageParser<UpdateCompanyRequest>(() => new UpdateCompanyRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<UpdateCompanyRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::HireFire.Grpc.CompanyReflection.Descriptor.MessageTypes[1]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public UpdateCompanyRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public UpdateCompanyRequest(UpdateCompanyRequest other) : this() {
+      companyId_ = other.companyId_;
+      name_ = other.name_;
+      description_ = other.description_;
+      website_ = other.website_;
+      city_ = other.city_;
+      postcode_ = other.postcode_;
+      address_ = other.address_;
+      companyRepresentativeId_ = other.companyRepresentativeId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public UpdateCompanyRequest Clone() {
+      return new UpdateCompanyRequest(this);
+    }
+
+    /// <summary>Field number for the "company_id" field.</summary>
+    public const int CompanyIdFieldNumber = 1;
+    private long companyId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long CompanyId {
+      get { return companyId_; }
+      set {
+        companyId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "name" field.</summary>
+    public const int NameFieldNumber = 2;
+    private string name_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Name {
+      get { return name_; }
+      set {
+        name_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "description" field.</summary>
+    public const int DescriptionFieldNumber = 3;
+    private string description_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Description {
+      get { return description_; }
+      set {
+        description_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "website" field.</summary>
+    public const int WebsiteFieldNumber = 4;
+    private string website_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Website {
+      get { return website_; }
+      set {
+        website_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "city" field.</summary>
+    public const int CityFieldNumber = 5;
+    private string city_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string City {
+      get { return city_; }
+      set {
+        city_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "postcode" field.</summary>
+    public const int PostcodeFieldNumber = 6;
+    private string postcode_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Postcode {
+      get { return postcode_; }
+      set {
+        postcode_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "address" field.</summary>
+    public const int AddressFieldNumber = 7;
+    private string address_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Address {
+      get { return address_; }
+      set {
+        address_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "company_representative_id" field.</summary>
+    public const int CompanyRepresentativeIdFieldNumber = 8;
+    private long companyRepresentativeId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long CompanyRepresentativeId {
+      get { return companyRepresentativeId_; }
+      set {
+        companyRepresentativeId_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as UpdateCompanyRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(UpdateCompanyRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (CompanyId != other.CompanyId) return false;
+      if (Name != other.Name) return false;
+      if (Description != other.Description) return false;
+      if (Website != other.Website) return false;
+      if (City != other.City) return false;
+      if (Postcode != other.Postcode) return false;
+      if (Address != other.Address) return false;
+      if (CompanyRepresentativeId != other.CompanyRepresentativeId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (CompanyId != 0L) hash ^= CompanyId.GetHashCode();
+      if (Name.Length != 0) hash ^= Name.GetHashCode();
+      if (Description.Length != 0) hash ^= Description.GetHashCode();
+      if (Website.Length != 0) hash ^= Website.GetHashCode();
+      if (City.Length != 0) hash ^= City.GetHashCode();
+      if (Postcode.Length != 0) hash ^= Postcode.GetHashCode();
+      if (Address.Length != 0) hash ^= Address.GetHashCode();
+      if (CompanyRepresentativeId != 0L) hash ^= CompanyRepresentativeId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (CompanyId != 0L) {
+        output.WriteRawTag(8);
+        output.WriteInt64(CompanyId);
+      }
+      if (Name.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(Name);
+      }
+      if (Description.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Description);
+      }
+      if (Website.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(Website);
+      }
+      if (City.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(City);
+      }
+      if (Postcode.Length != 0) {
+        output.WriteRawTag(50);
+        output.WriteString(Postcode);
+      }
+      if (Address.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(Address);
+      }
+      if (CompanyRepresentativeId != 0L) {
+        output.WriteRawTag(64);
+        output.WriteInt64(CompanyRepresentativeId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (CompanyId != 0L) {
+        output.WriteRawTag(8);
+        output.WriteInt64(CompanyId);
+      }
+      if (Name.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(Name);
+      }
+      if (Description.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Description);
+      }
+      if (Website.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(Website);
+      }
+      if (City.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(City);
+      }
+      if (Postcode.Length != 0) {
+        output.WriteRawTag(50);
+        output.WriteString(Postcode);
+      }
+      if (Address.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(Address);
+      }
+      if (CompanyRepresentativeId != 0L) {
+        output.WriteRawTag(64);
+        output.WriteInt64(CompanyRepresentativeId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (CompanyId != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(CompanyId);
+      }
+      if (Name.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+      }
+      if (Description.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Description);
+      }
+      if (Website.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Website);
+      }
+      if (City.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(City);
+      }
+      if (Postcode.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Postcode);
+      }
+      if (Address.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Address);
+      }
+      if (CompanyRepresentativeId != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(CompanyRepresentativeId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(UpdateCompanyRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.CompanyId != 0L) {
+        CompanyId = other.CompanyId;
+      }
+      if (other.Name.Length != 0) {
+        Name = other.Name;
+      }
+      if (other.Description.Length != 0) {
+        Description = other.Description;
+      }
+      if (other.Website.Length != 0) {
+        Website = other.Website;
+      }
+      if (other.City.Length != 0) {
+        City = other.City;
+      }
+      if (other.Postcode.Length != 0) {
+        Postcode = other.Postcode;
+      }
+      if (other.Address.Length != 0) {
+        Address = other.Address;
+      }
+      if (other.CompanyRepresentativeId != 0L) {
+        CompanyRepresentativeId = other.CompanyRepresentativeId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            CompanyId = input.ReadInt64();
+            break;
+          }
+          case 18: {
+            Name = input.ReadString();
+            break;
+          }
+          case 26: {
+            Description = input.ReadString();
+            break;
+          }
+          case 34: {
+            Website = input.ReadString();
+            break;
+          }
+          case 42: {
+            City = input.ReadString();
+            break;
+          }
+          case 50: {
+            Postcode = input.ReadString();
+            break;
+          }
+          case 58: {
+            Address = input.ReadString();
+            break;
+          }
+          case 64: {
+            CompanyRepresentativeId = input.ReadInt64();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            CompanyId = input.ReadInt64();
+            break;
+          }
+          case 18: {
+            Name = input.ReadString();
+            break;
+          }
+          case 26: {
+            Description = input.ReadString();
+            break;
+          }
+          case 34: {
+            Website = input.ReadString();
+            break;
+          }
+          case 42: {
+            City = input.ReadString();
+            break;
+          }
+          case 50: {
+            Postcode = input.ReadString();
+            break;
+          }
+          case 58: {
+            Address = input.ReadString();
+            break;
+          }
+          case 64: {
+            CompanyRepresentativeId = input.ReadInt64();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class CompanyResponse : pb::IMessage<CompanyResponse>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -490,7 +946,7 @@ namespace HireFire.Grpc {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HireFire.Grpc.CompanyReflection.Descriptor.MessageTypes[1]; }
+      get { return global::HireFire.Grpc.CompanyReflection.Descriptor.MessageTypes[2]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -976,7 +1432,7 @@ namespace HireFire.Grpc {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HireFire.Grpc.CompanyReflection.Descriptor.MessageTypes[2]; }
+      get { return global::HireFire.Grpc.CompanyReflection.Descriptor.MessageTypes[3]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1166,7 +1622,7 @@ namespace HireFire.Grpc {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HireFire.Grpc.CompanyReflection.Descriptor.MessageTypes[3]; }
+      get { return global::HireFire.Grpc.CompanyReflection.Descriptor.MessageTypes[4]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1345,7 +1801,7 @@ namespace HireFire.Grpc {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HireFire.Grpc.CompanyReflection.Descriptor.MessageTypes[4]; }
+      get { return global::HireFire.Grpc.CompanyReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1498,7 +1954,7 @@ namespace HireFire.Grpc {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HireFire.Grpc.CompanyReflection.Descriptor.MessageTypes[5]; }
+      get { return global::HireFire.Grpc.CompanyReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1677,7 +2133,7 @@ namespace HireFire.Grpc {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::HireFire.Grpc.CompanyReflection.Descriptor.MessageTypes[6]; }
+      get { return global::HireFire.Grpc.CompanyReflection.Descriptor.MessageTypes[7]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

@@ -1,0 +1,198 @@
+@page "/company/{CompanyId:long}/recruiters/{RecruiterId:long}/edit"
+@layout MainLayout
+@rendermode InteractiveServer
+
+@using System.Security.Claims
+@using WebApp.DTOs.Recruiter
+@using WebApp.Services
+
+@inject HttpRecruiterService RecruiterService
+@inject NavigationManager Nav
+@inject AuthenticationStateProvider AuthStateProvider
+
+<AuthorizeView Roles="company_representative">
+    <Authorized Context="authState">
+        <div class="register-shell">
+            <div class="register-card">
+                <div class="register-header">
+                    <h2>Edit Recruiter</h2>
+                    <p>Update recruiter details for your company.</p>
+                </div>
+
+                <div class="register-form-area">
+                    @if (isLoading)
+                    {
+                        <div class="dash-loading">Loading recruiter...</div>
+                    }
+                    else if (loadError != null)
+                    {
+                        <div class="dash-empty">
+                            <h4>Unable to load recruiter</h4>
+                            <p>@loadError</p>
+                            <a href="@($"/company/{CompanyId}")" class="primary-btn dash-register-btn">Back to company</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <EditForm Model="@recruiterProfile" OnValidSubmit="HandleSubmit">
+                            <DataAnnotationsValidator/>
+
+                            <div class="form-grid">
+                                <div class="form-group full-width">
+                                    <label for="r-name">Full name</label>
+                                    <InputText id="r-name" class="form-control" @bind-Value="recruiterProfile.Name"/>
+                                    <ValidationMessage For="@(() => recruiterProfile.Name)" class="validation-message"/>
+                                </div>
+
+                                <div class="form-group full-width">
+                                    <label for="r-email">Work email</label>
+                                    <InputText id="r-email" class="form-control" @bind-Value="recruiterProfile.Email"/>
+                                    <ValidationMessage For="@(() => recruiterProfile.Email)" class="validation-message"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="r-password">New password (optional)</label>
+                                    <InputText id="r-password" type="password" class="form-control"
+                                               @bind-Value="recruiterProfile.Password"/>
+                                    <ValidationMessage For="@(() => recruiterProfile.Password)" class="validation-message"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="r-password-confirm">Confirm password</label>
+                                    <InputText id="r-password-confirm" type="password" class="form-control"
+                                               @bind-Value="confirmPassword"/>
+                                    @if (!string.IsNullOrEmpty(passwordError))
+                                    {
+                                        <span class="validation-message">@passwordError</span>
+                                    }
+                                </div>
+
+                                <div class="form-group full-width">
+                                    <label for="r-position">Position / title</label>
+                                    <InputText id="r-position" class="form-control" @bind-Value="recruiterProfile.Position"/>
+                                    <ValidationMessage For="@(() => recruiterProfile.Position)" class="validation-message"/>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="submit-btn primary-btn" disabled="@isSubmitting">
+                                @(isSubmitting ? "Saving..." : "Save changes")
+                            </button>
+                        </EditForm>
+                    }
+
+                    <div class="@($"notification-container {(notificationVisible ? "show" : "")}")">
+                        <div class="@($"notification {notificationType}")">
+                            @notificationMessage
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>You must be logged in as a company representative to edit recruiters.</p>
+        <a href="/login">Go to login</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    [Parameter] public long CompanyId { get; set; }
+    [Parameter] public long RecruiterId { get; set; }
+
+    private UpdateRecruiterDto recruiterProfile = new();
+    private string confirmPassword = string.Empty;
+    private string? passwordError;
+    private bool isLoading = true;
+    private string? loadError;
+    private bool notificationVisible;
+    private string notificationMessage = string.Empty;
+    private string notificationType = string.Empty;
+    private bool isSubmitting;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            var idClaim = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!long.TryParse(idClaim, out var representativeId) || representativeId <= 0)
+            {
+                loadError = "You must be logged in as a company representative.";
+                return;
+            }
+
+            var recruiter = await RecruiterService.GetRecruiterByIdAsync(RecruiterId);
+
+            if (recruiter == null || recruiter.WorksInCompanyId != CompanyId)
+            {
+                loadError = "Recruiter not found in your company.";
+                return;
+            }
+
+            recruiterProfile = new UpdateRecruiterDto
+            {
+                Id = recruiter.Id,
+                Email = recruiter.Email,
+                Name = recruiter.Name,
+                Position = recruiter.Position,
+                WorksInCompanyId = recruiter.WorksInCompanyId,
+                RepresentativeId = representativeId
+            };
+        }
+        catch (Exception ex)
+        {
+            loadError = ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task HandleSubmit()
+    {
+        passwordError = null;
+
+        if (!string.IsNullOrEmpty(recruiterProfile.Password) &&
+            recruiterProfile.Password != confirmPassword)
+        {
+            passwordError = "Passwords do not match.";
+            return;
+        }
+
+        try
+        {
+            isSubmitting = true;
+            recruiterProfile.WorksInCompanyId = CompanyId;
+
+            var updated = await RecruiterService.UpdateRecruiterAsync(recruiterProfile);
+
+            ShowNotification("Recruiter updated successfully.", "success");
+            await Task.Delay(700);
+            Nav.NavigateTo($"/company/{CompanyId}");
+        }
+        catch (Exception ex)
+        {
+            ShowNotification($"Failed to update recruiter: {ex.Message}", "error");
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    private void ShowNotification(string message, string type)
+    {
+        notificationMessage = message;
+        notificationType = type;
+        notificationVisible = true;
+
+        _ = Task.Delay(3000).ContinueWith(_ =>
+        {
+            notificationVisible = false;
+            InvokeAsync(StateHasChanged);
+        });
+    }
+}

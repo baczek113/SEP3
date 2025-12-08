@@ -93,4 +93,41 @@ public class RecruiterService
         };
     }
 
+    public async Task<RecruiterDto?> UpdateRecruiterAsync(UpdateRecruiterDto dto)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new HireFire.Grpc.RecruiterService.RecruiterServiceClient(channel);
+
+        var passwordHash = string.IsNullOrWhiteSpace(dto.Password)
+            ? string.Empty
+            : AuthenticationService.HashPassword(dto.Password);
+
+        var request = new UpdateRecruiterRequest
+        {
+            RecruiterId = dto.Id,
+            Email = dto.Email ?? string.Empty,
+            Name = dto.Name ?? string.Empty,
+            PasswordHash = passwordHash,
+            Position = dto.Position ?? string.Empty,
+            WorksInCompanyId = dto.WorksInCompanyId,
+            RepresentativeId = dto.RepresentativeId
+        };
+
+        var reply = await client.UpdateRecruiterAsync(request);
+
+        if (reply.Id == 0)
+        {
+            return null;
+        }
+
+        return new RecruiterDto
+        {
+            Id = reply.Id,
+            Email = reply.Email,
+            Name = reply.Name,
+            Position = reply.Position,
+            HiredById = reply.HiredById,
+            WorksInCompanyId = reply.WorksInCompanyId
+        };
+    }
 }
