@@ -5,6 +5,7 @@
 @inject NavigationManager Navigation
 @implements IAsyncDisposable
 @inject AuthenticationStateProvider AuthStateProvider
+@inject IJSRuntime JS
 @rendermode InteractiveServer
 @attribute [Authorize]
 
@@ -15,31 +16,36 @@
     </div>
 }else
 {
-    <div class="chat-container">
-        <ul id="messagesList" style="list-style-type: none; padding: 0; height: 300px; overflow-y: auto;">
-            @foreach (var msg in messages)
-            {
-                var isMe = msg.SenderId == CurrentUserId;
-                <li class="mb-2 @(isMe ? "text-end" : "text-start")">
-                    <div class="d-inline-block p-2 rounded @(isMe ? "bg-primary text-white" : "bg-light border")">
-                        <strong>@msg.SenderName:</strong> @msg.Body
-                        <div class="small opacity-75">@msg.SendAt</div>
+    <div class="chat-wrapper">
+        <div class="chat-container">
+            <div id="messagesList" class="messages-list">
+                @foreach (var msg in messages)
+                {
+                    var isMe = msg.SenderId == CurrentUserId;
+
+                    <div class="message-row @(isMe ? "me" : "other")">
+                        <div class="message-bubble">
+                            <div class="sender-name">@msg.SenderName</div>
+                            <div class="message-text">@msg.Body</div>
+                            <div class="message-time">@msg.SendAt</div>
+                        </div>
                     </div>
-                </li>
-            }
-        </ul>
-        
-        <div class="form-group mt-3 d-flex gap-2">
-            <input @bind="messageInput" 
-                   @bind:event="oninput" 
-                   @onkeyup="HandleKeyUp"
-                   class="form-control" 
-                   placeholder="Type a message..." 
-                   disabled="@(!CanSend)" />
-                   
-            <button class="btn btn-primary" 
-                    @onclick="Send" 
-                    disabled="@(!CanSend || string.IsNullOrWhiteSpace(messageInput))">Send</button>
+                }
+            </div>
+
+            <div class="input-area">
+                <input @bind="messageInput"
+                       @bind:event="oninput"
+                       @onkeyup="HandleKeyUp"
+                       placeholder="Type a message..."
+                       class="message-input"
+                       disabled="@(!CanSend)" />
+                <button @onclick="Send"
+                        disabled="@(!CanSend || string.IsNullOrWhiteSpace(messageInput))"
+                        class="send-button">
+                    Send
+                </button>
+            </div>
         </div>
     </div>
 }
@@ -79,17 +85,27 @@
             .WithAutomaticReconnect()
             .Build();
         
-        _hubConnection.On<string, string, string, long>("ReceiveMessage", (user, body, time, senderId) =>
+        _hubConnection.On<string, string, string, long>("ReceiveMessage", async (user, body, time, senderId) =>
         {
             messages.Add(new ChatMessageDto{SenderName = user, Body = body, SendAt = time, SenderId = senderId});
-            InvokeAsync(StateHasChanged);
+            
+            await InvokeAsync(async () =>
+            {
+                StateHasChanged();
+                await JS.InvokeVoidAsync("chatScroll.scrollToBottom", "messagesList");
+            });
         });
         
-        _hubConnection.On<List<ChatMessageDto>, long>("ReceiveHistory", (history, appId) =>
+        _hubConnection.On<List<ChatMessageDto>, long>("ReceiveHistory", async (history, appId) =>
         {
             activeApplicationId = appId;
             messages.AddRange(history);
-            InvokeAsync(StateHasChanged);
+            await InvokeAsync(async () =>
+            {
+                StateHasChanged();
+                await JS.InvokeVoidAsync("chatScroll.scrollToBottom", "messagesList");
+
+            });
         });
         _hubConnection.On<String>("ErrorMessage", (reason) =>
         {
@@ -100,13 +116,14 @@
         await _hubConnection.StartAsync();
         await _hubConnection.SendAsync("JoinChat", JobId, ApplicantId);
     }
-
+    
     public async Task Send()
     {
         if(_hubConnection is not null && activeApplicationId.HasValue)
         {
             await _hubConnection.SendAsync("SendMessage", activeApplicationId.Value, messageInput, CurrentUserId);
             messageInput = "";
+            await JS.InvokeVoidAsync("chatScroll.scrollToBottom", "messagesList");
         }
     }
     public bool CanSend => _hubConnection?.State == HubConnectionState.Connected && activeApplicationId.HasValue;

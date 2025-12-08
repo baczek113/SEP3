@@ -75,14 +75,7 @@ public class ApplicationService
 
             // KONWERSJA STATUSU ENUM DO STRINGA
             string status = application.Status.ToString();
-
-            // 🔥 OBSŁUGA WSZYSTKICH MOŻLIWYCH FORMATÓW
-            bool isUnderReview =
-                status.Equals("under_review", StringComparison.OrdinalIgnoreCase) ||
-                status.Equals("UnderReview", StringComparison.OrdinalIgnoreCase) ||
-                status.Equals("APPLICATION_STATUS_UNDER_REVIEW", StringComparison.OrdinalIgnoreCase) ||
-                status.Equals("0"); // czasem enum = 0 → under review
-
+            
             applications.Add(new ApplicationDto()
             {
                 Id = application.Id,
@@ -91,8 +84,9 @@ public class ApplicationService
                 SubmittedAt = dateSubmitted,
                 Status = status
             });
+                
         }
-
+        Console.Write(applications.Count);
         return applications;
     }
 

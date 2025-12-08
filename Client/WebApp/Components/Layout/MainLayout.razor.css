@@ -1,8 +1,9 @@
 .auth-shell {
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     background: linear-gradient(135deg, #edf2f7, #ebf8ff);
+    overflow: hidden;
 }
 
 .auth-header {
@@ -43,6 +44,7 @@
     align-items: center;
     justify-content: center;
     padding: 32px 16px;
+    overflow: hidden;
 }
 
 .auth-footer {

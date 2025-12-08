@@ -12,4 +12,25 @@
       <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <AdditionalFiles Include="Components\Pages\Account\CreateRecruiter.razor" />
+      <AdditionalFiles Include="Components\Pages\Account\Login.razor" />
+      <AdditionalFiles Include="Components\Pages\Account\Register.razor" />
+      <AdditionalFiles Include="Components\Pages\Applicant\ApplicantSkills.razor" />
+      <AdditionalFiles Include="Components\Pages\Applicant\ApplicantView.razor" />
+      <AdditionalFiles Include="Components\Pages\Applicant\MyApplications.razor" />
+      <AdditionalFiles Include="Components\Pages\Communication\Chat.razor" />
+      <AdditionalFiles Include="Components\Pages\Company\CompanyRepresentativeView.razor" />
+      <AdditionalFiles Include="Components\Pages\Company\CompanyView.razor" />
+      <AdditionalFiles Include="Components\Pages\Company\RecruiterView.razor" />
+      <AdditionalFiles Include="Components\Pages\Company\RegisterCompany.razor" />
+      <AdditionalFiles Include="Components\Pages\General\Error.razor" />
+      <AdditionalFiles Include="Components\Pages\General\Home.razor" />
+      <AdditionalFiles Include="Components\Pages\General\NotFound.razor" />
+      <AdditionalFiles Include="Components\Pages\Jobs\AddJobListing.razor" />
+      <AdditionalFiles Include="Components\Pages\Jobs\AddJobListingSkills.razor" />
+      <AdditionalFiles Include="Components\Pages\Jobs\RecruiterJobMatches.razor" />
+      <AdditionalFiles Include="Components\Pages\Recruitment\ReviewingApplications.razor" />
+    </ItemGroup>
+
 </Project>

@@ -33,6 +33,10 @@
                     else if (CurrentApplication is null)
                     {
                         <div class="dash-empty">
+                            @if (totalAppsCount > 0)
+                            {
+                                <p>@totalAppsCount total applications found, but none are pending review.</p>
+                            }
                             <p>Loaded applications: @applications.Count</p>
                             <h4>No more applications to review</h4>
                             <p>All candidates for this job have been processed.</p>
@@ -135,7 +139,7 @@
     private int currentIndex = 0;
     private bool isLoading = true;
     private string? errorMessage;
-
+    private int totalAppsCount = 0;
     private ApplicantDto? currentApplicant;
     private List<ApplicantSkillDto> currentApplicantSkills = new();
 
@@ -152,7 +156,10 @@
             errorMessage = null;
 
             var all = await ApplicationService.GetByJobAsync(JobId);
-            applications = all.ToList();
+            
+            applications = all
+                .Where(a => a.Status.Replace("_", "").Equals("underreview", StringComparison.OrdinalIgnoreCase))
+                .ToList();
 
             if (applications.Any())
             {
@@ -201,7 +208,15 @@
         {
             errorMessage = null;
             await ApplicationService.AcceptAsync(CurrentApplication.Id);
-            await MoveNextAsync();
+            
+            applications.RemoveAt(currentIndex);
+            
+            if (currentIndex >= applications.Count)
+            {
+                currentIndex = Math.Max(0, applications.Count - 1);
+            }
+            
+            await RefreshCurrentAsync();
         }
         catch (Exception ex)
         {
@@ -217,7 +232,15 @@
         {
             errorMessage = null;
             await ApplicationService.RejectAsync(CurrentApplication.Id);
-            await MoveNextAsync();
+            
+            applications.RemoveAt(currentIndex);
+            
+            if (currentIndex >= applications.Count)
+            {
+                currentIndex = Math.Max(0, applications.Count - 1);
+            }
+
+            await RefreshCurrentAsync();
         }
         catch (Exception ex)
         {
@@ -225,13 +248,10 @@
         }
     }
 
-    private async Task MoveNextAsync()
+    private async Task RefreshCurrentAsync()
     {
-        currentIndex++;
-
-        if (currentIndex >= applications.Count)
+        if (!applications.Any())
         {
-            currentIndex = applications.Count; // CurrentApplication => null
             currentApplicant = null;
             currentApplicantSkills.Clear();
         }
@@ -239,7 +259,6 @@
         {
             await LoadCurrentApplicantAsync();
         }
-
         StateHasChanged();
     }
 

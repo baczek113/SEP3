@@ -1,0 +1,90 @@
+﻿@page "/applicant/applications"
+@using WebApp.DTOs.Application
+@using WebApp.Services
+@using System.Security.Claims
+@inject HttpApplicationService AppService
+@inject AuthenticationStateProvider AuthState
+@inject NavigationManager Nav
+@rendermode InteractiveServer
+
+<div class="dash-shell">
+    <div class="dash-card">
+        <div class="dash-header">
+            <div class="dash-title">
+                <h2>My Applications</h2>
+                <p>Track the status of jobs you've applied to.</p>
+            </div>
+            <a href="/applicant/dashboard" class="btn btn-outline-secondary">← Find Jobs</a>
+        </div>
+
+        <div class="dash-content">
+            @if (applications == null)
+            {
+                <p class="dash-loading">Loading...</p>
+            }
+            else if (!applications.Any())
+            {
+                <div class="dash-empty">
+                    <h4>No active applications</h4>
+                    <p>Go to the Dashboard to swipe on some jobs!</p>
+                </div>
+            }
+            else
+            {
+                <div class="job-list">
+                    @foreach (var app in applications)
+                    {
+                        <div class="job-card" style="cursor: default;">
+                            <div class="job-card-header">
+                                <h3>Job #@app.JobId</h3>
+                                <span class="badge @GetBadgeClass(app.Status)">@app.Status</span>
+                            </div>
+                            
+                            <div class="mt-3">
+                                @if (app.Status.Equals("MATCHED", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <a href="/chat/@app.JobId/@_applicantId" class="btn btn-primary w-100">
+                                        💬 Chat with Recruiter
+                                    </a>
+                                }
+                                else if (app.Status.Equals("DECLINED", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <button disabled class="btn btn-secondary w-100">Declined</button>
+                                }
+                                else
+                                {
+                                    <button disabled class="btn btn-outline-secondary w-100">Pending Review...</button>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<ApplicationDto>? applications;
+    private long _applicantId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await AuthState.GetAuthenticationStateAsync();
+        var user = state.User;
+        var idClaim = user.FindFirst(ClaimTypes.NameIdentifier);
+
+        if (idClaim != null && long.TryParse(idClaim.Value, out var id))
+        {
+            _applicantId = id;
+            applications = await AppService.GetByApplicantAsync(_applicantId);
+        }
+    }
+
+    private string GetBadgeClass(string status) => status.ToUpper() switch
+    {
+        "MATCHED" => "bg-success",
+        "DECLINED" => "bg-danger",
+        _ => "bg-warning text-dark"
+    };
+}
