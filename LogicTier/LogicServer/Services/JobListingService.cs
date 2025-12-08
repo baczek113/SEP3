@@ -39,6 +39,25 @@ public class JobListingService
 
         return MapToDto(reply);
     }
+
+    public async Task<RemoveJobListingResponseDto> RemoveJobListingAsync(RemoveJobListingRequestDto requestDto)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
+
+        var request = new RemoveJobListingRequest
+        {
+            Id = requestDto.Id
+        };
+        
+        var reply = await client.RemoveJobListingAsync(request);
+
+        return new RemoveJobListingResponseDto
+        {
+            Success = reply.Success,
+            Message = reply.Message
+        };
+    }
     
     public async Task<List<JobListingDto>> GetJobListingsForCompanyAsync(long companyId)
     {

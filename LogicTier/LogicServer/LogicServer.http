@@ -4,3 +4,7 @@ GET {{LogicServer_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+DELETE http://localhost:5177/api/Job/1
+
+###

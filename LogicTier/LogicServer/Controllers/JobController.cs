@@ -1,7 +1,8 @@
-﻿using LogicServer.DTOs.Job;
+using LogicServer.DTOs.Job;
 using LogicServer.Services;
 using Microsoft.AspNetCore.Mvc;
 using LogicServer.DTOs.JobListing;
+using JobListingService = LogicServer.Services.JobListingService;
 
 namespace LogicServer.Controllers;
 
@@ -26,7 +27,23 @@ public class JobListingController : ControllerBase
         return Ok(result);
     }
 
-  
+    [HttpDelete("{id:long}")]
+    public async Task<IActionResult> DeleteJobListing(long id)
+    {
+        var dto = new RemoveJobListingRequestDto
+        {
+            Id = id
+        };
+
+        var result = await _jobListingService.RemoveJobListingAsync(dto);
+
+        if (!result.Success)
+            return NotFound(new { message = result.Message });
+
+        return Ok(new { message = result.Message });
+    }
+
+
     [HttpGet("by-company/{companyId:long}")]
     public async Task<ActionResult<List<JobListingDto>>> GetByCompany(long companyId)
     {
@@ -59,7 +76,7 @@ public class JobListingController : ControllerBase
     {
         if (dto == null)
             return BadRequest("Invalid data");
-        
+
         dto.JobListingId = jobId;
 
         var result = await _jobListingService.AddJobListingSkillAsync(dto);
