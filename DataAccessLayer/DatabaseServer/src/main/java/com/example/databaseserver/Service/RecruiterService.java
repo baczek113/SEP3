@@ -13,6 +13,7 @@ import com.example.databaseserver.generated.RecruiterResponse;
 import com.example.databaseserver.generated.GetRecruitersForCompanyRequest;
 import com.example.databaseserver.generated.GetRecruitersForCompanyResponse;
 import com.example.databaseserver.generated.GetRecruiterByIdRequest;
+import com.example.databaseserver.generated.UpdateRecruiterRequest;
 import io.grpc.stub.StreamObserver;
 import jakarta.transaction.Transactional;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -186,9 +187,97 @@ public class RecruiterService extends RecruiterServiceGrpc.RecruiterServiceImplB
         }
     }
 
+    @Override
+    @Transactional
+    public void updateRecruiter(UpdateRecruiterRequest request,
+                                StreamObserver<RecruiterResponse> responseObserver) {
+        try {
+            Recruiter recruiter = recruiterRepository.findById(request.getRecruiterId()).orElse(null);
+            if (recruiter == null) {
+                responseObserver.onNext(notFoundResponse());
+                responseObserver.onCompleted();
+                return;
+            }
+
+            Company targetCompany = companyRepository.findById(request.getWorksInCompanyId()).orElse(null);
+            if (targetCompany == null
+                    || targetCompany.getCompanyRepresentative() == null
+                    || targetCompany.getCompanyRepresentative().getId() != request.getRepresentativeId()) {
+                responseObserver.onNext(notFoundResponse());
+                responseObserver.onCompleted();
+                return;
+            }
+
+            if (recruiter.getWorksIn() == null || recruiter.getWorksIn().getId() != targetCompany.getId()) {
+                responseObserver.onNext(notFoundResponse());
+                responseObserver.onCompleted();
+                return;
+            }
+
+            User user = recruiter.getUser();
+            if (user == null) {
+                responseObserver.onNext(notFoundResponse());
+                responseObserver.onCompleted();
+                return;
+            }
+
+            if (!request.getEmail().isEmpty()) {
+                user.setEmail(request.getEmail());
+            }
+
+            if (!request.getName().isEmpty()) {
+                user.setName(request.getName());
+            }
+
+            if (!request.getPasswordHash().isEmpty()) {
+                user.setPassword(request.getPasswordHash());
+            }
+
+            recruiter.setPosition(request.getPosition());
+            recruiter.setWorksIn(targetCompany);
+
+            userRepository.save(user);
+            Recruiter savedRecruiter = recruiterRepository.save(recruiter);
+
+            RecruiterResponse response = RecruiterResponse.newBuilder()
+                    .setId(savedRecruiter.getId())
+                    .setEmail(safe(user.getEmail()))
+                    .setName(safe(user.getName()))
+                    .setPosition(safe(savedRecruiter.getPosition()))
+                    .setHiredById(
+                            savedRecruiter.getHiredBy() != null
+                                    ? savedRecruiter.getHiredBy().getId()
+                                    : 0L
+                    )
+                    .setWorksInCompanyId(
+                            savedRecruiter.getWorksIn() != null
+                                    ? savedRecruiter.getWorksIn().getId()
+                                    : 0L
+                    )
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
+        catch (Exception e) {
+            responseObserver.onError(e);
+        }
+    }
+
 
 
     private String safe(String value) {
         return value == null ? "" : value;
+    }
+
+    private RecruiterResponse notFoundResponse() {
+        return RecruiterResponse.newBuilder()
+                .setId(0)
+                .setEmail("")
+                .setName("")
+                .setPosition("")
+                .setHiredById(0)
+                .setWorksInCompanyId(0)
+                .build();
     }
 }

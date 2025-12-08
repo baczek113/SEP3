@@ -42,4 +42,18 @@ public class RecruiterController : ControllerBase
         return Ok(result);
     }
 
+    [HttpPut("{recruiterId:long}")]
+    public async Task<ActionResult<RecruiterDto>> UpdateRecruiter(long recruiterId, [FromBody] UpdateRecruiterDto dto)
+    {
+        if (dto == null || dto.Id != recruiterId)
+            return BadRequest("Mismatched recruiter id.");
+
+        var result = await _recruiterService.UpdateRecruiterAsync(dto);
+
+        if (result == null)
+            return NotFound($"Recruiter with ID {recruiterId} not found or you do not have access.");
+
+        return Ok(result);
+    }
+
 }

@@ -53,4 +53,18 @@ public class HttpRecruiterService : IRecruiterService
         return JsonSerializer.Deserialize<RecruiterDto>(response, 
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
     }
+
+    public async Task<RecruiterDto> UpdateRecruiterAsync(UpdateRecruiterDto request)
+    {
+        var httpResponse = await client.PutAsJsonAsync($"api/recruiter/{request.Id}", request);
+        var response = await httpResponse.Content.ReadAsStringAsync();
+
+        if (!httpResponse.IsSuccessStatusCode)
+        {
+            throw new Exception($"Status {httpResponse.StatusCode}: {response}");
+        }
+
+        return JsonSerializer.Deserialize<RecruiterDto>(response,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
+    }
 }

@@ -124,10 +124,24 @@
 .recruiter-meta {
     font-size: 0.85rem;
     color: #4a5568;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .recruiter-email {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.recruiter-edit-link {
+    color: #3182ce;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.recruiter-edit-link:hover {
+    text-decoration: underline;
+    color: #2b6cb0;
 }
 
 
