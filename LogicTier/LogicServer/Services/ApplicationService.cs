@@ -63,7 +63,7 @@ public class ApplicationService
 
         foreach (var application in reply.Applications)
         {
-            
+            // poprawny parse SubmittedAt
             if (!DateTime.TryParse(
                     application.SubmittedAt,
                     CultureInfo.InvariantCulture,
@@ -73,28 +73,20 @@ public class ApplicationService
                 dateSubmitted = DateTime.UtcNow;
             }
 
-            
+            // KONWERSJA STATUSU ENUM DO STRINGA
             string status = application.Status.ToString();
             
-            bool isUnderReview =
-                status.Equals("under_review", StringComparison.OrdinalIgnoreCase) ||
-                status.Equals("UnderReview", StringComparison.OrdinalIgnoreCase) ||
-                status.Equals("APPLICATION_STATUS_UNDER_REVIEW", StringComparison.OrdinalIgnoreCase) ||
-                status.Equals("0");
-
-            if (isUnderReview)
+            applications.Add(new ApplicationDto()
             {
-                applications.Add(new ApplicationDto()
-                {
-                    Id = application.Id,
-                    ApplicantId = application.ApplicantId,
-                    JobId = application.JobId,
-                    SubmittedAt = dateSubmitted,
-                    Status = status
-                });
-            }
+                Id = application.Id,
+                ApplicantId = application.ApplicantId,
+                JobId = application.JobId,
+                SubmittedAt = dateSubmitted,
+                Status = status
+            });
+                
         }
-
+        Console.Write(applications.Count);
         return applications;
     }
 

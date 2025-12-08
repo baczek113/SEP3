@@ -1,0 +1,114 @@
+﻿@page "/recruiter/job/{JobId:long}/matches"
+@using WebApp.DTOs.Application
+@using WebApp.DTOs.Applicant
+@using WebApp.Services
+@inject HttpApplicationService AppService
+@inject HttpApplicantService ApplicantService
+@inject NavigationManager Nav
+@rendermode InteractiveServer
+
+<div class="dash-shell">
+    <div class="dash-card">
+        <div class="dash-header">
+            <div class="dash-title">
+                <h2>Matched Candidates</h2>
+                <p>Applicants you have accepted for Job #@JobId</p>
+            </div>
+            <a href="/recruiter/dashboard" class="btn btn-outline-secondary">← Back</a>
+        </div>
+
+        <div class="dash-content">
+            @if (isLoading)
+            {
+                <p class="dash-loading">Loading matches...</p>
+            }
+            else if (matches == null || !matches.Any())
+            {
+                <div class="dash-empty">
+                    <h4>No matches found</h4>
+                    <p>Go to <a href="/recruiter/job/@JobId/applications">Review Applicants</a> to find candidates.</p>
+                    
+                    <!-- DEBUG INFO: Remove later -->
+                    <div class="mt-3 text-muted small">
+                        <p>Debug: Loaded @allApps.Count total applications.</p>
+                        <ul>
+                            @foreach(var app in allApps)
+                            {
+                                <li>App #@app.Id: Status = '@app.Status'</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="list-group">
+                    @foreach (var app in matches)
+                    {
+                        var applicantName = applicantNames.ContainsKey(app.ApplicantId) 
+                            ? applicantNames[app.ApplicantId] 
+                            : $"Applicant #{app.ApplicantId}";
+
+                        <div class="list-group-item d-flex justify-content-between align-items-center p-3 mb-2 border rounded">
+                            <div>
+                                <h5 class="mb-1">@applicantName</h5>
+                                <small class="text-muted">Matched on: @app.SubmittedAt.ToShortDateString()</small>
+                            </div>
+                            
+                            <a href="/chat/@JobId/@app.ApplicantId" class="btn btn-primary">
+                                💬 Chat
+                            </a>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public long JobId { get; set; }
+    
+    private List<ApplicationDto>? allApps = new();
+    private List<ApplicationDto>? matches;
+    private Dictionary<long, string> applicantNames = new();
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            isLoading = true;
+            
+            allApps = await AppService.GetByJobAsync(JobId);
+            
+            matches = allApps
+                .Where(a => string.Equals(a.Status, "matched", StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            foreach (var app in matches)
+            {
+                if (!applicantNames.ContainsKey(app.ApplicantId))
+                {
+                    try 
+                    {
+                        var applicant = await ApplicantService.GetApplicantAsync(app.ApplicantId);
+                        applicantNames[app.ApplicantId] = applicant.Name;
+                    }
+                    catch 
+                    {
+                        applicantNames[app.ApplicantId] = "Unknown Applicant";
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error loading matches: {e.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}

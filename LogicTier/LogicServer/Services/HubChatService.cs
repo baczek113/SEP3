@@ -1,5 +1,7 @@
-﻿using Grpc.Core;
+﻿using System.Security.Claims;
+using Grpc.Core;
 using HireFire.Grpc;
+using LogicServer.DTOs.Chat;
 using Microsoft.AspNetCore.SignalR;
 namespace LogicServer.Services;
 
@@ -12,17 +14,35 @@ public class HubChatService : Hub
         _grpcClient = grpcClient;
     }
 
-    public async Task JoinChat(long applicationId)
+    public async Task JoinChat(long jobId, long applicantId)
     {
+        
         try
-        {
+        {          
+            var handshakeRequest = new ChatHandshakeRequest { JobId = jobId, ApplicantId = applicantId };
+            var handshakeResponse = await _grpcClient.GetChatHandshakeAsync(handshakeRequest);
+            if (!handshakeResponse.Exists)
+            {
+                await Clients.Caller.SendAsync("ErrorMessage", "No application found.");
+                return;
+            }
+            
+            long applicationId = handshakeResponse.ApplicationId;
+
             string groupName = $"app_{applicationId}";
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
             
             var request = new GetMessagesRequest{ApplicationId = applicationId};
             var response = await _grpcClient.GetMessagesAsync(request);
             
-            await Clients.Caller.SendAsync("ReceiveHistory", response);
+            var history = response?.Messages.Select(m => new ChatMessageDTO
+            {
+                SenderName = m.SenderName,
+                Body = m.Body,
+                SendAt = m.SendAt, 
+                SenderId = m.SenderId
+            }).ToList() ?? new List<ChatMessageDTO>();
+            await Clients.Caller.SendAsync("ReceiveHistory", history, applicationId);
 
         }
         catch (Exception e)

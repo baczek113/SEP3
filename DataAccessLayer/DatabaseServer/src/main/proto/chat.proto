@@ -7,6 +7,18 @@ option csharp_namespace = "HireFire.Grpc";
 service ChatService{
   rpc GetMessages (GetMessagesRequest) returns (GetMessagesResponse);
   rpc Save (SaveMessagesRequest) returns (SaveMessagesResponse);
+
+  rpc GetChatHandshake (ChatHandshakeRequest) returns (ChatHandshakeResponse);
+}
+
+message ChatHandshakeRequest {
+  int64 job_id = 1;
+  int64 applicant_id = 2;
+}
+
+message ChatHandshakeResponse {
+  int64 application_id = 1;
+  bool exists = 2;
 }
 
 message ChatMessage {

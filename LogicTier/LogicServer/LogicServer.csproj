@@ -26,7 +26,4 @@
     <ItemGroup>
       <Folder Include="GeneratedGrpc\" />
     </ItemGroup>
-    <ItemGroup>
-        <Compile Remove="GeneratedGrpc/**/*.cs" />
-    </ItemGroup>
 </Project>

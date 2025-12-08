@@ -86,7 +86,7 @@ public class ApplicationController : ControllerBase
     }
     
     [HttpGet("applications/by-job/{jobId:long}")]
-    public async Task<ActionResult<List<ApplicationsDto>>> GetApplicationsByJob(long jobId)
+    public async Task<ActionResult<ApplicationsDto>> GetApplicationsByJob(long jobId)
     {
         var result = await _service.GetApplicationsForJobAsync(jobId);
         return Ok(result);
@@ -94,7 +94,7 @@ public class ApplicationController : ControllerBase
 
     
     [HttpGet("applications/by-applicant/{applicantId:long}")]
-    public async Task<ActionResult<List<ApplicationDto>>> GetApplicationsByApplicant(long applicantId)
+    public async Task<ActionResult<ApplicationDto>> GetApplicationsByApplicant(long applicantId)
     {
         try
         {
