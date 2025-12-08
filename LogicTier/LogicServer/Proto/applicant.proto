@@ -14,6 +14,7 @@ enum SkillLevelProto {
 
 service ApplicantService {
   rpc CreateApplicant (CreateApplicantRequest) returns (ApplicantResponse);
+  rpc RemoveApplicant (RemoveApplicantRequest) returns (RemoveApplicantResponse);
   rpc AddApplicantSkill (AddApplicantSkillRequest) returns (ApplicantSkillResponse);
   rpc GetApplicantSkills (GetApplicantSkillsRequest) returns (ApplicantSkillsResponse);
   rpc GetApplicantById (GetApplicantRequest) returns (ApplicantResponse);
@@ -38,6 +39,15 @@ message ApplicantResponse {
   string city       = 5;
   string postcode   = 6;
   string address    = 7;
+}
+
+message RemoveApplicantRequest {
+  int64 id = 1; // Applicant ID
+}
+
+message RemoveApplicantResponse{
+  bool success = 1;
+  string message = 2; // Verification of deletion
 }
 
 message AddApplicantSkillRequest {
