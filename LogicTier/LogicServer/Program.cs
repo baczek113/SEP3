@@ -17,7 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSignalR();
-builder.Services.AddSingleton<RepresentativeService>();
+builder.Services.AddSingleton<LogicServer.Services.RepresentativeService>();
 builder.Services.AddSingleton<ApplicantService>();
 builder.Services.AddSingleton<CompanyService>();
 builder.Services.AddSingleton<AuthenticationService>();

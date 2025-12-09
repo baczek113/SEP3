@@ -60,18 +60,30 @@
                                             </a>
                                         }
 
-                                        <button class="primary-btn approve-btn"
-                                                disabled="@processingIds.Contains(company.Id)"
-                                                @onclick="() => Approve(company.Id)">
-                                            @if (processingIds.Contains(company.Id))
-                                            {
-                                                <span>Approving...</span>
-                                            }
-                                            else
-                                            {
-                                                <span>Approve</span>
-                                            }
-                                        </button>
+                                        <div style="display:flex; gap:8px;">
+
+                                            <!-- WAŻNE: async lambda -->
+                                            <button type="button"
+                                                    class="primary-btn approve-btn"
+                                                    disabled="@processingIds.Contains(company.Id)"
+                                                    @onclick="async () => await Approve(company.Id)">
+                                                @if (processingIds.Contains(company.Id))
+                                                {
+                                                    <span>Approving...</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>Approve</span>
+                                                }
+                                            </button>
+
+                                            <button type="button"
+                                                    class="danger-btn"
+                                                    @onclick="() => OpenDeleteModal(company.Id, company.Name)">
+                                                Delete
+                                            </button>
+
+                                        </div>
                                     </div>
                                 </div>
                             }
@@ -80,7 +92,46 @@
                 </div>
             </div>
         </div>
+
+        @if (showDeleteModal)
+        {
+            <div class="modal-backdrop">
+                <div class="modal-dialog">
+                    <h3>Delete company "@companyNameToDelete"?</h3>
+                    <p>
+                        Are you sure you want to delete this company?
+                        <strong>This action cannot be undone.</strong>
+                    </p>
+                    <p class="modal-warning">
+                        All recruiters and job listings related to this company will also be permanently deleted.
+                    </p>
+
+                    @if (!string.IsNullOrEmpty(deleteError))
+                    {
+                        <p class="modal-error">@deleteError</p>
+                    }
+
+                    <div class="modal-actions">
+                        <!-- async lambda, + type="button" -->
+                        <button type="button"
+                                class="danger-btn"
+                                @onclick="async () => await ConfirmDelete()"
+                                disabled="@isDeleting">
+                            @(isDeleting ? "Deleting..." : "Delete company")
+                        </button>
+
+                        <button type="button"
+                                class="secondary-btn"
+                                @onclick="CloseDeleteModal"
+                                disabled="@isDeleting">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
     </Authorized>
+
     <NotAuthorized>
         <p>You must be logged in as an admin to view this page.</p>
         <a href="/login" class="primary-btn">Go to login</a>
@@ -91,6 +142,13 @@
     private List<CompanyDto> pendingCompanies = new();
     private HashSet<long> processingIds = new();
     private bool isLoading = true;
+
+    // --- DELETE SUPPORT FIELDS ---
+    private bool showDeleteModal = false;
+    private long companyIdToDelete;
+    private string? companyNameToDelete;
+    private bool isDeleting = false;
+    private string? deleteError = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -106,7 +164,7 @@
 
         try
         {
-            var updated = await CompanyService.ApproveCompany(companyId);
+            await CompanyService.ApproveCompany(companyId);
             pendingCompanies.RemoveAll(c => c.Id == companyId);
         }
         finally
@@ -114,5 +172,42 @@
             processingIds.Remove(companyId);
             StateHasChanged();
         }
+    }
+
+    // ---- DELETE LOGIC ----
+
+    private void OpenDeleteModal(long id, string name)
+    {
+        companyIdToDelete = id;
+        companyNameToDelete = name;
+        deleteError = null;
+        showDeleteModal = true;
+    }
+
+    private void CloseDeleteModal()
+    {
+        showDeleteModal = false;
+        deleteError = null;
+    }
+
+    private async Task ConfirmDelete()
+    {
+        isDeleting = true;
+        deleteError = null;
+
+        try
+        {
+            await CompanyService.DeleteCompanyAsync(companyIdToDelete);
+            pendingCompanies.RemoveAll(c => c.Id == companyIdToDelete);
+
+            CloseDeleteModal();
+        }
+        catch (Exception ex)
+        {
+            deleteError = ex.Message;
+        }
+
+        isDeleting = false;
+        StateHasChanged();
     }
 }

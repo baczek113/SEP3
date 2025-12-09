@@ -1,8 +1,11 @@
 ﻿@page "/applicant/applications"
 @using WebApp.DTOs.Application
+@using WebApp.DTOs.Job
 @using WebApp.Services
 @using System.Security.Claims
+
 @inject HttpApplicationService AppService
+@inject HttpJobListingService JobListingService
 @inject AuthenticationStateProvider AuthState
 @inject NavigationManager Nav
 @rendermode InteractiveServer
@@ -14,15 +17,17 @@
                 <h2>My Applications</h2>
                 <p>Track the status of jobs you've applied to.</p>
             </div>
-            <a href="/applicant/dashboard" class="btn btn-outline-secondary">← Find Jobs</a>
+            <a href="/applicant/dashboard" class="secondary-btn">
+                ← Find Jobs
+            </a>
         </div>
 
         <div class="dash-content">
-            @if (applications == null)
+            @if (_items == null)
             {
                 <p class="dash-loading">Loading...</p>
             }
-            else if (!applications.Any())
+            else if (!_items.Any())
             {
                 <div class="dash-empty">
                     <h4>No active applications</h4>
@@ -32,28 +37,68 @@
             else
             {
                 <div class="job-list">
-                    @foreach (var app in applications)
+                    @foreach (var item in _items)
                     {
-                        <div class="job-card" style="cursor: default;">
+                        var app = item.Application;
+                        var job = item.Job;
+
+                        <div class="job-card">
                             <div class="job-card-header">
-                                <h3>Job #@app.JobId</h3>
-                                <span class="badge @GetBadgeClass(app.Status)">@app.Status</span>
+                                <h3>@job.Title</h3>
+
+                              
+                                @if (!string.IsNullOrWhiteSpace(job.City))
+                                {
+                                    <span class="job-location">@job.City</span>
+                                }
+                                
+                                <span class="app-status-pill @GetStatusClass(app.Status)">
+                                    @FormatStatus(app.Status)
+                                </span>
                             </div>
+
                             
-                            <div class="mt-3">
+                            @if (job.Salary is not null)
+                            {
+                                <p class="job-salary">
+                                    @($"{job.Salary:C0}")
+                                </p>
+                            }
+                            
+                            @if (!string.IsNullOrWhiteSpace(job.Description))
+                            {
+                                <p class="job-description">
+                                    @job.Description
+                                </p>
+                            }
+
+                            <div class="job-meta-row">
+                                <span class="job-meta-pill">
+                                    Applied @app.SubmittedAt.ToShortDateString()
+                                </span>
+
+                                @if (job.DatePosted != default)
+                                {
+                                    <span class="job-meta-pill subtle">
+                                        Posted @job.DatePosted.ToShortDateString()
+                                    </span>
+                                }
+                            </div>
+
+                            <div class="application-actions">
                                 @if (app.Status.Equals("MATCHED", StringComparison.OrdinalIgnoreCase))
                                 {
-                                    <a href="/chat/@app.JobId/@_applicantId" class="btn btn-primary w-100">
+                                    <a href="/chat/@job.Id/@_applicantId" class="primary-btn w-100">
                                         💬 Chat with Recruiter
                                     </a>
                                 }
                                 else if (app.Status.Equals("DECLINED", StringComparison.OrdinalIgnoreCase))
                                 {
-                                    <button disabled class="btn btn-secondary w-100">Declined</button>
+                                    <button disabled class="secondary-btn w-100">Declined</button>
                                 }
                                 else
                                 {
-                                    <button disabled class="btn btn-outline-secondary w-100">Pending Review...</button>
+                                    <button disabled class="secondary-btn w-100">Pending Review...</button>
                                 }
                             </div>
                         </div>
@@ -65,8 +110,15 @@
 </div>
 
 @code {
-    private List<ApplicationDto>? applications;
     private long _applicantId;
+
+    
+    private List<ApplicationWithJob>? _items;
+    private class ApplicationWithJob
+    {
+        public ApplicationDto Application { get; set; } = default!;
+        public JobListingDto Job { get; set; } = default!;
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -74,17 +126,57 @@
         var user = state.User;
         var idClaim = user.FindFirst(ClaimTypes.NameIdentifier);
 
-        if (idClaim != null && long.TryParse(idClaim.Value, out var id))
+        if (idClaim == null || !long.TryParse(idClaim.Value, out _applicantId))
         {
-            _applicantId = id;
-            applications = await AppService.GetByApplicantAsync(_applicantId);
+            _items = new();
+            return;
         }
+
+        var applications = await AppService.GetByApplicantAsync(_applicantId);
+
+        if (applications == null || !applications.Any())
+        {
+            _items = new();
+            return;
+        }
+
+        var list = new List<ApplicationWithJob>();
+
+        foreach (var app in applications)
+        {
+            try
+            {
+               
+                var job = await JobListingService.GetByIdAsync(app.JobId);
+
+                if (job != null)
+                {
+                    list.Add(new ApplicationWithJob
+                    {
+                        Application = app,
+                        Job = job
+                    });
+                }
+            }
+            catch
+            { 
+            }
+        }
+
+        _items = list;
     }
 
-    private string GetBadgeClass(string status) => status.ToUpper() switch
+    private string GetStatusClass(string status) => status.ToUpper() switch
     {
-        "MATCHED" => "bg-success",
-        "DECLINED" => "bg-danger",
-        _ => "bg-warning text-dark"
+        "MATCHED"  => "matched",
+        "DECLINED" => "declined",
+        _          => "pending"
+    };
+
+    private string FormatStatus(string status) => status.ToUpper() switch
+    {
+        "MATCHED"  => "Matched",
+        "DECLINED" => "Declined",
+        _          => "Under Review"
     };
 }

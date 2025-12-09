@@ -205,5 +205,27 @@ public class JobListingService
             SkillName    = reply.SkillName
         };
     }
+    public async Task<JobListingDto?> GetJobListingByIdAsync(long jobId)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
+
+        var request = new GetJobListingByIdRequest
+        {
+            Id = jobId
+        };
+
+        try
+        {
+            var reply = await client.GetJobListingByIdAsync(request);
+            return MapToDto(reply);
+        }
+        catch (Grpc.Core.RpcException ex) when (ex.StatusCode == Grpc.Core.StatusCode.NotFound)
+        {
+            return null;
+        }
+    }
+
+    
 
 }

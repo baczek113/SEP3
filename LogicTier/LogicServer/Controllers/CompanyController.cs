@@ -62,5 +62,14 @@ namespace LogicServer.Controllers;
         var result = await _companyService.ApproveCompanyAsync(id);
         return Ok(result);
     }
+    [HttpDelete("{id:long}")]
+    public async Task<IActionResult> DeleteCompany(long id)
+    {
+        var success = await _companyService.RemoveCompanyAsync(id);
 
+        if (!success)
+            return NotFound($"Company with ID {id} not found.");
+
+        return NoContent();
+    }
 }

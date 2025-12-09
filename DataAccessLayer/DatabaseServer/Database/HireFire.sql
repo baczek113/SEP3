@@ -51,7 +51,7 @@ CREATE TABLE company (
                          description TEXT,
                          website     VARCHAR(255),
                          is_approved BOOLEAN NOT NULL DEFAULT FALSE,
-                         cr_id       BIGINT REFERENCES company_representative(user_id) ON DELETE SET NULL,
+                         cr_id       BIGINT REFERENCES company_representative(user_id) ON DELETE CASCADE,
                          location_id BIGINT REFERENCES location(id) ON DELETE SET NULL
 );
 
@@ -78,7 +78,7 @@ CREATE TABLE job_listing (
                              date_posted   TIMESTAMPTZ NOT NULL DEFAULT now(),
                              salary        NUMERIC(12,2),
                              company_id    BIGINT NOT NULL REFERENCES company(id) ON DELETE CASCADE,
-                             location_id   BIGINT NOT NULL REFERENCES location(id) ON DELETE RESTRICT,
+                             location_id   BIGINT NOT NULL REFERENCES location(id) ON DELETE CASCADE,
                              posted_by_id  BIGINT REFERENCES recruiter(user_id) ON DELETE SET NULL
 );
 

@@ -1,5 +1,4 @@
-﻿using Grpc.Core;
-using LogicServer.DTOs.Representative;
+﻿using LogicServer.DTOs.Representative;
 using LogicServer.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,37 +8,45 @@ namespace LogicServer.Controllers;
 [Route("api/[controller]")]
 public class RepresentativeController : ControllerBase
 {
-    private readonly RepresentativeService _service;
-    private readonly ILogger<RepresentativeController> _logger;
+    private readonly RepresentativeService _representativeService;
 
-    public RepresentativeController(RepresentativeService service, ILogger<RepresentativeController> logger)
+    public RepresentativeController(RepresentativeService representativeService)
     {
-        _service = service;
-        _logger = logger;
+        _representativeService = representativeService;
     }
 
     [HttpPost]
     public async Task<ActionResult<RepresentativeDto>> CreateRepresentative([FromBody] CreateRepresentativeDto dto)
     {
-        try
-        {
-            if (dto == null)
-            {
-                return BadRequest("Invalid data");
-            }
+        if (dto == null)
+            return BadRequest("Invalid data");
 
-            var result = await _service.CreateRepresentativeAsync(dto);
-            return Ok(result);
-        }
-        catch (RpcException e) when (e.StatusCode == Grpc.Core.StatusCode.AlreadyExists)
-        {
-            _logger.LogWarning("Failed to create representative: {Detail} ", e.Status.Detail);
-            return Conflict(e.Status.Detail);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Internal Server Error while creating representative");
-            return StatusCode(500, e.Message);
-        }
+        var result = await _representativeService.CreateRepresentativeAsync(dto);
+        return Ok(result);
+    }
+
+    [HttpPut("{id:long}")]
+    public async Task<ActionResult<RepresentativeDto>> UpdateRepresentative(long id, [FromBody] UpdateRepresentativeDto dto)
+    {
+        if (dto == null || dto.Id != id)
+            return BadRequest("Mismatched representative id.");
+
+        var result = await _representativeService.UpdateRepresentativeAsync(dto);
+
+        if (result == null)
+            return NotFound($"Representative with ID {id} not found.");
+
+        return Ok(result);
+    }
+
+    [HttpDelete("{id:long}")]
+    public async Task<IActionResult> DeleteRepresentative(long id)
+    {
+        var success = await _representativeService.DeleteRepresentativeAsync(id);
+
+        if (!success)
+            return NotFound($"Representative with ID {id} not found.");
+
+        return NoContent();
     }
 }
