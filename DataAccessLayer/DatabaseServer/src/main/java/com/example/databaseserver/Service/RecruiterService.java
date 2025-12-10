@@ -1,5 +1,6 @@
 package com.example.databaseserver.Service;
-
+import com.example.databaseserver.generated.RemoveRecruiterRequest;
+import com.example.databaseserver.generated.RemoveRecruiterResponse;
 import com.example.databaseserver.Entities.*;
 import com.example.databaseserver.Entities.Company;
 import com.example.databaseserver.Entities.Recruiter;
@@ -280,4 +281,53 @@ public class RecruiterService extends RecruiterServiceGrpc.RecruiterServiceImplB
                 .setWorksInCompanyId(0)
                 .build();
     }
+
+    @Override
+    @Transactional
+    public void removeRecruiter(RemoveRecruiterRequest request,
+                                StreamObserver<RemoveRecruiterResponse> responseObserver) {
+        try {
+            Recruiter recruiter = recruiterRepository
+                    .findById(request.getId())
+                    .orElse(null);
+
+            if (recruiter == null) {
+                RemoveRecruiterResponse response = RemoveRecruiterResponse.newBuilder()
+                        .setSuccess(false)
+                        .setMessage("Recruiter not found.")
+                        .build();
+
+                responseObserver.onNext(response);
+                responseObserver.onCompleted();
+                return;
+            }
+
+            User user = recruiter.getUser();
+
+            recruiterRepository.delete(recruiter);
+
+            if (user != null) {
+                userRepository.delete(user);
+            }
+
+            RemoveRecruiterResponse response = RemoveRecruiterResponse.newBuilder()
+                    .setSuccess(true)
+                    .setMessage("Recruiter removed successfully.")
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
+        catch (Exception e) {
+            RemoveRecruiterResponse errorResponse = RemoveRecruiterResponse.newBuilder()
+                    .setSuccess(false)
+                    .setMessage("Error removing recruiter: " + e.getMessage())
+                    .build();
+
+            responseObserver.onError(e);
+        }
+    }
+
+
+
 }

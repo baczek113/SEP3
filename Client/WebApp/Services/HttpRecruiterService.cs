@@ -67,4 +67,15 @@ public class HttpRecruiterService : IRecruiterService
         return JsonSerializer.Deserialize<RecruiterDto>(response,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
     }
+    public async Task DeleteRecruiterAsync(long recruiterId)
+    {
+        var httpResponse = await client.DeleteAsync($"api/recruiter/{recruiterId}");
+        var response = await httpResponse.Content.ReadAsStringAsync();
+
+        if (!httpResponse.IsSuccessStatusCode)
+        {
+            throw new Exception($"Status {httpResponse.StatusCode}: {response}");
+        }
+    }
+    
 }

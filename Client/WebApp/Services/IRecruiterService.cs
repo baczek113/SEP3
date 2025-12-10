@@ -10,5 +10,5 @@ public interface IRecruiterService
     Task<RecruiterDto> GetRecruiterByIdAsync(long recruiterId);
     Task<RecruiterDto> UpdateRecruiterAsync(UpdateRecruiterDto request);
     
-    
+    Task DeleteRecruiterAsync(long recruiterId);
 }

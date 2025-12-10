@@ -14,6 +14,8 @@ service RecruiterService {
   rpc GetRecruiterById (GetRecruiterByIdRequest) returns (RecruiterResponse);
 
   rpc UpdateRecruiter (UpdateRecruiterRequest) returns (RecruiterResponse);
+
+  rpc RemoveRecruiter (RemoveRecruiterRequest) returns (RemoveRecruiterResponse);
 }
 
 message RegisterRecruiterRequest {
@@ -54,4 +56,13 @@ message UpdateRecruiterRequest {
   string position = 5;
   int64 works_in_company_id = 6;
   int64 representative_id = 7;
+}
+
+message RemoveRecruiterRequest {
+  int64 id = 1;
+}
+
+message RemoveRecruiterResponse {
+  bool success = 1;
+  string message = 2;
 }
