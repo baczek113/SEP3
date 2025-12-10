@@ -68,5 +68,13 @@ public class HttpCompanyService: ICompanyService
         return JsonSerializer.Deserialize<CompanyDto>(response,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
     }
+    
+    public async Task DeleteCompanyAsync(long id)
+    {
+        HttpResponseMessage httpResponse = await client.DeleteAsync($"api/company/{id}");
+
+        if (!httpResponse.IsSuccessStatusCode)
+            throw new Exception($"Failed to delete company with ID {id}. Server returned status {httpResponse.StatusCode}.");
+    }
 
 }

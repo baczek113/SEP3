@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option java_package = "com.example.databaseserver.generated";
+option java_multiple_files = true;
 option csharp_namespace = "HireFire.Grpc";
 
 service CompanyService {
@@ -13,6 +15,7 @@ service CompanyService {
 
   rpc ApproveCompany (ApproveCompanyRequest)
       returns (CompanyResponse);
+  rpc RemoveCompany (RemoveCompanyRequest) returns (RemoveCompanyResponse);
 }
 
 message CreateCompanyRequest {
@@ -72,4 +75,13 @@ message GetCompaniesToApproveResponse {
 message ApproveCompanyRequest {
   int64 company_id = 1;
 }
+message RemoveCompanyRequest {
+  int64 id = 1;
+}
+
+message RemoveCompanyResponse {
+  bool success = 1;
+  string message = 2;
+}
+
 

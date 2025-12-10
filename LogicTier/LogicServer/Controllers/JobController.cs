@@ -82,6 +82,17 @@ public class JobListingController : ControllerBase
         var result = await _jobListingService.AddJobListingSkillAsync(dto);
         return Ok(result);
     }
+    [HttpGet("{id:long}")]
+    public async Task<ActionResult<JobListingDto>> GetById(long id)
+    {
+        var result = await _jobListingService.GetJobListingByIdAsync(id);
+
+        if (result == null)
+            return NotFound(new { message = "Job listing not found" });
+
+        return Ok(result);
+    }
+
 
 
 }

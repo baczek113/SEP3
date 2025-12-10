@@ -128,10 +128,17 @@
                                             </div>
                                             <div class="recruiter-meta">
                                                 <span class="recruiter-email">@r.Email</span>
-                                                <a class="recruiter-edit-link"
-                                                   href="@($"/company/{CompanyId}/recruiters/{r.Id}/edit")">
-                                                    Edit
-                                                </a>
+                                                <div class="recruiter-actions">
+                                                    <a class="recruiter-edit-link"
+                                                       href="@($"/company/{CompanyId}/recruiters/{r.Id}/edit")">
+                                                        Edit
+                                                    </a>
+                                                    <button type="button"
+                                                            class="recruiter-delete-link"
+                                                            @onclick="@(() => OpenDeleteModal(r.Id, r.Name))">
+                                                        Remove
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     }
@@ -142,6 +149,41 @@
                 </div>
             </div>
         </div>
+
+        @if (showDeleteModal)
+        {
+            <div class="modal-backdrop">
+                <div class="modal-dialog">
+                    <h3>Remove recruiter "@recruiterNameToDelete"?</h3>
+                    <p>
+                        Are you sure you want to remove this recruiter account?
+                        This action cannot be undone.
+                    </p>
+                    <p class="modal-warning">
+                        The recruiter will permanently lose access to HireFire
+                        and all data directly linked to their account may be deleted.
+                    </p>
+
+                    @if (!string.IsNullOrEmpty(deleteErrorMessage))
+                    {
+                        <p class="modal-error">@deleteErrorMessage</p>
+                    }
+
+                    <div class="modal-actions">
+                        <button class="danger-btn"
+                                @onclick="ConfirmDeleteAsync"
+                                disabled="@isDeleting">
+                            @(isDeleting ? "Removing..." : "Yes, remove recruiter")
+                        </button>
+                        <button class="secondary-btn"
+                                @onclick="CloseDeleteModal"
+                                disabled="@isDeleting">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
     </Authorized>
     <NotAuthorized>
         <p>You must be logged in as a company representative to view this page.</p>
@@ -156,6 +198,13 @@
     private List<RecruiterDto> recruiters = new();
     private bool isLoading = true;
 
+    // stan modala usuwania rekrutera
+    private bool showDeleteModal = false;
+    private long? recruiterIdToDelete;
+    private string? recruiterNameToDelete;
+    private bool isDeleting = false;
+    private string? deleteErrorMessage;
+
     protected override async Task OnInitializedAsync()
     {
         isLoading = true;
@@ -168,14 +217,10 @@
 
             if (long.TryParse(idClaim, out var representativeId) && representativeId > 0)
             {
-                
                 var myCompanies = await CompanyService.GetMyCompaniesAsync(representativeId);
-
-                
                 company = myCompanies.FirstOrDefault(c => c.Id == CompanyId);
             }
 
-            
             recruiters = await RecruiterService.GetRecruitersForCompanyAsync(CompanyId);
         }
         catch
@@ -185,5 +230,54 @@
 
         isLoading = false;
     }
-}
 
+    private void OpenDeleteModal(long recruiterId, string? recruiterName)
+    {
+        recruiterIdToDelete = recruiterId;
+        recruiterNameToDelete = string.IsNullOrWhiteSpace(recruiterName)
+            ? "this recruiter"
+            : recruiterName;
+        deleteErrorMessage = null;
+        showDeleteModal = true;
+    }
+
+
+    private void CloseDeleteModal()
+    {
+        showDeleteModal = false;
+        recruiterIdToDelete = null;
+        recruiterNameToDelete = null;
+        deleteErrorMessage = null;
+    }
+
+    private async Task ConfirmDeleteAsync()
+    {
+        if (recruiterIdToDelete is null)
+            return;
+
+        isDeleting = true;
+        deleteErrorMessage = null;
+
+        try
+        {
+            await RecruiterService.DeleteRecruiterAsync(recruiterIdToDelete.Value);
+
+            var toRemove = recruiters.FirstOrDefault(r => r.Id == recruiterIdToDelete.Value);
+            if (toRemove is not null)
+            {
+                recruiters.Remove(toRemove);
+            }
+
+            CloseDeleteModal();
+        }
+        catch (Exception ex)
+        {
+            deleteErrorMessage = $"Failed to remove recruiter: {ex.Message}";
+        }
+        finally
+        {
+            isDeleting = false;
+            StateHasChanged();
+        }
+    }
+}

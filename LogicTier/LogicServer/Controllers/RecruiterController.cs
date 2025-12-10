@@ -55,5 +55,16 @@ public class RecruiterController : ControllerBase
 
         return Ok(result);
     }
+    [HttpDelete("{recruiterId:long}")]
+    public async Task<IActionResult> RemoveRecruiter(long recruiterId)
+    {
+        var success = await _recruiterService.RemoveRecruiterAsync(recruiterId);
+
+        if (!success)
+            return NotFound($"Recruiter with ID {recruiterId} not found.");
+
+        return NoContent();
+    }
+
 
 }

@@ -1,0 +1,210 @@
+﻿@page "/company-representative/account"
+@layout MainLayout
+@rendermode InteractiveServer
+
+@using System.Security.Claims
+@using WebApp.DTOs.CompanyRepresentative
+@using WebApp.Services
+@using Microsoft.AspNetCore.Components.Authorization
+
+@inject HttpCompanyRepresentativeService CompanyRepService
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager Nav
+
+<AuthorizeView Roles="company_representative">
+    <Authorized Context="_">
+        <div class="register-shell">
+            <div class="register-card">
+                <div class="register-header">
+                    <h2>Manage account</h2>
+                    <p>
+                        Update your account information or delete your company representative account.
+                    </p>
+                </div>
+
+                <div class="register-form-area">
+                    <EditForm Model="@repProfile" OnValidSubmit="HandleSaveChanges">
+                        <DataAnnotationsValidator />
+
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label for="r-name">Full name</label>
+                                <InputText id="r-name" class="form-control" @bind-Value="repProfile.Name" />
+                                <ValidationMessage For="@(() => repProfile.Name)" class="validation-message" />
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="r-email">Email</label>
+                                <InputText id="r-email" class="form-control" @bind-Value="repProfile.Email" />
+                                <ValidationMessage For="@(() => repProfile.Email)" class="validation-message" />
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="r-position">Position / title</label>
+                                <InputText id="r-position" class="form-control" @bind-Value="repProfile.Position" />
+                                <ValidationMessage For="@(() => repProfile.Position)" class="validation-message" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="r-password">New password (optional)</label>
+                                <InputText id="r-password" type="password" class="form-control"
+                                           @bind-Value="newPassword" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="r-password-confirm">Confirm new password</label>
+                                <InputText id="r-password-confirm" type="password" class="form-control"
+                                           @bind-Value="confirmPassword" />
+                                @if (!string.IsNullOrEmpty(passwordError))
+                                {
+                                    <span class="validation-message">@passwordError</span>
+                                }
+                            </div>
+                        </div>
+
+                        <button type="submit" class="submit-btn primary-btn">
+                            Save changes
+                        </button>
+                    </EditForm>
+
+                    <div class="@($"notification-container {(notificationVisible ? "show" : "")}")">
+                        <div class="@($"notification {notificationType}")">
+                            @notificationMessage
+                        </div>
+                    </div>
+
+                    <div class="danger-zone">
+                        <h3>Delete account</h3>
+                        <p>
+                            Deleting your account will remove your company representative profile,
+                            all companies you own, recruiters, job listings, applications and related chats.
+                            This action cannot be undone.
+                        </p>
+
+                        @if (!showDeleteConfirm)
+                        {
+                            <button type="button" class="danger-btn" @onclick="ShowDeleteConfirm">
+                                Delete account
+                            </button>
+                        }
+                        else
+                        {
+                            <div class="delete-confirm-box">
+                                <p>
+                                    Are you sure you want to remove this account?
+                                    You will lose all connected information like companies, recruiters, job listings and applications.
+                                </p>
+                                <div class="delete-confirm-actions">
+                                    <button type="button" class="danger-btn" @onclick="ConfirmDeleteAccount">
+                                        Yes, delete my account
+                                    </button>
+                                    <button type="button" class="secondary-btn" @onclick="CancelDelete">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>You must be logged in as a company representative to manage this page.</p>
+        <a href="/login">Go to login</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private UpdateCompanyRepresentativeDto repProfile = new();
+    private string newPassword = string.Empty;
+    private string confirmPassword = string.Empty;
+    private string? passwordError;
+
+    private bool notificationVisible = false;
+    private string notificationMessage = string.Empty;
+    private string notificationType = string.Empty;
+
+    private bool showDeleteConfirm = false;
+    private long representativeId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        var idClaim = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        long.TryParse(idClaim, out representativeId);
+
+        repProfile.Id = representativeId;
+        repProfile.Name = user.Identity?.Name ?? string.Empty;
+        repProfile.Email = user.FindFirst(ClaimTypes.Email)?.Value ?? string.Empty;
+        repProfile.Position = string.Empty;
+    }
+
+    private async Task HandleSaveChanges()
+    {
+        passwordError = null;
+
+        if (!string.IsNullOrEmpty(newPassword) || !string.IsNullOrEmpty(confirmPassword))
+        {
+            if (newPassword != confirmPassword)
+            {
+                passwordError = "Passwords do not match.";
+                return;
+            }
+
+            repProfile.Password = newPassword;
+        }
+        else
+        {
+            repProfile.Password = null;
+        }
+
+        try
+        {
+            var updated = await CompanyRepService.UpdateCompanyRepresentativeAsync(repProfile);
+            ShowNotification("Account updated successfully.", "success");
+        }
+        catch (Exception ex)
+        {
+            ShowNotification($"Failed to update account: {ex.Message}", "error");
+        }
+    }
+
+    private void ShowNotification(string message, string type)
+    {
+        notificationMessage = message;
+        notificationType = type;
+        notificationVisible = true;
+
+        _ = Task.Delay(3000).ContinueWith(_ =>
+        {
+            notificationVisible = false;
+            InvokeAsync(StateHasChanged);
+        });
+    }
+
+    private void ShowDeleteConfirm()
+    {
+        showDeleteConfirm = true;
+    }
+
+    private void CancelDelete()
+    {
+        showDeleteConfirm = false;
+    }
+
+    private async Task ConfirmDeleteAccount()
+    {
+        try
+        {
+            await CompanyRepService.DeleteCompanyRepresentativeAsync(representativeId);
+            Nav.NavigateTo("/logout", true);
+        }
+        catch (Exception ex)
+        {
+            ShowNotification($"Failed to delete account: {ex.Message}", "error");
+        }
+    }
+}
