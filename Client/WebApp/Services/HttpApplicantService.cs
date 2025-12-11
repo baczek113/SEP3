@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using WebApp.DTOs.Applicant;
 using WebApp.DTOs.Job;
+using WebApp.DTOs.Recruiter;
 
 namespace WebApp.Services;
 
@@ -34,6 +35,26 @@ public class HttpApplicantService: IApplicantService
         }
 
         return JsonSerializer.Deserialize<ApplicantSkillDto>(
+            response,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+        )!;
+    }
+    
+    public async Task<RemoveApplicantResponseDto> DeleteApplicantAsync(long applicantId)
+    {
+        var httpResponse = await client.DeleteAsync($"api/applicant/{applicantId}");
+        var response = await httpResponse.Content.ReadAsStringAsync();
+
+        if (!httpResponse.IsSuccessStatusCode)
+        {
+            return new RemoveApplicantResponseDto
+            {
+                Success = false,
+                Message = "Failed to delete applicant account."
+            };
+        }
+
+        return JsonSerializer.Deserialize<RemoveApplicantResponseDto>(
             response,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
         )!;

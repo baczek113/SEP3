@@ -5,10 +5,11 @@
 @using Microsoft.AspNetCore.Components.Web
 @using System.Security.Claims
 @using WebApp.Services
-
+@using WebApp.Authentication
 @inject HttpApplicantService ApplicantService
 @inject HttpApplicationService ApplicationService
 @inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager Nav
 
 <AuthorizeView Roles="applicant">
     <Authorized Context="_">
@@ -19,15 +20,22 @@
                         <h2>Discover jobs</h2>
                         <p>Use ← to skip, → to apply. Simple as Tinder.</p>
                     </div>
+
                     <div class="dash-header">
                         <div class="dash-title">
                             <h2>Discover jobs</h2>
                             <p>Use ← to skip, → to apply. Simple as Tinder.</p>
                         </div>
-    
-                        <a href="/applicant/applications" class="btn btn-outline-primary">
-                            View My Applications
-                        </a>
+
+                        <div class="d-flex gap-2">
+                            <a href="/applicant/applications" class="btn btn-outline-primary">
+                                View My Applications
+                            </a>
+
+                            <button class="btn btn-danger" @onclick="ShowDeleteConfirm">
+                                🗑️ Delete My Profile
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -53,32 +61,24 @@
                             <div class="job-card-header">
                                 <h3>@CurrentJob.Title</h3>
 
-                                <span class="job-location">
-                                    @CurrentJob.City
-                                </span>
+                                <span class="job-location">@CurrentJob.City</span>
                             </div>
 
                             @if (CurrentJob.Salary is not null)
                             {
-                                <p class="job-salary">
-                                    @($"{CurrentJob.Salary:C0}")
-                                </p>
+                                <p class="job-salary">@($"{CurrentJob.Salary:C0}")</p>
                             }
 
                             @if (!string.IsNullOrWhiteSpace(CurrentJob.Description))
                             {
-                                <p class="job-description">
-                                    @CurrentJob.Description
-                                </p>
+                                <p class="job-description">@CurrentJob.Description</p>
                             }
 
                             <div class="job-meta-row">
                                 <span class="job-meta-pill">
                                     Posted @CurrentJob.DatePosted.ToShortDateString()
                                 </span>
-                                <span class="job-meta-pill subtle">
-                                    Job #@CurrentJob.Id
-                                </span>
+                                <span class="job-meta-pill subtle">Job #@CurrentJob.Id</span>
                             </div>
                         </div>
 
@@ -92,13 +92,44 @@
                             </button>
                         </div>
 
-                        <p class="job-counter">
-                            @((currentIndex + 1)) / @jobListings.Count
-                        </p>
+                        <p class="job-counter">@((currentIndex + 1)) / @jobListings.Count</p>
                     }
                 </div>
             </div>
         </div>
+
+        @* -------------------- DELETE CONFIRM MODAL -------------------- *@
+
+        @if (showDeleteModal)
+        {
+            <div class="modal-backdrop fade show"></div>
+
+            <div class="modal fade show d-block" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content p-3">
+
+                        <h5>Confirm Profile Deletion</h5>
+                        <p>
+                            Are you sure you want to delete your applicant profile?
+                            This action cannot be undone.
+                        </p>
+
+                        @if (!string.IsNullOrEmpty(deleteMessage))
+                        {
+                            <p class="text-danger">@deleteMessage</p>
+                        }
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <button class="btn btn-secondary" @onclick="CancelDelete">Cancel</button>
+                            <button class="btn btn-danger" @onclick="DeleteApplicantAsync">
+                                Delete Profile
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
     </Authorized>
 
     <NotAuthorized>
@@ -117,6 +148,14 @@
     private bool isLoading = true;
     private string? errorMessage;
 
+    // NEW FIELDS
+    private bool showDeleteModal = false;
+    private string? deleteMessage = null;
+
+    // --------------------------------------------------------------------------
+    // JOB LISTING NAVIGATION
+    // --------------------------------------------------------------------------
+
     private JobListingDto? CurrentJob =>
         (currentIndex >= 0 && currentIndex < jobListings.Count)
             ? jobListings[currentIndex]
@@ -127,12 +166,11 @@
         try
         {
             isLoading = true;
-            errorMessage = null;
 
             _applicantId = await ResolveApplicantIdAsync();
             if (_applicantId == 0)
             {
-                errorMessage = "Cannot resolve applicant id from user claims.";
+                errorMessage = "Cannot resolve applicant id.";
                 return;
             }
 
@@ -153,12 +191,60 @@
         var state = await AuthStateProvider.GetAuthenticationStateAsync();
         var user = state.User;
 
-        // Dostosuj do swoich claimów (np. "sub", "nameidentifier", "applicant_id")
-        var idValue = user.FindFirst("applicant_id")?.Value
-                     ?? user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var value = user.FindFirst("applicant_id")?.Value
+                    ?? user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        return long.TryParse(idValue, out var id) ? id : 0;
+        return long.TryParse(value, out var id) ? id : 0;
     }
+
+    // --------------------------------------------------------------------------
+    // DELETE PROFILE LOGIC
+    // --------------------------------------------------------------------------
+
+    private void ShowDeleteConfirm()
+    {
+        deleteMessage = null;
+        showDeleteModal = true;
+    }
+
+    private void CancelDelete()
+    {
+        showDeleteModal = false;
+        deleteMessage = null;
+    }
+
+    private async Task DeleteApplicantAsync()
+    {
+        try
+        {
+            deleteMessage = null;
+
+            var result = await ApplicantService.DeleteApplicantAsync(_applicantId);
+
+            if (!result.Success)
+            {
+                deleteMessage = result.Message;
+                return;
+            }
+
+            // SUCCESS → Logout user
+            if (AuthStateProvider is AuthProvider auth)
+            {
+                await auth.LogoutAsync();
+            }
+
+            // Redirect to homepage
+            Nav.NavigateTo("/", true);
+        }
+        catch (Exception ex)
+        {
+            deleteMessage = ex.Message;
+        }
+    }
+
+    // --------------------------------------------------------------------------
+    // SWIPE / APPLY / DECLINE
+    // --------------------------------------------------------------------------
 
     private async Task AcceptAsync()
     {
@@ -166,8 +252,6 @@
 
         try
         {
-            errorMessage = null;
-
             var dto = new CreateApplicationDto
             {
                 JobId = CurrentJob.Id,
@@ -189,9 +273,6 @@
 
         try
         {
-            errorMessage = null;
-
-            // 1. Utwórz Application (status startowy = under_review)
             var createDto = new CreateApplicationDto
             {
                 JobId = CurrentJob.Id,
@@ -200,10 +281,8 @@
 
             var created = await ApplicationService.CreateAsync(createDto);
 
-            // 2. Zmień status na „declined”
             await ApplicationService.RejectAsync(created.Id);
 
-            // 3. Przejdź do kolejnej oferty
             MoveNext();
         }
         catch (Exception ex)
@@ -212,26 +291,19 @@
         }
     }
 
-
     private void MoveNext()
     {
         currentIndex++;
         if (currentIndex >= jobListings.Count)
-        {
-            currentIndex = jobListings.Count; // CurrentJob => null
-        }
+            currentIndex = jobListings.Count;
     }
-    
+
     private async Task HandleKeyDown(KeyboardEventArgs e)
     {
         if (e.Key == "ArrowRight")
-        {
             await AcceptAsync();
-        }
-        else if (e.Key == "ArrowLeft")
-        {
-            Decline();
-        }
-    }
 
+        else if (e.Key == "ArrowLeft")
+            Decline();
+    }
 }

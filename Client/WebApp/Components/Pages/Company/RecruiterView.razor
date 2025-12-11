@@ -24,6 +24,14 @@
                         Create Job Listing
                     </a>
                 </div>
+                
+                @* Notification UI *@
+                @if (!string.IsNullOrEmpty(notificationMessage))
+                {
+                    <div class="alert @(notificationType == "success" ? "alert-success" : "alert-danger")">
+                        @notificationMessage
+                    </div>
+                }
 
                 <div class="dash-content">
                     @if (isLoading)
@@ -78,9 +86,35 @@
                                         <a href="/recruiter/job/@job.Id/matches" class="btn btn-success flex-grow-1">
                                             💬 Matches
                                         </a>
+                                        
+                                        <a href="javascript:void(0)"
+                                           class="btn btn-danger flex-grow-1"
+                                           @onclick="() => ConfirmDelete(job.Id)">
+                                            🗑️ Remove
+                                        </a>
                                     </div>
                                 </div>
                             }
+                        </div>
+                    }
+                    
+                    @* Confirmation Modal for Remove Job Listing *@
+                    @if (showDeleteModal)
+                    {
+                        <div class="modal-backdrop fade show"></div>
+
+                        <div class="modal fade show d-block" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content p-3">
+                                    <h5>Confirm Deletion</h5>
+                                    <p>Are you sure you want to delete this job listing?</p>
+
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <button class="btn btn-secondary" @onclick="CancelDelete">Cancel</button>
+                                        <button class="btn btn-danger" @onclick="DeleteJob">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     }
                 </div>
@@ -100,6 +134,11 @@
     private long recruiterId;
     private List<JobListingDto> jobListings = new();
     private bool isLoading = true;
+    
+    private bool showDeleteModal = false;
+    private long pendingDeleteJobId;
+    private string? notificationMessage = null;
+    private string notificationType = ""; // "success" or "error"
 
     protected override async Task OnInitializedAsync()
     {
@@ -118,4 +157,54 @@
 
         isLoading = false;
     }
+
+    private void ConfirmDelete(long jobId)
+    {
+        pendingDeleteJobId = jobId;
+        showDeleteModal = true;
+    }
+
+    private void CancelDelete()
+    {
+        showDeleteModal = false;
+        pendingDeleteJobId = 0;
+    }
+
+    private async Task DeleteJob()
+    {
+        showDeleteModal = false;
+        notificationMessage = null;
+
+        try
+        {
+            var result = await JobListingService.DeleteJobListingAsync(pendingDeleteJobId);
+
+            if (result.Success)
+            {
+                notificationMessage = "Job listing removed successfully.";
+                notificationType = "success";
+
+                // 🔥 Remove from UI immediately (just like companies)
+                var toRemove = jobListings.FirstOrDefault(j => j.Id == pendingDeleteJobId);
+                if (toRemove != null)
+                {
+                    jobListings.Remove(toRemove);
+                }
+
+                // 🔥 Force UI update immediately
+                StateHasChanged();
+            }
+            else
+            {
+                notificationMessage = result.Message ?? "Failed to remove job listing.";
+                notificationType = "error";
+            }
+        }
+        catch (Exception ex)
+        {
+            notificationMessage = $"Error removing job listing: {ex.Message}";
+            notificationType = "error";
+        }
+    }
+
 }

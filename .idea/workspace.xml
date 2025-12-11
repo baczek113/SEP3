@@ -4,43 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="de597b5c-1726-45e2-b5e4-ac367ce62b51" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.agent.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.ask.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.edit.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/indexLayout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/projectSettingsUpdater.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccessLayer/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccessLayer/.idea/DataAccessLayer.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccessLayer/.idea/copilot.data.migration.agent.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccessLayer/.idea/copilot.data.migration.ask.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccessLayer/.idea/copilot.data.migration.ask2agent.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccessLayer/.idea/copilot.data.migration.edit.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccessLayer/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccessLayer/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccessLayer/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Applicant.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Applicant.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/ApplicantGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/ApplicantGrpc.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Application.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Application.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/ApplicationGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/ApplicationGrpc.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Authentication.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Authentication.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/AuthenticationGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/AuthenticationGrpc.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Chat.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Chat.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/ChatGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/ChatGrpc.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Company.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Company.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/CompanyGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/CompanyGrpc.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Job.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Job.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/JobGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/JobGrpc.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Recruiter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Recruiter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/RecruiterGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/RecruiterGrpc.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Representative.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Representative.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/RepresentativeGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/RepresentativeGrpc.cs" afterDir="false" />
-    </list>
+    <list default="true" id="de597b5c-1726-45e2-b5e4-ac367ce62b51" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -49,9 +13,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 7
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="36RQ88u1VvAdr8k0NUl2ULFjY6c" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -62,7 +26,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "remove-applicant",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/sheik/OneDrive - ViaUC/VIA University/Subjects and Education/Semester Projects/SEP3-Project and Documentation/Appendicies/F - Source Code/SEP3",
@@ -94,6 +58,7 @@
       <option name="presentableId" value="Default" />
       <updated>1764966741211</updated>
       <workItem from="1764966742472" duration="68000" />
+      <workItem from="1765374835889" duration="45000" />
     </task>
     <servers />
   </component>

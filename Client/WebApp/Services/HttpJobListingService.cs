@@ -28,7 +28,7 @@ public class HttpJobListingService : IJobListingService
     
     public async Task<RemoveJobListingResponseDto> DeleteJobListingAsync(long jobListingId)
     {
-        var response = await client.DeleteAsync($"api/Job/{jobListingId}");
+        var response = await client.DeleteAsync($"api/joblisting/{jobListingId}");
 
         if (!response.IsSuccessStatusCode)
         {

@@ -92,7 +92,4 @@ public class JobListingController : ControllerBase
 
         return Ok(result);
     }
-
-
-
 }
