@@ -18,11 +18,14 @@ public class RepresentativeController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<RepresentativeDto>> CreateRepresentative([FromBody] CreateRepresentativeDto dto)
     {
+        Console.WriteLine("LOGIC: HTTP POST /api/representative received - creating company representative");
         if (dto == null)
             return BadRequest("Invalid data");
 
         var result = await _representativeService.CreateRepresentativeAsync(dto);
+        Console.WriteLine("LOGIC: Company representative created in LogicServer, returning response to Client");
         return Ok(result);
+        
     }
 
     [HttpPut("{id:long}")]
