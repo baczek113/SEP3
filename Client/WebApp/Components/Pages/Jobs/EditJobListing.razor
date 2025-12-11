@@ -1,0 +1,209 @@
+@page "/job/edit/{JobId:long}"
+@layout MainLayout
+@rendermode InteractiveServer
+
+@using WebApp.DTOs.Job
+@using WebApp.Services
+@using System.Security.Claims
+
+@inject HttpJobListingService JobListingService
+@inject AuthenticationStateProvider AuthStateProvider
+
+<AuthorizeView Roles="recruiter">
+    <Authorized Context="_">
+        <div class="register-shell">
+            <div class="register-card">
+                <div class="register-header">
+                    <h2>Edit Job Listing</h2>
+                    <p>Update the role details. Changes apply immediately, and closed listings stay visible to you.</p>
+                </div>
+
+                <div class="register-form-area">
+                    @if (isLoading)
+                    {
+                        <div class="dash-loading">Loading job listing...</div>
+                    }
+                    else if (!string.IsNullOrEmpty(loadError))
+                    {
+                        <div class="dash-empty">
+                            <h4>Unable to load job listing</h4>
+                            <p>@loadError</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <EditForm Model="@job" OnValidSubmit="HandleSubmit">
+                            <DataAnnotationsValidator/>
+
+                            <div class="form-grid">
+                                <div class="form-group full-width">
+                                    <label for="j-title">Job Title</label>
+                                    <InputText id="j-title" class="form-control" @bind-Value="job.Title"/>
+                                    <ValidationMessage For="@(() => job.Title)" class="validation-message"/>
+                                </div>
+
+                                <div class="form-group full-width">
+                                    <label for="j-description">Description</label>
+                                    <InputTextArea id="j-description" class="form-control" @bind-Value="job.Description"/>
+                                    <ValidationMessage For="@(() => job.Description)" class="validation-message"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="j-salary">Salary (optional)</label>
+                                    <InputNumber id="j-salary" class="form-control" @bind-Value="job.Salary"/>
+                                    <ValidationMessage For="@(() => job.Salary)" class="validation-message"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="j-city">City</label>
+                                    <InputText id="j-city" class="form-control" @bind-Value="job.City"/>
+                                    <ValidationMessage For="@(() => job.City)" class="validation-message"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="j-postcode">Postcode</label>
+                                    <InputText id="j-postcode" class="form-control" @bind-Value="job.Postcode"/>
+                                    <ValidationMessage For="@(() => job.Postcode)" class="validation-message"/>
+                                </div>
+
+                                <div class="form-group full-width">
+                                    <label for="j-address">Address</label>
+                                    <InputText id="j-address" class="form-control" @bind-Value="job.Address"/>
+                                    <ValidationMessage For="@(() => job.Address)" class="validation-message"/>
+                                </div>
+                            </div>
+
+                            <div class="job-status-row">
+                                <span class="status-pill @(job.IsClosed ? "closed" : "open")">
+                                    @(job.IsClosed ? "Closed" : "Open")
+                                </span>
+                                <button type="button" class="submit-btn secondary-btn" @onclick="ToggleClosed" disabled="@isSubmitting">
+                                    @(job.IsClosed ? "Activate job listing" : "Close job listing")
+                                </button>
+                            </div>
+
+                            <button type="submit" class="submit-btn primary-btn" disabled="@isSubmitting">
+                                @(isSubmitting ? "Saving..." : "Save changes")
+                            </button>
+                        </EditForm>
+                    }
+
+                    <div class="@($"notification-container {(notificationVisible ? "show" : "")}")">
+                        <div class="@($"notification {notificationType}")">
+                            @notificationMessage
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>You must be logged in as a recruiter to edit a job listing.</p>
+        <a href="/login">Go to login</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    [Parameter] public long JobId { get; set; }
+
+    private UpdateJobListingDto job = new()
+    {
+        Title = string.Empty,
+        City = string.Empty,
+        Postcode = string.Empty,
+        Address = string.Empty
+    };
+    private bool isLoading = true;
+    private string? loadError;
+    private bool notificationVisible;
+    private string notificationMessage = string.Empty;
+    private string notificationType = string.Empty;
+    private bool isSubmitting;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            var idClaim = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!long.TryParse(idClaim, out var recruiterId) || recruiterId <= 0)
+            {
+                loadError = "You must be logged in as a recruiter.";
+                return;
+            }
+
+            var dto = await JobListingService.GetJobListingByIdAsync(JobId);
+            if (dto is null)
+            {
+                loadError = "Job listing not found.";
+                return;
+            }
+
+            job = new UpdateJobListingDto
+            {
+                Id = dto.Id,
+                Title = dto.Title,
+                Description = dto.Description,
+                Salary = dto.Salary,
+                CompanyId = dto.CompanyId,
+                City = dto.City,
+                Postcode = dto.Postcode,
+                Address = dto.Address,
+                IsClosed = dto.IsClosed
+            };
+
+            recruiterCompanyId = dto.CompanyId;
+        }
+        catch (Exception ex)
+        {
+            loadError = ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private long recruiterCompanyId;
+
+    private async Task HandleSubmit()
+    {
+        try
+        {
+            isSubmitting = true;
+            job.CompanyId = recruiterCompanyId;
+
+            var updated = await JobListingService.UpdateJobListingAsync(job);
+            job.IsClosed = updated.IsClosed;
+            ShowNotification("Job listing updated.", "success");
+        }
+        catch (Exception ex)
+        {
+            ShowNotification($"Failed to update listing: {ex.Message}", "error");
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    private void ToggleClosed()
+    {
+        job.IsClosed = !job.IsClosed;
+    }
+
+    private void ShowNotification(string message, string type)
+    {
+        notificationMessage = message;
+        notificationType = type;
+        notificationVisible = true;
+
+        _ = Task.Delay(3000).ContinueWith(_ =>
+        {
+            notificationVisible = false;
+            InvokeAsync(StateHasChanged);
+        });
+    }
+}

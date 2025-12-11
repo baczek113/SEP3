@@ -5,41 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="de597b5c-1726-45e2-b5e4-ac367ce62b51" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.agent.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.ask.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.edit.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/indexLayout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/projectSettingsUpdater.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccessLayer/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccessLayer/.idea/DataAccessLayer.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccessLayer/.idea/copilot.data.migration.agent.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccessLayer/.idea/copilot.data.migration.ask.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccessLayer/.idea/copilot.data.migration.ask2agent.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccessLayer/.idea/copilot.data.migration.edit.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccessLayer/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccessLayer/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccessLayer/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Applicant.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Applicant.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/ApplicantGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/ApplicantGrpc.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Application.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Application.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/ApplicationGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/ApplicationGrpc.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Authentication.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Authentication.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/AuthenticationGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/AuthenticationGrpc.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Chat.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Chat.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/ChatGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/ChatGrpc.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Company.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Company.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/CompanyGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/CompanyGrpc.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Job.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Job.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/JobGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/JobGrpc.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Recruiter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Recruiter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/RecruiterGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/RecruiterGrpc.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Representative.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/Representative.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/RepresentativeGrpc.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/GeneratedGrpc/Proto/RepresentativeGrpc.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/WebApp/Components/Pages/Applicant/ApplicantView.razor" beforeDir="false" afterPath="$PROJECT_DIR$/Client/WebApp/Components/Pages/Applicant/ApplicantView.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/WebApp/Components/Pages/Company/RecruiterView.razor" beforeDir="false" afterPath="$PROJECT_DIR$/Client/WebApp/Components/Pages/Company/RecruiterView.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/WebApp/Components/Pages/Company/RecruiterView.razor.css" beforeDir="false" afterPath="$PROJECT_DIR$/Client/WebApp/Components/Pages/Company/RecruiterView.razor.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/WebApp/DTOs/Job/JobListingDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Client/WebApp/DTOs/Job/JobListingDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/WebApp/Services/HttpApplicantService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Client/WebApp/Services/HttpApplicantService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/WebApp/Services/HttpJobListingService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Client/WebApp/Services/HttpJobListingService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/WebApp/Services/IApplicantService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Client/WebApp/Services/IApplicantService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/WebApp/Services/IJobListingService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Client/WebApp/Services/IJobListingService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/Database/HireFire.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/Database/HireFire.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/src/main/java/com/example/databaseserver/Entities/JobListing.java" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/src/main/java/com/example/databaseserver/Entities/JobListing.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/src/main/java/com/example/databaseserver/Service/ApplicantService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/src/main/java/com/example/databaseserver/Service/ApplicantService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/src/main/java/com/example/databaseserver/Service/JobListingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/src/main/java/com/example/databaseserver/Service/JobListingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/src/main/proto/applicant.proto" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/src/main/proto/applicant.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/src/main/proto/job.proto" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/src/main/proto/job.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/Controllers/ApplicantController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/Controllers/ApplicantController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/Controllers/JobController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/Controllers/JobController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/DTOs/Job/JobListingDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/DTOs/Job/JobListingDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/Proto/applicant.proto" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/Proto/applicant.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/Proto/job.proto" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/Proto/job.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/Services/ApplicantService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/Services/ApplicantService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/Services/JobListingService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/Services/JobListingService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,26 +37,31 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 7
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="36RQ88u1VvAdr8k0NUl2ULFjY6c" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "remove-applicant",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/sheik/OneDrive - ViaUC/VIA University/Subjects and Education/Semester Projects/SEP3-Project and Documentation/Appendicies/F - Source Code/SEP3",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;EditApplicant__EditJobDetails__CloseJobListing&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/sheik/OneDrive - ViaUC/VIA University/Subjects and Education/Semester Projects/SEP3-Project and Documentation/Appendicies/F - Source Code/SEP3&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="DatabaseServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="DatabaseServer" />
@@ -81,8 +74,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
-        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.27397.103" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26830.84" />
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.26830.84" />
       </set>
     </attachedChunks>
   </component>
@@ -94,10 +87,13 @@
       <option name="presentableId" value="Default" />
       <updated>1764966741211</updated>
       <workItem from="1764966742472" duration="68000" />
+      <workItem from="1765359583027" duration="600000" />
+      <workItem from="1765467702436" duration="644000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
 </project>

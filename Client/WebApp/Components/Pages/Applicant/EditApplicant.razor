@@ -1,0 +1,195 @@
+@page "/applicant/edit"
+@layout MainLayout
+@rendermode InteractiveServer
+
+@using System.Security.Claims
+@using WebApp.DTOs.Applicant
+@using WebApp.Services
+
+@inject HttpApplicantService ApplicantService
+@inject NavigationManager Nav
+@inject AuthenticationStateProvider AuthStateProvider
+
+<AuthorizeView Roles="applicant">
+    <Authorized Context="_">
+        <div class="register-shell">
+            <div class="register-card">
+                <div class="register-header">
+                    <h2>Edit Applicant Profile</h2>
+                    <p>Update your contact info and experience to improve matching accuracy.</p>
+                </div>
+
+                <div class="register-form-area">
+                    @if (isLoading)
+                    {
+                        <div class="dash-loading">Loading profile...</div>
+                    }
+                    else if (!string.IsNullOrEmpty(loadError))
+                    {
+                        <div class="dash-empty">
+                            <h4>Unable to load your profile</h4>
+                            <p>@loadError</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <EditForm Model="@applicant" OnValidSubmit="HandleSubmit">
+                            <DataAnnotationsValidator/>
+
+                            <div class="form-grid">
+                                <div class="form-group full-width">
+                                    <label for="a-name">Full name</label>
+                                    <InputText id="a-name" class="form-control" @bind-Value="applicant.Name"/>
+                                    <ValidationMessage For="@(() => applicant.Name)" class="validation-message"/>
+                                </div>
+
+                                <div class="form-group full-width">
+                                    <label for="a-email">Email</label>
+                                    <InputText id="a-email" class="form-control" @bind-Value="applicant.Email"/>
+                                    <ValidationMessage For="@(() => applicant.Email)" class="validation-message"/>
+                                </div>
+
+                                <div class="form-group full-width">
+                                    <label for="a-experience">Experience</label>
+                                    <InputTextArea id="a-experience" class="form-control" @bind-Value="applicant.Experience"/>
+                                    <ValidationMessage For="@(() => applicant.Experience)" class="validation-message"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="a-city">City</label>
+                                    <InputText id="a-city" class="form-control" @bind-Value="applicant.City"/>
+                                    <ValidationMessage For="@(() => applicant.City)" class="validation-message"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="a-postcode">Postcode</label>
+                                    <InputText id="a-postcode" class="form-control" @bind-Value="applicant.Postcode"/>
+                                    <ValidationMessage For="@(() => applicant.Postcode)" class="validation-message"/>
+                                </div>
+
+                                <div class="form-group full-width">
+                                    <label for="a-address">Address</label>
+                                    <InputText id="a-address" class="form-control" @bind-Value="applicant.Address"/>
+                                    <ValidationMessage For="@(() => applicant.Address)" class="validation-message"/>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="submit-btn primary-btn" disabled="@isSubmitting">
+                                @(isSubmitting ? "Saving..." : "Save changes")
+                            </button>
+                        </EditForm>
+                    }
+
+                    <div class="@($"notification-container {(notificationVisible ? "show" : "")}")">
+                        <div class="@($"notification {notificationType}")">
+                            @notificationMessage
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>You must be logged in as an applicant to edit your profile.</p>
+        <a href="/login">Go to login</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private UpdateApplicantDto applicant = new()
+    {
+        Name = string.Empty,
+        Email = string.Empty,
+        Experience = string.Empty,
+        City = string.Empty,
+        Postcode = string.Empty,
+        Address = string.Empty
+    };
+    private bool isLoading = true;
+    private string? loadError;
+    private bool notificationVisible;
+    private string notificationMessage = string.Empty;
+    private string notificationType = string.Empty;
+    private bool isSubmitting;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            var idValue = user.FindFirst("applicant_id")?.Value
+                         ?? user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (!long.TryParse(idValue, out var applicantId) || applicantId <= 0)
+            {
+                loadError = "Unable to resolve applicant id from your account.";
+                return;
+            }
+
+            var dto = await ApplicantService.GetApplicantAsync(applicantId);
+
+            applicant = new UpdateApplicantDto
+            {
+                Id = dto.Id,
+                Name = dto.Name,
+                Email = dto.Email,
+                Experience = dto.Experience,
+                City = dto.City,
+                Postcode = dto.Postcode,
+                Address = dto.Address
+            };
+        }
+        catch (Exception ex)
+        {
+            loadError = ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task HandleSubmit()
+    {
+        try
+        {
+            isSubmitting = true;
+            var updated = await ApplicantService.UpdateApplicantAsync(applicant);
+
+            ShowNotification("Profile updated successfully.", "success");
+            applicant = new UpdateApplicantDto
+            {
+                Id = updated.Id,
+                Name = updated.Name,
+                Email = updated.Email,
+                Experience = updated.Experience,
+                City = updated.City,
+                Postcode = updated.Postcode,
+                Address = updated.Address
+            };
+        }
+        catch (Exception ex)
+        {
+            ShowNotification($"Failed to update profile: {ex.Message}", "error");
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    private void ShowNotification(string message, string type)
+    {
+        notificationMessage = message;
+        notificationType = type;
+        notificationVisible = true;
+
+        _ = Task.Delay(3000).ContinueWith(_ =>
+        {
+            notificationVisible = false;
+            InvokeAsync(StateHasChanged);
+        });
+    }
+}

@@ -109,6 +109,7 @@
     justify-content: space-between;
     align-items: center;
     font-size: 0.86rem;
+    gap: 8px;
 }
 
 .job-salary {
@@ -118,6 +119,23 @@
 
 .job-id {
     color: #718096;
+}
+
+.job-status-pill {
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.job-status-pill.open {
+    background: #e6fffa;
+    color: #0f766e;
+}
+
+.job-status-pill.closed {
+    background: #fff5f5;
+    color: #c53030;
 }
 
 @media (max-width: 768px) {

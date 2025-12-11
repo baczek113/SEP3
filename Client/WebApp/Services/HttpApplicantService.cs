@@ -81,4 +81,18 @@ public class HttpApplicantService: IApplicantService
         )!;
     }
 
+    public async Task<ApplicantDto> UpdateApplicantAsync(UpdateApplicantDto request)
+    {
+        var httpResponse = await client.PutAsJsonAsync($"api/applicant/{request.Id}", request);
+        var response = await httpResponse.Content.ReadAsStringAsync();
+
+        if (!httpResponse.IsSuccessStatusCode)
+            throw new Exception(response);
+
+        return JsonSerializer.Deserialize<ApplicantDto>(
+            response,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+        )!;
+    }
+
 }

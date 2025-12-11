@@ -92,4 +92,31 @@ public class ApplicantController : ControllerBase
         var result = await _service.GetByIdAsync(applicantId);
         return Ok(result);
     }
+
+    [HttpPut("{applicantId:long}")]
+    public async Task<ActionResult<ApplicantDto>> UpdateApplicant(long applicantId, [FromBody] UpdateApplicantDto dto)
+    {
+        if (dto == null || dto.Id != applicantId)
+            return BadRequest("Invalid applicant payload.");
+
+        try
+        {
+            var updated = await _service.UpdateApplicantAsync(dto);
+
+            if (updated == null)
+                return NotFound($"Applicant with ID {applicantId} not found.");
+
+            return Ok(updated);
+        }
+        catch (RpcException e) when (e.StatusCode == Grpc.Core.StatusCode.AlreadyExists)
+        {
+            _logger.LogWarning("Failed to update applicant: {Detail}", e.Status.Detail);
+            return Conflict(e.Status.Detail);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Internal Server Error while updating applicant");
+            return StatusCode(500, e.Message);
+        }
+    }
 }

@@ -7,6 +7,12 @@ service JobListingService {
 
   rpc RemoveJobListing (RemoveJobListingRequest) returns (RemoveJobListingResponse);
 
+  rpc UpdateJobListing (UpdateJobListingRequest) returns (JobListingResponse);
+
+  rpc CloseJobListing (CloseJobListingRequest) returns (JobListingResponse);
+
+  rpc GetJobListingById (GetJobListingByIdRequest) returns (JobListingResponse);
+
   rpc GetJobListingsForCompany (GetJobListingsForCompanyRequest)
       returns (GetJobListingsForCompanyResponse);
 
@@ -32,6 +38,7 @@ message CreateJobListingRequest {
   string city        = 6;
   string postcode    = 7;
   string address     = 8;
+  bool is_closed     = 9;
 }
 
 message JobListingResponse {
@@ -45,6 +52,7 @@ message JobListingResponse {
   string address     = 8;
   int64 company_id   = 9;
   int64 posted_by_id = 10;
+  bool is_closed     = 11;
 }
 
 message RemoveJobListingRequest {
@@ -102,4 +110,24 @@ message AddJobListingSkillRequest {
   string skill_name    = 2;
   string category      = 3;
   string priority      = 4;
+}
+
+message UpdateJobListingRequest {
+  int64 id           = 1;
+  string title       = 2;
+  string description = 3;
+  string salary      = 4;
+  string city        = 5;
+  string postcode    = 6;
+  string address     = 7;
+  int64 company_id   = 8;
+  bool is_closed     = 9;
+}
+
+message CloseJobListingRequest {
+  int64 id = 1;
+}
+
+message GetJobListingByIdRequest {
+  int64 id = 1;
 }

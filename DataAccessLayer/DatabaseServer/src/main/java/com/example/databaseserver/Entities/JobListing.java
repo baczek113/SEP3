@@ -41,6 +41,9 @@ public class JobListing {
     @JoinColumn(name = "posted_by_id")
     private Recruiter postedBy;
 
+    @Column(name = "is_closed", nullable = false)
+    private boolean isClosed = false;
+
     // ---- Custom constructor ----
     public JobListing(String title,
                       String description,
@@ -48,7 +51,8 @@ public class JobListing {
                       BigDecimal salary,
                       Company company,
                       Location location,
-                      Recruiter postedBy) {
+                      Recruiter postedBy,
+                      boolean isClosed) {
 
         this.title = title;
         this.description = description;
@@ -57,5 +61,6 @@ public class JobListing {
         this.company = company;
         this.location = location;
         this.postedBy = postedBy;
+        this.isClosed = isClosed;
     }
 }

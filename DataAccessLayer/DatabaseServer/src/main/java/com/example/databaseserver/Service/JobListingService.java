@@ -22,10 +22,13 @@ import com.example.databaseserver.generated.GetJobListingsForCompanyRequest;
 import com.example.databaseserver.generated.GetJobListingsForCompanyResponse;
 import com.example.databaseserver.generated.GetJobListingsForRecruiterRequest;
 import com.example.databaseserver.generated.GetJobListingsForRecruiterResponse;
+import com.example.databaseserver.generated.GetJobListingByIdRequest;
 import com.example.databaseserver.generated.JobListingResponse;
 import com.example.databaseserver.generated.JobListingServiceGrpc;
 import com.example.databaseserver.generated.JobListingsResponse;
 import com.example.databaseserver.generated.JobSkillResponse;
+import com.example.databaseserver.generated.UpdateJobListingRequest;
+import com.example.databaseserver.generated.CloseJobListingRequest;
 import com.example.databaseserver.generated.RemoveJobListingRequest;
 import com.example.databaseserver.generated.RemoveJobListingResponse;
 import io.grpc.Status;
@@ -97,23 +100,13 @@ public class JobListingService extends JobListingServiceGrpc.JobListingServiceIm
                     salary,
                     company,
                     savedLocation,
-                    recruiter
+                    recruiter,
+                    request.getIsClosed()
             );
 
             JobListing saved = jobListingRepository.save(job);
 
-            JobListingResponse response = JobListingResponse.newBuilder()
-                    .setId(saved.getId())
-                    .setTitle(saved.getTitle())
-                    .setDescription(saved.getDescription() == null ? "" : saved.getDescription())
-                    .setCompanyId(saved.getCompany().getId())
-                    .setPostedById(saved.getPostedBy().getId())
-                    .setDatePosted(saved.getDatePosted().toString())
-                    .setSalary(salary != null ? salary.toPlainString() : "")
-                    .setCity(savedLocation.getCity())
-                    .setPostcode(savedLocation.getPostcode() == null ? "" : savedLocation.getPostcode())
-                    .setAddress(savedLocation.getAddress() == null ? "" : savedLocation.getAddress())
-                    .build();
+            JobListingResponse response = mapToResponse(saved);
 
             responseObserver.onNext(response);
             responseObserver.onCompleted();
@@ -184,26 +177,7 @@ public class JobListingService extends JobListingServiceGrpc.JobListingServiceIm
 
             for (JobListing job : listings) {
 
-                JobListingResponse jobResponse = JobListingResponse.newBuilder()
-                        .setId(job.getId())
-                        .setTitle(safe(job.getTitle()))
-                        .setDescription(safe(job.getDescription()))
-                        .setDatePosted(job.getDatePosted().toString())
-                        .setSalary(job.getSalary() != null ? job.getSalary().toPlainString() : "")
-                        .setCompanyId(job.getCompany().getId())
-                        .setCity(job.getLocation().getCity())
-                        .setPostcode(
-                                job.getLocation().getPostcode() == null
-                                        ? ""
-                                        : job.getLocation().getPostcode()
-                        )
-                        .setAddress(
-                                job.getLocation().getAddress() == null
-                                        ? ""
-                                        : job.getLocation().getAddress()
-                        )
-                        .setPostedById(job.getPostedBy() != null ? job.getPostedBy().getId() : 0L)
-                        .build();
+                JobListingResponse jobResponse = mapToResponse(job);
 
                 builder.addJobListings(jobResponse);
             }
@@ -231,26 +205,7 @@ public class JobListingService extends JobListingServiceGrpc.JobListingServiceIm
 
             for (JobListing job : listings) {
 
-                JobListingResponse jobResponse = JobListingResponse.newBuilder()
-                        .setId(job.getId())
-                        .setTitle(safe(job.getTitle()))
-                        .setDescription(safe(job.getDescription()))
-                        .setDatePosted(job.getDatePosted().toString())
-                        .setSalary(job.getSalary() != null ? job.getSalary().toPlainString() : "")
-                        .setCompanyId(job.getCompany().getId())
-                        .setCity(job.getLocation().getCity())
-                        .setPostcode(
-                                job.getLocation().getPostcode() == null
-                                        ? ""
-                                        : job.getLocation().getPostcode()
-                        )
-                        .setAddress(
-                                job.getLocation().getAddress() == null
-                                        ? ""
-                                        : job.getLocation().getAddress()
-                        )
-                        .setPostedById(job.getPostedBy() != null ? job.getPostedBy().getId() : 0L)
-                        .build();
+                JobListingResponse jobResponse = mapToResponse(job);
 
                 builder.addJobListings(jobResponse);
             }
@@ -356,27 +311,11 @@ public class JobListingService extends JobListingServiceGrpc.JobListingServiceIm
                     JobListingsResponse.newBuilder();
 
             for (JobListing job : listings) {
+                if (job.isClosed()) {
+                    continue;
+                }
 
-                JobListingResponse jobResponse = JobListingResponse.newBuilder()
-                        .setId(job.getId())
-                        .setTitle(safe(job.getTitle()))
-                        .setDescription(safe(job.getDescription()))
-                        .setDatePosted(job.getDatePosted().toString())
-                        .setSalary(job.getSalary() != null ? job.getSalary().toPlainString() : "")
-                        .setCompanyId(job.getCompany().getId())
-                        .setCity(job.getLocation().getCity())
-                        .setPostcode(
-                                job.getLocation().getPostcode() == null
-                                        ? ""
-                                        : job.getLocation().getPostcode()
-                        )
-                        .setAddress(
-                                job.getLocation().getAddress() == null
-                                        ? ""
-                                        : job.getLocation().getAddress()
-                        )
-                        .setPostedById(job.getPostedBy() != null ? job.getPostedBy().getId() : 0L)
-                        .build();
+                JobListingResponse jobResponse = mapToResponse(job);
 
                 builder.addListings(jobResponse);
             }
@@ -390,5 +329,115 @@ public class JobListingService extends JobListingServiceGrpc.JobListingServiceIm
 
     private String safe(String val) {
         return val == null ? "" : val;
+    }
+
+    private JobListingResponse mapToResponse(JobListing job) {
+        return JobListingResponse.newBuilder()
+                .setId(job.getId())
+                .setTitle(safe(job.getTitle()))
+                .setDescription(safe(job.getDescription()))
+                .setDatePosted(job.getDatePosted().toString())
+                .setSalary(job.getSalary() != null ? job.getSalary().toPlainString() : "")
+                .setCompanyId(job.getCompany().getId())
+                .setCity(job.getLocation().getCity())
+                .setPostcode(job.getLocation().getPostcode() == null ? "" : job.getLocation().getPostcode())
+                .setAddress(job.getLocation().getAddress() == null ? "" : job.getLocation().getAddress())
+                .setPostedById(job.getPostedBy() != null ? job.getPostedBy().getId() : 0L)
+                .setIsClosed(job.isClosed())
+                .build();
+    }
+
+    @Override
+    @Transactional
+    public void updateJobListing(UpdateJobListingRequest request,
+                                 StreamObserver<JobListingResponse> responseObserver) {
+        try {
+            JobListing jobListing = jobListingRepository.findById(request.getId())
+                    .orElseThrow(() -> new RuntimeException("Job listing not found"));
+
+            jobListing.setTitle(request.getTitle());
+            jobListing.setDescription(request.getDescription());
+
+            if (request.getSalary() != null && !request.getSalary().isBlank()) {
+                jobListing.setSalary(new BigDecimal(request.getSalary()));
+            } else {
+                jobListing.setSalary(null);
+            }
+
+            Location location = jobListing.getLocation();
+            if (location == null) {
+                location = new Location(request.getCity(), request.getPostcode(), request.getAddress());
+            } else {
+                location.setCity(request.getCity());
+                location.setPostcode(request.getPostcode());
+                location.setAddress(request.getAddress());
+            }
+
+            Location savedLocation = locationRepository.save(location);
+            jobListing.setLocation(savedLocation);
+
+            if (request.getCompanyId() != 0 && (jobListing.getCompany() == null || !jobListing.getCompany().getId().equals(request.getCompanyId()))) {
+                Company company = companyRepository.findById(request.getCompanyId())
+                        .orElseThrow(() -> new RuntimeException("Company not found"));
+                jobListing.setCompany(company);
+            }
+            jobListing.setClosed(request.getIsClosed());
+
+            JobListing saved = jobListingRepository.save(jobListing);
+
+            responseObserver.onNext(mapToResponse(saved));
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            responseObserver.onError(
+                    Status.UNKNOWN
+                            .withDescription(e.getMessage())
+                            .withCause(e)
+                            .asRuntimeException()
+            );
+        }
+    }
+
+    @Override
+    @Transactional
+    public void closeJobListing(CloseJobListingRequest request,
+                                StreamObserver<JobListingResponse> responseObserver) {
+        try {
+            JobListing jobListing = jobListingRepository.findById(request.getId())
+                    .orElseThrow(() -> new RuntimeException("Job listing not found"));
+
+            jobListing.setClosed(true);
+
+            JobListing saved = jobListingRepository.save(jobListing);
+
+            responseObserver.onNext(mapToResponse(saved));
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            responseObserver.onError(
+                    Status.UNKNOWN
+                            .withDescription(e.getMessage())
+                            .withCause(e)
+                            .asRuntimeException()
+            );
+        }
+    }
+
+    @Override
+    @Transactional
+    public void getJobListingById(GetJobListingByIdRequest request,
+                                  StreamObserver<JobListingResponse> responseObserver) {
+        try {
+            JobListing jobListing = jobListingRepository.findById(request.getId())
+                    .orElseThrow(() -> new RuntimeException("Job listing not found"));
+
+            responseObserver.onNext(mapToResponse(jobListing));
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            responseObserver.onError(
+                    Status.UNKNOWN
+                            .withDescription(e.getMessage())
+                            .withCause(e)
+                            .asRuntimeException()
+            );
+        }
     }
 }

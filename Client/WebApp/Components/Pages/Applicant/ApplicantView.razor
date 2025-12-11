@@ -1,4 +1,4 @@
-﻿@page "/applicant/dashboard"
+@page "/applicant/dashboard"
 
 @using WebApp.DTOs.Job
 @using WebApp.DTOs.Application
@@ -17,16 +17,15 @@
                 <div class="dash-header">
                     <div class="dash-title">
                         <h2>Discover jobs</h2>
-                        <p>Use ← to skip, → to apply. Simple as Tinder.</p>
+                        <p>Use left arrow to skip, right arrow to apply. Simple as Tinder.</p>
                     </div>
-                    <div class="dash-header">
-                        <div class="dash-title">
-                            <h2>Discover jobs</h2>
-                            <p>Use ← to skip, → to apply. Simple as Tinder.</p>
-                        </div>
-    
+
+                    <div class="d-flex gap-2">
                         <a href="/applicant/applications" class="btn btn-outline-primary">
                             View My Applications
+                        </a>
+                        <a href="/applicant/edit" class="btn btn-secondary">
+                            Edit Profile
                         </a>
                     </div>
                 </div>
@@ -84,11 +83,11 @@
 
                         <div class="job-actions">
                             <button class="job-btn job-btn-decline" @onclick="Decline">
-                                ❌ Skip<br /><span>Left arrow</span>
+                                ? Skip<br /><span>Left arrow</span>
                             </button>
 
                             <button class="job-btn job-btn-accept" @onclick="AcceptAsync">
-                                ✅ Apply<br /><span>Right arrow</span>
+                                ? Apply<br /><span>Right arrow</span>
                             </button>
                         </div>
 
@@ -153,7 +152,6 @@
         var state = await AuthStateProvider.GetAuthenticationStateAsync();
         var user = state.User;
 
-        // Dostosuj do swoich claimów (np. "sub", "nameidentifier", "applicant_id")
         var idValue = user.FindFirst("applicant_id")?.Value
                      ?? user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -191,7 +189,6 @@
         {
             errorMessage = null;
 
-            // 1. Utwórz Application (status startowy = under_review)
             var createDto = new CreateApplicationDto
             {
                 JobId = CurrentJob.Id,
@@ -200,10 +197,8 @@
 
             var created = await ApplicationService.CreateAsync(createDto);
 
-            // 2. Zmień status na „declined”
             await ApplicationService.RejectAsync(created.Id);
 
-            // 3. Przejdź do kolejnej oferty
             MoveNext();
         }
         catch (Exception ex)
@@ -212,13 +207,12 @@
         }
     }
 
-
     private void MoveNext()
     {
         currentIndex++;
         if (currentIndex >= jobListings.Count)
         {
-            currentIndex = jobListings.Count; // CurrentJob => null
+            currentIndex = jobListings.Count;
         }
     }
     

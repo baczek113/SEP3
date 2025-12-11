@@ -18,5 +18,6 @@
         
         public string Address { get; set; } = null!;
         public long? PostedById { get; set; }
+        public bool IsClosed { get; set; }
     }
 }
