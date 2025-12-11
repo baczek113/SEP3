@@ -15,11 +15,12 @@ public class RepresentativeService
 
     public async Task<RepresentativeDto> CreateRepresentativeAsync(CreateRepresentativeDto dto)
     {
+        Console.WriteLine("LOGIC: Mapping RepresentativeDto to gRPC request for DatabaseServer");
         using var channel = GrpcChannel.ForAddress(_grpcAddress);
         var client = new HireFire.Grpc.RepresentativeService.RepresentativeServiceClient(channel);
 
         var passwordHash = AuthenticationService.HashPassword(dto.Password);
-
+        
         var request = new CreateRepRequest
         {
             Name = dto.Name,
@@ -27,9 +28,9 @@ public class RepresentativeService
             PasswordHash = passwordHash,
             Position = dto.Position
         };
-
+        Console.WriteLine("LOGIC: Sending CreateRepresentative gRPC request to DatabaseServer");
         var reply = await client.CreateRepresentativeAsync(request);
-
+        Console.WriteLine("LOGIC: Received CreateRepresentative gRPC response from DatabaseServer");
         return new RepresentativeDto()
         {
             Id = reply.Id,
@@ -37,6 +38,7 @@ public class RepresentativeService
             Email = reply.Email,
             Position = reply.Position
         };
+        
     }
 
     public async Task<RepresentativeDto> UpdateRepresentativeAsync(UpdateRepresentativeDto dto)

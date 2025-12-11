@@ -42,6 +42,7 @@ public class RepresenativeService extends RepresentativeServiceGrpc.Representati
     @Override
     @Transactional
     public void createRepresentative(CreateRepRequest request, StreamObserver<RepresentativeResponse> responseObserver) {
+        System.out.println("DB-SERVER: Received CreateRepresentative request from LogicServer");
         if (userRepository.existsByEmail(request.getEmail())) {
             log.warn("Blocked duplicate registration attempt for email: {} | REPRESENTATIVE", request.getEmail());
             responseObserver.onError(
@@ -51,6 +52,8 @@ public class RepresenativeService extends RepresentativeServiceGrpc.Representati
             );
             return;
         }
+        System.out.println("DB-SERVER: Mapping request to CompanyRepresentative entity");
+
         try {
             User user = new User(request.getEmail(), request.getPasswordHash(), UserRole.company_representative, request.getName());
             CompanyRepresentative rep = new CompanyRepresentative(user, request.getPosition());
@@ -63,7 +66,10 @@ public class RepresenativeService extends RepresentativeServiceGrpc.Representati
                     .build();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
-        } catch (Exception e) {
+            System.out.println("DB-SERVER: CompanyRepresentative created, sending response back to LogicServer");
+
+        }
+        catch (Exception e) {
             log.error("Error creating representative", e);
             responseObserver.onError(Status.INTERNAL
                     .withDescription("Error creating representative: " + e.getMessage())

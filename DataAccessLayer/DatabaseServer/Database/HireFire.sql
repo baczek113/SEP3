@@ -124,7 +124,7 @@ CREATE TABLE chat_thread (
 CREATE TABLE message (
                          id         BIGSERIAL PRIMARY KEY,
                          chat_id    BIGINT NOT NULL REFERENCES chat_thread(chat_id) ON DELETE CASCADE,
-                         sender_id  BIGINT NOT NULL REFERENCES users(id) ON DELETE SET CASCADE,
+                         sender_id  BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
                          body       TEXT NOT NULL,
                          sent_at    TIMESTAMPTZ NOT NULL DEFAULT now()
 );

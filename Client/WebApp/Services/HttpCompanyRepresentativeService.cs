@@ -15,14 +15,16 @@ public class HttpCompanyRepresentativeService : ICompanyRepresentativeService
 
     public async Task<CompanyRepresentativeDto> AddCompanyRepresentativeAsync(AddCompanyRepresentativeDto request)
     {
+        Console.WriteLine("CLIENT: Sending CreateCompanyRepresentative request to LogicServer");
         HttpResponseMessage httpResponse = await client.PostAsJsonAsync("api/representative", request);
         string response = await httpResponse.Content.ReadAsStringAsync();
-
+        Console.WriteLine("CLIENT: Received response from LogicServer for CreateCompanyRepresentative");
         if (!httpResponse.IsSuccessStatusCode)
             throw new Exception(response);
 
         return JsonSerializer.Deserialize<CompanyRepresentativeDto>(
             response, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
+        
     }
 
     public async Task<CompanyRepresentativeDto> UpdateCompanyRepresentativeAsync(UpdateCompanyRepresentativeDto request)

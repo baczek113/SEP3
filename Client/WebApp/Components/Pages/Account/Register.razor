@@ -193,7 +193,10 @@
     {
         try
         {
+            Console.WriteLine("CLIENT: Create Company Representative button clicked");
             await HttpCompanyRepresentativeService.AddCompanyRepresentativeAsync(representativeProfile);
+            Console.WriteLine("CLIENT: Create Company Representative request finished");
+
             ShowNotification("Company representative account created successfully!", "success");
             
             ShowNotification(message: "Company representative account created successfully!", type: "success");
