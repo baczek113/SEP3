@@ -181,3 +181,76 @@
     opacity: 0.4;
     cursor: default;
 }
+.admin-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* --- MODAL BACKDROP --- */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 5000; /* ważne – nad wszystkim! */
+}
+
+/* --- MODAL BOX --- */
+.modal-dialog {
+    background: white;
+    padding: 24px 28px;
+    border-radius: 12px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+    pointer-events: auto;
+    z-index: 6000; /* nad backdropem */
+}
+
+/* --- BUTTONS --- */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.danger-btn {
+    background: #e53935;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.danger-btn:hover {
+    background: #c62828;
+}
+
+.secondary-btn {
+    background: white;
+    border: 1px solid black;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.secondary-btn:hover {
+    background: #f0f0f0;
+}
+
+/* Upewniamy się, że wszystkie przyciski w modalach mają pointer cursor */
+.modal-dialog button {
+    cursor: pointer;
+}
+
+

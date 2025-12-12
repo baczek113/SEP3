@@ -10,7 +10,6 @@
 @inject HttpCompanyService CompanyService
 @inject NavigationManager Nav
 
-}
 <AuthorizeView Roles="company_representative">
     <Authorized Context="_">
         <div class="dash-shell">
@@ -21,9 +20,14 @@
                         <p>Here are the companies you have registered on HireFire.</p>
                     </div>
 
-                    <a href="/register-company" class="primary-btn dash-register-btn">
-                        Register Company
-                    </a>
+                    <div class="dash-actions">
+                        <a href="/register-company" class="primary-btn dash-register-btn">
+                            Register Company
+                        </a>
+                        <a href="/company-representative/account" class="secondary-btn dash-manage-btn">
+                            Manage account
+                        </a>
+                    </div>
                 </div>
 
                 <div class="dash-content">
@@ -52,7 +56,6 @@
                                      @onclick="@(() => NavigateToCompany(company.Id))"
                                      style="cursor: pointer;">
 
-
                                     <div class="company-card-header">
                                         <h3>@company.Name</h3>
                                         @if (!string.IsNullOrWhiteSpace(company.City))
@@ -78,20 +81,63 @@
                                             @(company.IsApproved ? "Approved" : "Pending approval")
                                         </span>
                                     </div>
+
+                                    <div class="company-actions">
+                                        <button class="danger-btn company-remove-btn"
+                                                @onclick:stopPropagation="true"
+                                                @onclick="@(() => OpenDeleteModal(company.Id, company.Name))">
+                                            Remove company
+                                        </button>
+                                    </div>
                                 </div>
                             }
                         </div>
-
                     }
                 </div>
             </div>
         </div>
+
+        @if (showDeleteModal)
+        {
+            <div class="modal-backdrop">
+                <div class="modal-dialog">
+                    <h3>Remove company "@companyNameToDelete"?</h3>
+                    <p>
+                        Are you sure you want to remove this company?
+                        This action cannot be undone.
+                    </p>
+                    <p class="modal-warning">
+                        All recruiters and job listings related to this company
+                        will also be permanently deleted.
+                    </p>
+
+                    @if (!string.IsNullOrEmpty(deleteErrorMessage))
+                    {
+                        <p class="modal-error">@deleteErrorMessage</p>
+                    }
+
+                    <div class="modal-actions">
+                        <button class="danger-btn"
+                                @onclick="ConfirmDeleteAsync"
+                                disabled="@isDeleting">
+                            @(isDeleting ? "Removing..." : "Yes, remove company")
+                        </button>
+                        <button class="secondary-btn"
+                                @onclick="CloseDeleteModal"
+                                disabled="@isDeleting">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
     </Authorized>
     <NotAuthorized>
         <p>You must be logged in as a company representative to view this page.</p>
         <a href="/login">Go to login</a>
     </NotAuthorized>
 </AuthorizeView>
+
 @code {
     [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
 
@@ -99,6 +145,12 @@
     private long representativeId;
     private List<CompanyDto> companies = new();
     private bool isLoading = true;
+
+    private bool showDeleteModal = false;
+    private long? companyIdToDelete;
+    private string? companyNameToDelete;
+    private bool isDeleting = false;
+    private string? deleteErrorMessage;
 
     protected override async Task OnInitializedAsync()
     {
@@ -117,10 +169,56 @@
 
         isLoading = false;
     }
+
     private void NavigateToCompany(long id)
     {
         Nav.NavigateTo($"/company/{id}");
     }
 
-    
+    private void OpenDeleteModal(long companyId, string companyName)
+    {
+        companyIdToDelete = companyId;
+        companyNameToDelete = companyName;
+        deleteErrorMessage = null;
+        showDeleteModal = true;
+    }
+
+    private void CloseDeleteModal()
+    {
+        showDeleteModal = false;
+        companyIdToDelete = null;
+        companyNameToDelete = null;
+        deleteErrorMessage = null;
+    }
+
+    private async Task ConfirmDeleteAsync()
+    {
+        if (companyIdToDelete is null)
+            return;
+
+        isDeleting = true;
+        deleteErrorMessage = null;
+
+        try
+        {
+            await CompanyService.DeleteCompanyAsync(companyIdToDelete.Value);
+
+            var toRemove = companies.FirstOrDefault(c => c.Id == companyIdToDelete.Value);
+            if (toRemove != null)
+            {
+                companies.Remove(toRemove);
+            }
+
+            CloseDeleteModal();
+        }
+        catch (Exception ex)
+        {
+            deleteErrorMessage = $"Failed to remove company: {ex.Message}";
+        }
+        finally
+        {
+            isDeleting = false;
+            StateHasChanged();
+        }
+    }
 }

@@ -1,0 +1,145 @@
+﻿/* --- MY APPLICATIONS / JOB CARDS --- */
+
+.job-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.job-card {
+    background-color: #f9fafb;
+    border-radius: 14px;
+    padding: 14px 16px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.job-card-header {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) auto auto;
+    gap: 8px;
+    align-items: baseline;
+}
+
+.job-card-header h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin: 0;
+}
+
+.job-location {
+    font-size: 0.85rem;
+    color: #718096;
+    justify-self: flex-start;
+}
+
+.job-salary {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #2b6cb0;
+    margin: 4px 0;
+}
+
+.job-description {
+    font-size: 0.92rem;
+    color: #4a5568;
+    margin: 0;
+    /* opcjonalnie delikatne ucięcie tekstu */
+    max-height: 4.5em;
+    overflow: hidden;
+}
+
+.job-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+}
+
+.job-meta-pill {
+    font-size: 0.8rem;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background-color: #edf2f7;
+    color: #4a5568;
+}
+
+.job-meta-pill.subtle {
+    background-color: transparent;
+    color: #a0aec0;
+    padding: 0;
+}
+
+/* STATUS PILL */
+
+.app-status-pill {
+    font-size: 0.8rem;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+    justify-self: flex-end;
+}
+
+.app-status-pill.matched {
+    background-color: #c6f6d5;
+    color: #22543d;
+}
+
+.app-status-pill.declined {
+    background-color: #fed7d7;
+    color: #742a2a;
+}
+
+.app-status-pill.pending {
+    background-color: #fefcbf;
+    color: #744210;
+}
+
+/* AKCJE (przyciski na dole karty) */
+
+.application-actions {
+    margin-top: 8px;
+}
+
+.application-actions .w-100 {
+    width: 100%;
+}
+
+/* Prosty primary button w stylu dash */
+
+.primary-btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 20px;
+    border-radius: 999px;
+    border: none;
+    background-color: #3182ce;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease;
+}
+
+.primary-btn:hover {
+    background-color: #2b6cb0;
+    box-shadow: 0 6px 16px rgba(56, 189, 248, 0.5);
+}
+
+.primary-btn:active {
+    transform: scale(0.98);
+}
+
+/* Upewnij się, że secondary-btn dobrze wygląda jako link/btn w headerze */
+
+.secondary-btn.w-100 {
+    width: 100%;
+}

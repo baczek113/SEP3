@@ -51,7 +51,7 @@ CREATE TABLE company (
                          description TEXT,
                          website     VARCHAR(255),
                          is_approved BOOLEAN NOT NULL DEFAULT FALSE,
-                         cr_id       BIGINT REFERENCES company_representative(user_id) ON DELETE SET NULL,
+                         cr_id       BIGINT REFERENCES company_representative(user_id) ON DELETE CASCADE,
                          location_id BIGINT REFERENCES location(id) ON DELETE SET NULL
 );
 
@@ -130,7 +130,7 @@ CREATE TABLE chat_thread (
 CREATE TABLE message (
                          id         BIGSERIAL PRIMARY KEY,
                          chat_id    BIGINT NOT NULL REFERENCES chat_thread(chat_id) ON DELETE CASCADE,
-                         sender_id  BIGINT NOT NULL REFERENCES users(id) ON DELETE SET NULL,
+                         sender_id  BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
                          body       TEXT NOT NULL,
                          sent_at    TIMESTAMPTZ NOT NULL DEFAULT now()
 );

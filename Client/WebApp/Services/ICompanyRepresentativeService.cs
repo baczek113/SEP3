@@ -5,6 +5,9 @@ namespace WebApp.Services;
 
 public interface ICompanyRepresentativeService
 {
-    public Task<CompanyRepresentativeDto> AddCompanyRepresentativeAsync(AddCompanyRepresentativeDto request);
+    Task<CompanyRepresentativeDto> AddCompanyRepresentativeAsync(AddCompanyRepresentativeDto request);
     
+    Task<CompanyRepresentativeDto> UpdateCompanyRepresentativeAsync(UpdateCompanyRepresentativeDto request);
+    
+    Task DeleteCompanyRepresentativeAsync(long id);
 }

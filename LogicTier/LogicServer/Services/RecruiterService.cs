@@ -130,4 +130,19 @@ public class RecruiterService
             WorksInCompanyId = reply.WorksInCompanyId
         };
     }
+    public async Task<bool> RemoveRecruiterAsync(long recruiterId)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new HireFire.Grpc.RecruiterService.RecruiterServiceClient(channel);
+
+        var request = new RemoveRecruiterRequest
+        {
+            Id = recruiterId
+        };
+
+        var reply = await client.RemoveRecruiterAsync(request);
+
+        return reply.Success;
+    }
+
 }

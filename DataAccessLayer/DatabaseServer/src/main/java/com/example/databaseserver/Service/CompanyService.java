@@ -7,15 +7,7 @@ import com.example.databaseserver.Entities.Location;
 import com.example.databaseserver.Repositories.CompanyRepository;
 import com.example.databaseserver.Repositories.LocationRepository;
 import com.example.databaseserver.Repositories.RepresentativeRepository;
-import com.example.databaseserver.generated.ApproveCompanyRequest;
-import com.example.databaseserver.generated.CompanyResponse;
-import com.example.databaseserver.generated.CompanyServiceGrpc;
-import com.example.databaseserver.generated.CreateCompanyRequest;
-import com.example.databaseserver.generated.GetCompaniesForRepresentativeRequest;
-import com.example.databaseserver.generated.GetCompaniesForRepresentativeResponse;
-import com.example.databaseserver.generated.GetCompaniesToApproveRequest;
-import com.example.databaseserver.generated.GetCompaniesToApproveResponse;
-import com.example.databaseserver.generated.UpdateCompanyRequest;
+import com.example.databaseserver.generated.*;
 import io.grpc.stub.StreamObserver;
 import jakarta.transaction.Transactional;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -223,6 +215,46 @@ public class CompanyService extends CompanyServiceGrpc.CompanyServiceImplBase {
                 .setCompanyRepresentativeId(rep != null ? rep.getId() : 0L)
                 .build();
     }
+    @Override
+    @Transactional
+    public void removeCompany(RemoveCompanyRequest request,
+                              StreamObserver<RemoveCompanyResponse> responseObserver) {
+
+        try {
+            long companyId = request.getId();
+
+            boolean exists = companyRepository.existsById(companyId);
+            if (!exists) {
+                RemoveCompanyResponse response = RemoveCompanyResponse.newBuilder()
+                        .setSuccess(false)
+                        .setMessage("Company not found with id: " + companyId)
+                        .build();
+
+                responseObserver.onNext(response);
+                responseObserver.onCompleted();
+                return;
+            }
+
+            companyRepository.deleteById(companyId);
+
+            RemoveCompanyResponse response = RemoveCompanyResponse.newBuilder()
+                    .setSuccess(true)
+                    .setMessage("Company deleted successfully")
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            RemoveCompanyResponse response = RemoveCompanyResponse.newBuilder()
+                    .setSuccess(false)
+                    .setMessage("Error deleting company: " + e.getMessage())
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
+    }
+
 
     private String safe(String value) {
         return value == null ? "" : value;

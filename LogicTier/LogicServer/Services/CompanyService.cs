@@ -166,4 +166,19 @@ namespace LogicServer.Services;
             CompanyRepresentativeId = reply.CompanyRepresentativeId
         };
     }
+    public async Task<bool> RemoveCompanyAsync(long companyId)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new HireFire.Grpc.CompanyService.CompanyServiceClient(channel);
+
+        var request = new RemoveCompanyRequest
+        {
+            Id = companyId
+        };
+
+        var reply = await client.RemoveCompanyAsync(request);
+
+        return reply.Success;
+    }
+
 }
