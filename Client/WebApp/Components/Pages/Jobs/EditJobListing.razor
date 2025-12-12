@@ -5,6 +5,7 @@
 @using WebApp.DTOs.Job
 @using WebApp.Services
 @using System.Security.Claims
+@using System.Linq
 
 @inject HttpJobListingService JobListingService
 @inject AuthenticationStateProvider AuthStateProvider
@@ -82,6 +83,95 @@
                                 </button>
                             </div>
 
+                            <div class="skills-card">
+                                <div class="skills-header">
+                                    <div class="skills-title">
+                                        <button type="button" class="add-skill-icon">+</button>
+                                        <div class="skills-title-text">
+                                            <h4>Skills</h4>
+                                            <p>Set the skills that best match this job.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @if (skillsLoading)
+                                {
+                                    <p class="dash-loading mb-0">Loading skills...</p>
+                                }
+                                else
+                                {
+                                    @if (selectedSkills.Any())
+                                    {
+                                        <div class="selected-skills-section">
+                                            <span class="selected-label">Selected skills:</span>
+                                            <div class="selected-skills-chips scrollable-skills">
+                                                @foreach (var s in selectedSkills)
+                                                {
+                                                    <div class="selected-skill-item">
+                                                        <button class="skill-chip selected"
+                                                                type="button"
+                                                                @ondblclick="() => RemoveSkillFromSelection(s)">
+                                                            @s.Skill.Name
+                                                        </button>
+
+                                                        <select class="skill-level-select" @bind="s.Priority">
+                                                            @foreach (var p in priorityOptions)
+                                                            {
+                                                                <option value="@p">@GetPriorityLabel(p)</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="selected-skills-section">
+                                            <span class="selected-label">Selected skills:</span>
+                                            <p class="empty-skills-hint">No skills selected yet. Use the selectors below to add.</p>
+                                        </div>
+                                    }
+
+                                    <div class="skill-add-bar">
+                                        <select class="skill-add-select"
+                                                value="@selectedCategory"
+                                                @onchange="OnCategoryChanged">
+                                            <option value="">Select category</option>
+                                            @foreach (var cat in categories)
+                                            {
+                                                <option value="@cat">@cat</option>
+                                            }
+                                        </select>
+
+                                        <select class="skill-add-select"
+                                                @bind="selectedSkillName"
+                                                disabled="@(string.IsNullOrWhiteSpace(selectedCategory))">
+                                            <option value="">Select skill</option>
+                                            @foreach (var option in skillsForSelectedCategory)
+                                            {
+                                                <option value="@option.Name">@option.Name</option>
+                                            }
+                                        </select>
+
+                                        <select class="skill-add-select"
+                                                @bind="selectedPriority">
+                                            @foreach (var p in priorityOptions)
+                                            {
+                                                <option value="@p">@GetPriorityLabel(p)</option>
+                                            }
+                                        </select>
+
+                                        <button type="button"
+                                                class="skill-add-btn"
+                                                @onclick="AddSkillFromPicker"
+                                                disabled="@(!CanAddFromPicker)">
+                                            Add
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+
                             <button type="submit" class="submit-btn primary-btn" disabled="@isSubmitting">
                                 @(isSubmitting ? "Saving..." : "Save changes")
                             </button>
@@ -119,6 +209,58 @@
     private string notificationMessage = string.Empty;
     private string notificationType = string.Empty;
     private bool isSubmitting;
+    private bool skillsLoading = true;
+    private List<JobListingSkillDto> loadedSkills = new();
+    private List<SelectedSkill> selectedSkills = new();
+    private long recruiterCompanyId;
+
+    private record SkillOption(string Name, string Category);
+
+    private class SelectedSkill
+    {
+        public SkillOption Skill { get; set; } = default!;
+        public string Priority { get; set; } = "must";
+        public long? JobListingSkillId { get; set; }
+        public long? SkillId { get; set; }
+    }
+
+    private readonly List<SkillOption> allSkills = new()
+    {
+        new("C#",          "Backend"),
+        new("Java",        "Backend"),
+        new("Spring Boot", "Backend"),
+        new(".NET",        "Backend"),
+        new("SQL",         "Backend"),
+        new("PostgreSQL",  "Backend"),
+
+        new("JavaScript",  "Frontend"),
+        new("TypeScript",  "Frontend"),
+        new("React",       "Frontend"),
+        new("Blazor",      "Frontend"),
+        new("HTML/CSS",    "Frontend"),
+
+        new("Docker",      "DevOps"),
+        new("Kubernetes",  "DevOps"),
+        new("CI/CD",       "DevOps"),
+        new("Git",         "DevOps"),
+
+        new("Problem solving", "Soft skills"),
+        new("Teamwork",        "Soft skills"),
+        new("Communication",   "Soft skills"),
+        new("Leadership",      "Soft skills")
+    };
+
+    private ILookup<string, SkillOption> groupedSkills => allSkills.ToLookup(s => s.Category);
+    private IEnumerable<string> categories => groupedSkills.Select(g => g.Key).OrderBy(c => c);
+    private IEnumerable<SkillOption> skillsForSelectedCategory =>
+        string.IsNullOrWhiteSpace(selectedCategory)
+            ? Enumerable.Empty<SkillOption>()
+            : allSkills.Where(s => SkillNameMatches(s.Category, selectedCategory));
+
+    private readonly string[] priorityOptions = new[] { "must", "nice" };
+    private string selectedCategory = string.Empty;
+    private string? selectedSkillName;
+    private string selectedPriority = "must";
 
     protected override async Task OnInitializedAsync()
     {
@@ -155,6 +297,17 @@
             };
 
             recruiterCompanyId = dto.CompanyId;
+
+            try
+            {
+                loadedSkills = await JobListingService.GetSkillsForJobListingAsync(JobId);
+                HydrateSelectedSkillsFromLoaded();
+            }
+            catch
+            {
+                loadedSkills = new List<JobListingSkillDto>();
+                selectedSkills.Clear();
+            }
         }
         catch (Exception ex)
         {
@@ -163,10 +316,9 @@
         finally
         {
             isLoading = false;
+            skillsLoading = false;
         }
     }
-
-    private long recruiterCompanyId;
 
     private async Task HandleSubmit()
     {
@@ -177,6 +329,9 @@
 
             var updated = await JobListingService.UpdateJobListingAsync(job);
             job.IsClosed = updated.IsClosed;
+
+            await SyncSkillsAsync();
+
             ShowNotification("Job listing updated.", "success");
         }
         catch (Exception ex)
@@ -193,6 +348,118 @@
     {
         job.IsClosed = !job.IsClosed;
     }
+
+    private void RemoveSkillFromSelection(SelectedSkill skill)
+    {
+        selectedSkills.Remove(skill);
+    }
+
+    private void OnCategoryChanged(ChangeEventArgs e)
+    {
+        selectedCategory = e.Value?.ToString() ?? string.Empty;
+        selectedSkillName = string.Empty;
+    }
+
+    private bool CanAddFromPicker =>
+        !string.IsNullOrWhiteSpace(selectedCategory) &&
+        !string.IsNullOrWhiteSpace(selectedSkillName);
+
+    private void AddSkillFromPicker()
+    {
+        if (!CanAddFromPicker)
+            return;
+
+        var option = EnsureSkillOption(selectedSkillName!, selectedCategory);
+        var existing = selectedSkills.FirstOrDefault(s => SkillNameMatches(s.Skill.Name, option.Name));
+
+        if (existing is not null)
+        {
+            existing.Priority = selectedPriority;
+        }
+        else
+        {
+            selectedSkills.Add(new SelectedSkill
+            {
+                Skill = option,
+                Priority = selectedPriority
+            });
+        }
+    }
+
+    private async Task SyncSkillsAsync()
+    {
+        var toRemove = loadedSkills
+            .Where(existing => selectedSkills.All(s => !SkillNameMatches(existing.SkillName, s.Skill.Name)))
+            .ToList();
+
+        foreach (var remove in toRemove)
+        {
+            await JobListingService.RemoveJobListingSkillAsync(remove.Id);
+        }
+
+        foreach (var staged in selectedSkills)
+        {
+            var existing = loadedSkills.FirstOrDefault(s => SkillNameMatches(s.SkillName, staged.Skill.Name));
+
+            if (existing is not null && string.Equals(existing.Priority, staged.Priority, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            if (existing is not null)
+            {
+                await JobListingService.RemoveJobListingSkillAsync(existing.Id);
+            }
+
+            var dto = new AddJobListingSkillDto
+            {
+                JobListingId = JobId,
+                SkillName    = staged.Skill.Name,
+                Category     = staged.Skill.Category,
+                Priority     = staged.Priority
+            };
+
+            await JobListingService.AddSkillsForJobListing(dto);
+        }
+
+        loadedSkills = await JobListingService.GetSkillsForJobListingAsync(JobId);
+        HydrateSelectedSkillsFromLoaded();
+    }
+
+    private void HydrateSelectedSkillsFromLoaded()
+    {
+        selectedSkills = loadedSkills
+            .Select(s =>
+            {
+                var option = EnsureSkillOption(s.SkillName);
+                return new SelectedSkill
+                {
+                    Skill = option,
+                    Priority = s.Priority,
+                    JobListingSkillId = s.Id,
+                    SkillId = s.SkillId
+                };
+            })
+            .ToList();
+    }
+
+    private SkillOption EnsureSkillOption(string name, string? category = null)
+    {
+        var existing = allSkills.FirstOrDefault(s => SkillNameMatches(s.Name, name));
+        if (existing is not null) return existing;
+
+        var option = new SkillOption(name, string.IsNullOrWhiteSpace(category) ? "Other" : category);
+        allSkills.Add(option);
+        return option;
+    }
+
+    private static bool SkillNameMatches(string left, string right) =>
+        left.Equals(right, StringComparison.OrdinalIgnoreCase);
+
+    private string GetPriorityLabel(string p) => p switch
+    {
+        "must" => "Must-have",
+        "nice" => "Nice to have",
+        _      => p
+    };
 
     private void ShowNotification(string message, string type)
     {

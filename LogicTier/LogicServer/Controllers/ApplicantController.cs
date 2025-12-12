@@ -73,11 +73,25 @@ public class ApplicantController : ControllerBase
         }
     }
     
+    [HttpDelete("skills/{applicantSkillId:long}")]
+    public async Task<ActionResult<RemoveApplicantSkillResponseDto>> RemoveSkill(long applicantSkillId)
+    {
+        if (applicantSkillId <= 0) return BadRequest("Invalid skill id.");
+
+        var result = await _service.RemoveSkillAsync(applicantSkillId);
+
+        if (!result.Success)
+            return BadRequest(result);
+
+        return Ok(result);
+    }
+    
     [HttpGet("skills/by-applicant/{applicantId:long}")]
     public async Task<ActionResult<List<ApplicantSkillDto>>> GetApplicantSkills(long applicantId)
     {
         var result = await _service.GetApplicantSkillsAsync(applicantId);
-        return Ok(result);
+        var mapped = result.Select(MapToDto).ToList();
+        return Ok(mapped);
     }
     
     [HttpGet("job-listings/by-applicant/{applicantId:long}")]
@@ -118,5 +132,25 @@ public class ApplicantController : ControllerBase
             _logger.LogError(e, "Internal Server Error while updating applicant");
             return StatusCode(500, e.Message);
         }
+    }
+
+    private static ApplicantSkillDto MapToDto(HireFire.Grpc.ApplicantSkillResponse proto)
+    {
+        return new ApplicantSkillDto
+        {
+            Id = proto.Id,
+            ApplicantId = proto.ApplicantId,
+            SkillId = proto.SkillId,
+            SkillName = proto.SkillName,
+            Level = proto.Level switch
+            {
+                HireFire.Grpc.SkillLevelProto.SkillLevelBeginner => SkillLevelDto.Beginner,
+                HireFire.Grpc.SkillLevelProto.SkillLevelJunior   => SkillLevelDto.Junior,
+                HireFire.Grpc.SkillLevelProto.SkillLevelMid      => SkillLevelDto.Mid,
+                HireFire.Grpc.SkillLevelProto.SkillLevelSenior   => SkillLevelDto.Senior,
+                HireFire.Grpc.SkillLevelProto.SkillLevelExpert   => SkillLevelDto.Expert,
+                _                                                => SkillLevelDto.Beginner
+            }
+        };
     }
 }

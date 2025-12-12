@@ -121,6 +121,25 @@ public class ApplicantService
         }
     }
 
+    public async Task<RemoveApplicantSkillResponseDto> RemoveSkillAsync(long applicantSkillId)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new GrpcApplicantService.ApplicantServiceClient(channel);
+
+        var request = new RemoveApplicantSkillRequest
+        {
+            ApplicantSkillId = applicantSkillId
+        };
+
+        var reply = await client.RemoveApplicantSkillAsync(request);
+
+        return new RemoveApplicantSkillResponseDto
+        {
+            Success = reply.Success,
+            Message = reply.Message
+        };
+    }
+
     
     public async Task<List<ApplicantSkillResponse>> GetApplicantSkillsAsync(long userId)
     {

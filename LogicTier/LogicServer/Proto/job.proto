@@ -26,6 +26,7 @@ service JobListingService {
       returns (JobListingsResponse);
 
   rpc AddJobListingSkill (AddJobListingSkillRequest) returns (JobSkillResponse);
+  rpc RemoveJobListingSkill (RemoveJobListingSkillRequest) returns (RemoveJobListingSkillResponse);
 }
 
 
@@ -110,6 +111,15 @@ message AddJobListingSkillRequest {
   string skill_name    = 2;
   string category      = 3;
   string priority      = 4;
+}
+
+message RemoveJobListingSkillRequest {
+  int64 job_listing_skill_id = 1;
+}
+
+message RemoveJobListingSkillResponse {
+  bool success = 1;
+  string message = 2;
 }
 
 message UpdateJobListingRequest {

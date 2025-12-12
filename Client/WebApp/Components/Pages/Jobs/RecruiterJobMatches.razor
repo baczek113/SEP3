@@ -1,4 +1,4 @@
-﻿@page "/recruiter/job/{JobId:long}/matches"
+@page "/recruiter/job/{JobId:long}/matches"
 @using WebApp.DTOs.Application
 @using WebApp.DTOs.Applicant
 @using WebApp.Services
@@ -14,7 +14,7 @@
                 <h2>Matched Candidates</h2>
                 <p>Applicants you have accepted for Job #@JobId</p>
             </div>
-            <a href="/recruiter/dashboard" class="btn btn-outline-secondary">← Back</a>
+            <a href="/recruiter/dashboard" class="pill-back-link">Back to matches</a>
         </div>
 
         <div class="dash-content">
@@ -27,17 +27,6 @@
                 <div class="dash-empty">
                     <h4>No matches found</h4>
                     <p>Go to <a href="/recruiter/job/@JobId/applications">Review Applicants</a> to find candidates.</p>
-                    
-                    <!-- DEBUG INFO: Remove later -->
-                    <div class="mt-3 text-muted small">
-                        <p>Debug: Loaded @allApps.Count total applications.</p>
-                        <ul>
-                            @foreach(var app in allApps)
-                            {
-                                <li>App #@app.Id: Status = '@app.Status'</li>
-                            }
-                        </ul>
-                    </div>
                 </div>
             }
             else
@@ -54,10 +43,15 @@
                                 <h5 class="mb-1">@applicantName</h5>
                                 <small class="text-muted">Matched on: @app.SubmittedAt.ToShortDateString()</small>
                             </div>
-                            
-                            <a href="/chat/@JobId/@app.ApplicantId" class="btn btn-primary">
-                                💬 Chat
-                            </a>
+
+                            <div class="d-flex flex-column gap-2">
+                                <a href="/chat/@JobId/@app.ApplicantId" class="btn btn-primary">
+                                    Chat
+                                </a>
+                                <a href="/recruiter/job/@JobId/applicant/@app.ApplicantId" class="btn btn-primary">
+                                    Profile
+                                </a>
+                            </div>
                         </div>
                     }
                 </div>

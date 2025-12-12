@@ -18,6 +18,8 @@ public interface IJobListingService
 
     public Task<JobListingSkillDto> AddSkillsForJobListing(AddJobListingSkillDto request);
 
+    public Task<RemoveJobListingSkillResponseDto> RemoveJobListingSkillAsync(long jobListingSkillId);
+
     public Task<JobListingDto?> GetJobListingByIdAsync(long jobListingId);
 
     public Task<JobListingDto> UpdateJobListingAsync(UpdateJobListingDto request);

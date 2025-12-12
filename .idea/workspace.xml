@@ -6,24 +6,21 @@
   <component name="ChangeListManager">
     <list default="true" id="de597b5c-1726-45e2-b5e4-ac367ce62b51" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/WebApp/Components/Pages/Applicant/ApplicantView.razor" beforeDir="false" afterPath="$PROJECT_DIR$/Client/WebApp/Components/Pages/Applicant/ApplicantView.razor" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/WebApp/Components/Pages/Company/RecruiterView.razor" beforeDir="false" afterPath="$PROJECT_DIR$/Client/WebApp/Components/Pages/Company/RecruiterView.razor" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/WebApp/Components/Pages/Company/RecruiterView.razor.css" beforeDir="false" afterPath="$PROJECT_DIR$/Client/WebApp/Components/Pages/Company/RecruiterView.razor.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Client/WebApp/DTOs/Job/JobListingDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Client/WebApp/DTOs/Job/JobListingDto.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/WebApp/Components/Pages/Applicant/EditApplicant.razor" beforeDir="false" afterPath="$PROJECT_DIR$/Client/WebApp/Components/Pages/Applicant/EditApplicant.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/WebApp/Components/Pages/Applicant/EditApplicant.razor.css" beforeDir="false" afterPath="$PROJECT_DIR$/Client/WebApp/Components/Pages/Applicant/EditApplicant.razor.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/WebApp/Components/Pages/Jobs/EditJobListing.razor" beforeDir="false" afterPath="$PROJECT_DIR$/Client/WebApp/Components/Pages/Jobs/EditJobListing.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/WebApp/Components/Pages/Jobs/EditJobListing.razor.css" beforeDir="false" afterPath="$PROJECT_DIR$/Client/WebApp/Components/Pages/Jobs/EditJobListing.razor.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Client/WebApp/Components/Pages/Jobs/RecruiterJobMatches.razor" beforeDir="false" afterPath="$PROJECT_DIR$/Client/WebApp/Components/Pages/Jobs/RecruiterJobMatches.razor" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/WebApp/Services/HttpApplicantService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Client/WebApp/Services/HttpApplicantService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/WebApp/Services/HttpJobListingService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Client/WebApp/Services/HttpJobListingService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/WebApp/Services/IApplicantService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Client/WebApp/Services/IApplicantService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Client/WebApp/Services/IJobListingService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Client/WebApp/Services/IJobListingService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/Database/HireFire.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/Database/HireFire.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/src/main/java/com/example/databaseserver/Entities/JobListing.java" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/src/main/java/com/example/databaseserver/Entities/JobListing.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/src/main/java/com/example/databaseserver/Service/ApplicantService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/src/main/java/com/example/databaseserver/Service/ApplicantService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/src/main/java/com/example/databaseserver/Service/JobListingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/src/main/java/com/example/databaseserver/Service/JobListingService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/src/main/proto/applicant.proto" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/src/main/proto/applicant.proto" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/src/main/proto/job.proto" beforeDir="false" afterPath="$PROJECT_DIR$/DataAccessLayer/DatabaseServer/src/main/proto/job.proto" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/Controllers/ApplicantController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/Controllers/ApplicantController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/Controllers/JobController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/Controllers/JobController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/DTOs/Job/JobListingDto.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/DTOs/Job/JobListingDto.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/Proto/applicant.proto" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/Proto/applicant.proto" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/Proto/job.proto" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/Proto/job.proto" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LogicTier/LogicServer/Services/ApplicantService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/LogicTier/LogicServer/Services/ApplicantService.cs" afterDir="false" />
@@ -45,23 +42,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;EditApplicant__EditJobDetails__CloseJobListing&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/sheik/OneDrive - ViaUC/VIA University/Subjects and Education/Semester Projects/SEP3-Project and Documentation/Appendicies/F - Source Code/SEP3&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "EditApplicant__EditJobDetails__CloseJobListing",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/sheik/OneDrive - ViaUC/VIA University/Subjects and Education/Semester Projects/SEP3-Project and Documentation/Appendicies/F - Source Code/SEP3",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="DatabaseServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="DatabaseServer" />
@@ -88,7 +86,7 @@
       <updated>1764966741211</updated>
       <workItem from="1764966742472" duration="68000" />
       <workItem from="1765359583027" duration="600000" />
-      <workItem from="1765467702436" duration="644000" />
+      <workItem from="1765467702436" duration="2760000" />
     </task>
     <servers />
   </component>

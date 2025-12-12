@@ -31,6 +31,8 @@ import com.example.databaseserver.generated.UpdateJobListingRequest;
 import com.example.databaseserver.generated.CloseJobListingRequest;
 import com.example.databaseserver.generated.RemoveJobListingRequest;
 import com.example.databaseserver.generated.RemoveJobListingResponse;
+import com.example.databaseserver.generated.RemoveJobListingSkillRequest;
+import com.example.databaseserver.generated.RemoveJobListingSkillResponse;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import jakarta.transaction.Transactional;
@@ -386,6 +388,44 @@ public class JobListingService extends JobListingServiceGrpc.JobListingServiceIm
             JobListing saved = jobListingRepository.save(jobListing);
 
             responseObserver.onNext(mapToResponse(saved));
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            responseObserver.onError(
+                    Status.UNKNOWN
+                            .withDescription(e.getMessage())
+                            .withCause(e)
+                            .asRuntimeException()
+            );
+        }
+    }
+
+    @Override
+    @Transactional
+    public void removeJobListingSkill(RemoveJobListingSkillRequest request,
+                                      StreamObserver<RemoveJobListingSkillResponse> responseObserver) {
+        try {
+            long jobListingSkillId = request.getJobListingSkillId();
+
+            boolean exists = jobSkillRepository.existsById(jobListingSkillId);
+
+            if (!exists) {
+                RemoveJobListingSkillResponse response = RemoveJobListingSkillResponse.newBuilder()
+                        .setSuccess(false)
+                        .setMessage("Job listing skill not found.")
+                        .build();
+                responseObserver.onNext(response);
+                responseObserver.onCompleted();
+                return;
+            }
+
+            jobSkillRepository.deleteById(jobListingSkillId);
+
+            RemoveJobListingSkillResponse response = RemoveJobListingSkillResponse.newBuilder()
+                    .setSuccess(true)
+                    .setMessage("Job listing skill removed.")
+                    .build();
+
+            responseObserver.onNext(response);
             responseObserver.onCompleted();
         } catch (Exception e) {
             responseObserver.onError(

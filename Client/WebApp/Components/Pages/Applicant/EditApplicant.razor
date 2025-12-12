@@ -74,6 +74,96 @@
                                 </div>
                             </div>
 
+                            <div class="skills-card">
+                                <div class="skills-header">
+                                    <div class="skills-title">
+                                        <button type="button" class="add-skill-icon">+</button>
+                                        <div class="skills-title-text">
+                                            <h4>Skills</h4>
+                                            <p>Keep your skill set up to date to improve matching accuracy.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @if (skillsLoading)
+                                {
+                                    <p class="dash-loading mb-0">Loading skills...</p>
+                                }
+                                else
+                                {
+                                    @if (selectedSkills.Any())
+                                    {
+                                        <div class="selected-skills-section">
+                                            <span class="selected-label">Selected skills:</span>
+                                            <div class="selected-skills-chips scrollable-skills">
+                                                @foreach (var s in selectedSkills)
+                                                {
+                                                    <div class="selected-skill-item">
+                                                        <button class="skill-chip selected"
+                                                                type="button"
+                                                                @ondblclick="() => RemoveSkillFromSelection(s)">
+                                                            @s.Skill.Name
+                                                        </button>
+
+                                                        <select class="skill-level-select" @bind="s.Level">
+                                                            @foreach (var lvl in levelOptions)
+                                                            {
+                                                                <option value="@lvl">@GetLevelLabel(lvl)</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="selected-skills-section">
+                                            <span class="selected-label">Selected skills:</span>
+                                            <p class="empty-skills-hint">No skills selected yet. Use the tags below to add.</p>
+                                        </div>
+                                    }
+
+                                    <div class="skill-add-bar">
+                                        <select class="skill-add-select"
+                                                value="@selectedCategory"
+                                                @onchange="OnCategoryChanged">
+                                            <option value="">Select category</option>
+                                            @foreach (var cat in categories)
+                                            {
+                                                <option value="@cat">@cat</option>
+                                            }
+                                        </select>
+
+                                        <select class="skill-add-select"
+                                                @bind="selectedSkillName"
+                                                disabled="@(string.IsNullOrWhiteSpace(selectedCategory))">
+                                            <option value="">Select skill</option>
+                                            @foreach (var option in skillsForSelectedCategory)
+                                            {
+                                                <option value="@option.Name">@option.Name</option>
+                                            }
+                                        </select>
+
+                                        <select class="skill-add-select"
+                                                @bind="selectedLevel">
+                                            @foreach (var lvl in levelOptions)
+                                            {
+                                                <option value="@lvl">@GetLevelLabel(lvl)</option>
+                                            }
+                                        </select>
+
+                                        <button type="button"
+                                                class="skill-add-btn"
+                                                @onclick="AddSkillFromPicker"
+                                                disabled="@(!CanAddFromPicker)">
+                                            Add
+                                        </button>
+                                    </div>
+
+                                }
+                            </div>
+
                             <button type="submit" class="submit-btn primary-btn" disabled="@isSubmitting">
                                 @(isSubmitting ? "Saving..." : "Save changes")
                             </button>
@@ -111,6 +201,58 @@
     private string notificationMessage = string.Empty;
     private string notificationType = string.Empty;
     private bool isSubmitting;
+    private bool skillsLoading = true;
+    private List<ApplicantSkillDto> loadedSkills = new();
+    private List<SelectedSkill> selectedSkills = new();
+
+    private readonly List<SkillOption> allSkills = new()
+    {
+        new("C#",          "Backend"),
+        new("Java",        "Backend"),
+        new("Spring Boot", "Backend"),
+        new(".NET",        "Backend"),
+        new("SQL",         "Backend"),
+        new("PostgreSQL",  "Backend"),
+
+        new("JavaScript",  "Frontend"),
+        new("TypeScript",  "Frontend"),
+        new("React",       "Frontend"),
+        new("Blazor",      "Frontend"),
+        new("HTML/CSS",    "Frontend"),
+
+        new("Docker",      "DevOps"),
+        new("Kubernetes",  "DevOps"),
+        new("CI/CD",       "DevOps"),
+        new("Git",         "DevOps"),
+
+        new("Problem solving", "Soft skills"),
+        new("Teamwork",        "Soft skills"),
+        new("Communication",   "Soft skills"),
+        new("Leadership",      "Soft skills")
+    };
+
+    private ILookup<string, SkillOption> groupedSkills => allSkills.ToLookup(s => s.Category);
+    private IEnumerable<string> categories => groupedSkills.Select(g => g.Key).OrderBy(c => c);
+    private IEnumerable<SkillOption> skillsForSelectedCategory =>
+        string.IsNullOrWhiteSpace(selectedCategory)
+            ? Enumerable.Empty<SkillOption>()
+            : allSkills.Where(s => SkillNameMatches(s.Category, selectedCategory));
+
+    private record SkillOption(string Name, string Category);
+
+    private class SelectedSkill
+    {
+        public SkillOption Skill { get; set; } = default!;
+        public SkillLevelDto Level { get; set; } = SkillLevelDto.Mid;
+        public long? ApplicantSkillId { get; set; }
+        public long? SkillId { get; set; }
+    }
+
+    private readonly IReadOnlyList<SkillLevelDto> levelOptions = Enum.GetValues<SkillLevelDto>();
+
+    private string selectedCategory = string.Empty;
+    private string? selectedSkillName;
+    private SkillLevelDto selectedLevel = SkillLevelDto.Mid;
 
     protected override async Task OnInitializedAsync()
     {
@@ -140,6 +282,17 @@
                 Postcode = dto.Postcode,
                 Address = dto.Address
             };
+
+            try
+            {
+                loadedSkills = await ApplicantService.GetApplicantSkillsAsync(applicant.Id);
+                HydrateSelectedSkillsFromLoaded();
+            }
+            catch
+            {
+                loadedSkills = new List<ApplicantSkillDto>();
+                selectedSkills.Clear();
+            }
         }
         catch (Exception ex)
         {
@@ -148,6 +301,7 @@
         finally
         {
             isLoading = false;
+            skillsLoading = false;
         }
     }
 
@@ -158,7 +312,9 @@
             isSubmitting = true;
             var updated = await ApplicantService.UpdateApplicantAsync(applicant);
 
-            ShowNotification("Profile updated successfully.", "success");
+            await SyncSkillsAsync();
+
+            ShowNotification("Profile and skills updated successfully.", "success");
             applicant = new UpdateApplicantDto
             {
                 Id = updated.Id,
@@ -179,6 +335,147 @@
             isSubmitting = false;
         }
     }
+
+    private void ToggleSkill(SkillOption skill)
+    {
+        var existing = selectedSkills.FirstOrDefault(s => SkillNameMatches(s.Skill.Name, skill.Name));
+
+        if (existing is not null)
+        {
+            selectedSkills.Remove(existing);
+        }
+        else
+        {
+            selectedSkills.Add(new SelectedSkill
+            {
+                Skill = skill,
+                Level = SkillLevelDto.Mid
+            });
+        }
+    }
+
+    private void RemoveSkillFromSelection(SelectedSkill skill)
+    {
+        selectedSkills.Remove(skill);
+    }
+
+    private void ClearSkills()
+    {
+        selectedSkills.Clear();
+    }
+
+    private void OnCategoryChanged(ChangeEventArgs e)
+    {
+        selectedCategory = e.Value?.ToString() ?? string.Empty;
+        selectedSkillName = string.Empty;
+    }
+
+    private bool CanAddFromPicker =>
+        !string.IsNullOrWhiteSpace(selectedCategory) &&
+        !string.IsNullOrWhiteSpace(selectedSkillName);
+
+    private void AddSkillFromPicker()
+    {
+        if (!CanAddFromPicker)
+            return;
+
+        var option = EnsureSkillOption(selectedSkillName!, selectedCategory);
+        var existing = selectedSkills.FirstOrDefault(s => SkillNameMatches(s.Skill.Name, option.Name));
+
+        if (existing is not null)
+        {
+            existing.Level = selectedLevel;
+        }
+        else
+        {
+            selectedSkills.Add(new SelectedSkill
+            {
+                Skill = option,
+                Level = selectedLevel
+            });
+        }
+    }
+
+    private async Task SyncSkillsAsync()
+    {
+        if (applicant.Id == 0)
+            return;
+
+        var toRemove = loadedSkills
+            .Where(existing => selectedSkills.All(s => !SkillNameMatches(existing.SkillName, s.Skill.Name)))
+            .ToList();
+
+        foreach (var remove in toRemove)
+        {
+            await ApplicantService.RemoveApplicantSkillAsync(remove.Id);
+        }
+
+        foreach (var staged in selectedSkills)
+        {
+            var existing = loadedSkills.FirstOrDefault(s => SkillNameMatches(s.SkillName, staged.Skill.Name));
+
+            if (existing is not null && existing.Level == staged.Level)
+                continue;
+
+            if (existing is not null)
+            {
+                await ApplicantService.RemoveApplicantSkillAsync(existing.Id);
+            }
+
+            var dto = new AddApplicantSkillDto
+            {
+                ApplicantId = applicant.Id,
+                SkillName = staged.Skill.Name,
+                Category = staged.Skill.Category,
+                Level = staged.Level
+            };
+
+            await ApplicantService.AddApplicantSkillAsync(dto);
+        }
+
+        loadedSkills = await ApplicantService.GetApplicantSkillsAsync(applicant.Id);
+        HydrateSelectedSkillsFromLoaded();
+    }
+
+    private void HydrateSelectedSkillsFromLoaded()
+    {
+        selectedSkills = loadedSkills
+            .Select(s =>
+            {
+                var option = EnsureSkillOption(s.SkillName);
+                return new SelectedSkill
+                {
+                    Skill = option,
+                    Level = s.Level,
+                    ApplicantSkillId = s.Id,
+                    SkillId = s.SkillId
+                };
+            })
+            .ToList();
+    }
+
+    private SkillOption EnsureSkillOption(string name, string? category = null)
+    {
+        var existing = allSkills.FirstOrDefault(s => SkillNameMatches(s.Name, name));
+        if (existing is not null) return existing;
+
+        var option = new SkillOption(name, string.IsNullOrWhiteSpace(category) ? "Other" : category);
+        allSkills.Add(option);
+        return option;
+    }
+
+    private string GetLevelLabel(SkillLevelDto level) => level switch
+    {
+        SkillLevelDto.Beginner => "Beginner",
+        SkillLevelDto.Junior   => "Junior",
+        SkillLevelDto.Mid      => "Mid",
+        SkillLevelDto.Senior   => "Senior",
+        SkillLevelDto.Expert   => "Expert",
+        _                      => level.ToString()
+    };
+
+    private static bool SkillNameMatches(string left, string right) =>
+        left.Equals(right, StringComparison.OrdinalIgnoreCase);
 
     private void ShowNotification(string message, string type)
     {

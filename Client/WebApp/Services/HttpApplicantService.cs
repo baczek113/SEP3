@@ -53,6 +53,20 @@ public class HttpApplicantService: IApplicantService
         )!;
     }
 
+    public async Task<RemoveApplicantSkillResponseDto> RemoveApplicantSkillAsync(long applicantSkillId)
+    {
+        var httpResponse = await client.DeleteAsync($"api/applicant/skills/{applicantSkillId}");
+        var response = await httpResponse.Content.ReadAsStringAsync();
+
+        if (!httpResponse.IsSuccessStatusCode)
+            throw new Exception(response);
+
+        return JsonSerializer.Deserialize<RemoveApplicantSkillResponseDto>(
+            response,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+        )!;
+    }
+
 
     public async Task<List<JobListingDto>> GetSuggestJobListingAsync(long applicantId)
     {

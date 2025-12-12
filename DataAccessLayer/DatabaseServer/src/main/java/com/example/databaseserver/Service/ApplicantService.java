@@ -259,6 +259,41 @@ public class ApplicantService extends ApplicantServiceGrpc.ApplicantServiceImplB
 
     @Override
     @Transactional
+    public void removeApplicantSkill(RemoveApplicantSkillRequest request,
+                                     StreamObserver<RemoveApplicantSkillResponse> responseObserver) {
+        try {
+            long skillId = request.getApplicantSkillId();
+            boolean exists = applicantSkillRepository.existsById(skillId);
+
+            if (!exists) {
+                RemoveApplicantSkillResponse response = RemoveApplicantSkillResponse.newBuilder()
+                        .setSuccess(false)
+                        .setMessage("Applicant skill not found.")
+                        .build();
+                responseObserver.onNext(response);
+                responseObserver.onCompleted();
+                return;
+            }
+
+            applicantSkillRepository.deleteById(skillId);
+
+            RemoveApplicantSkillResponse response = RemoveApplicantSkillResponse.newBuilder()
+                    .setSuccess(true)
+                    .setMessage("Skill removed.")
+                    .build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            responseObserver.onError(
+                    io.grpc.Status.INTERNAL
+                            .withDescription(e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName())
+                            .withCause(e)
+                            .asRuntimeException());
+        }
+    }
+
+    @Override
+    @Transactional
     public void getApplicantById(GetApplicantRequest request,
                                    StreamObserver<ApplicantResponse> responseObserver) {
         try {

@@ -83,6 +83,19 @@ public class JobListingController : ControllerBase
         return Ok(result);
     }
 
+    [HttpDelete("skills/{jobListingSkillId:long}")]
+    public async Task<ActionResult<RemoveJobListingSkillResponseDto>> RemoveSkillFromJob(long jobListingSkillId)
+    {
+        if (jobListingSkillId <= 0) return BadRequest("Invalid skill id.");
+
+        var result = await _jobListingService.RemoveJobListingSkillAsync(jobListingSkillId);
+
+        if (!result.Success)
+            return BadRequest(result);
+
+        return Ok(result);
+    }
+
     [HttpGet("{jobId:long}")]
     public async Task<ActionResult<JobListingDto>> GetJobListingById(long jobId)
     {

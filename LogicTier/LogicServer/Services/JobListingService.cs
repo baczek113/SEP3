@@ -260,4 +260,23 @@ public class JobListingService
         };
     }
 
+    public async Task<RemoveJobListingSkillResponseDto> RemoveJobListingSkillAsync(long jobListingSkillId)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
+
+        var request = new RemoveJobListingSkillRequest
+        {
+            JobListingSkillId = jobListingSkillId
+        };
+
+        var reply = await client.RemoveJobListingSkillAsync(request);
+
+        return new RemoveJobListingSkillResponseDto
+        {
+            Success = reply.Success,
+            Message = reply.Message
+        };
+    }
+
 }
