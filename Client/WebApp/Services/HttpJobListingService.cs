@@ -28,7 +28,7 @@ public class HttpJobListingService : IJobListingService
     
     public async Task<RemoveJobListingResponseDto> DeleteJobListingAsync(long jobListingId)
     {
-        var response = await client.DeleteAsync($"api/Job/{jobListingId}");
+        var response = await client.DeleteAsync($"api/joblisting/{jobListingId}");
 
         if (!response.IsSuccessStatusCode)
         {
@@ -134,6 +134,62 @@ public class HttpJobListingService : IJobListingService
             throw new Exception(response);
 
         return JsonSerializer.Deserialize<JobListingDto>(
+            response,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+        )!;
+    }
+
+    public async Task<JobListingDto?> GetJobListingByIdAsync(long jobListingId)
+    {
+        var httpResponse = await client.GetAsync($"api/joblisting/{jobListingId}");
+        var response = await httpResponse.Content.ReadAsStringAsync();
+
+        if (!httpResponse.IsSuccessStatusCode)
+            throw new Exception(response);
+
+        return JsonSerializer.Deserialize<JobListingDto>(
+            response,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+        );
+    }
+
+    public async Task<JobListingDto> UpdateJobListingAsync(UpdateJobListingDto request)
+    {
+        var httpResponse = await client.PutAsJsonAsync($"api/joblisting/{request.Id}", request);
+        var response = await httpResponse.Content.ReadAsStringAsync();
+
+        if (!httpResponse.IsSuccessStatusCode)
+            throw new Exception(response);
+
+        return JsonSerializer.Deserialize<JobListingDto>(
+            response,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+        )!;
+    }
+
+    public async Task<JobListingDto> CloseJobListingAsync(long jobListingId)
+    {
+        var httpResponse = await client.PostAsync($"api/joblisting/{jobListingId}/close", new StringContent(string.Empty));
+        var response = await httpResponse.Content.ReadAsStringAsync();
+
+        if (!httpResponse.IsSuccessStatusCode)
+            throw new Exception(response);
+
+        return JsonSerializer.Deserialize<JobListingDto>(
+            response,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+        )!;
+    }
+
+    public async Task<RemoveJobListingSkillResponseDto> RemoveJobListingSkillAsync(long jobListingSkillId)
+    {
+        var httpResponse = await client.DeleteAsync($"api/joblisting/skills/{jobListingSkillId}");
+        var response = await httpResponse.Content.ReadAsStringAsync();
+
+        if (!httpResponse.IsSuccessStatusCode)
+            throw new Exception(response);
+
+        return JsonSerializer.Deserialize<RemoveJobListingSkillResponseDto>(
             response,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
         )!;

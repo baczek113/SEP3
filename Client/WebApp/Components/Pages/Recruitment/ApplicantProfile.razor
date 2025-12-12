@@ -1,0 +1,137 @@
+@page "/recruiter/job/{JobId:long}/applicant/{ApplicantId:long}"
+@layout MainLayout
+@rendermode InteractiveServer
+
+@using WebApp.DTOs.Applicant
+@using WebApp.DTOs.Application
+@using WebApp.Services
+
+@inject HttpApplicantService ApplicantService
+@inject HttpApplicationService ApplicationService
+
+<AuthorizeView Roles="recruiter">
+    <Authorized>
+        <div class="dash-shell">
+            <div class="dash-card">
+                <div class="dash-header">
+                    <div class="dash-title">
+                        <h2>Applicant Profile</h2>
+                        <p>Read-only profile for candidate matched to Job #@JobId.</p>
+                    </div>
+                    <a href="/recruiter/job/@JobId/matches" class="pill-back-link">Back to matches</a>
+                </div>
+
+                <div class="dash-content">
+                    @if (isLoading)
+                    {
+                        <p class="dash-loading">Loading profile...</p>
+                    }
+                    else if (!string.IsNullOrWhiteSpace(loadError))
+                    {
+                        <div class="dash-empty">
+                            <h4>Unable to load profile</h4>
+                            <p>@loadError</p>
+                        </div>
+                    }
+                    else if (applicant is not null && application is not null)
+                    {
+                        <div class="profile-card">
+                            <div class="profile-header">
+                                <div>
+                                    <h3>@applicant.Name</h3>
+                                    <p class="text-muted mb-1">@applicant.Email</p>
+                                    <p class="text-muted mb-0">Application submitted: @application.SubmittedAt.ToLocalTime().ToString("g")</p>
+                                </div>
+                                <div class="profile-meta">
+                                    <span class="job-meta-pill">Job ID: @application.JobId</span>
+                                    <span class="job-meta-pill subtle">Status: @application.Status</span>
+                                </div>
+                            </div>
+
+                            <div class="profile-body">
+                                <div class="profile-section">
+                                    <h5>Experience</h5>
+                                    <p>@(string.IsNullOrWhiteSpace(applicant.Experience) ? "Not provided." : applicant.Experience)</p>
+                                </div>
+
+                                <div class="profile-section">
+                                    <h5>Location</h5>
+                                    <p>@applicant.City @if(!string.IsNullOrWhiteSpace(applicant.Postcode)){ <span>(@applicant.Postcode)</span> }</p>
+                                    <p class="text-muted mb-0">@applicant.Address</p>
+                                </div>
+
+                                <div class="profile-section">
+                                    <h5>Skills</h5>
+                                    @if (skills.Any())
+                                    {
+                                        <div class="skills-inline">
+                                            @foreach (var s in skills)
+                                            {
+                                                <span class="skill-chip selected">@s.SkillName (@s.Level)</span>
+                                            }
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <p class="text-muted mb-0">No skills listed.</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <div class="dash-shell">
+            <div class="dash-card">
+                <p>You must be logged in as a recruiter to view this page.</p>
+            </div>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    [Parameter] public long JobId { get; set; }
+    [Parameter] public long ApplicantId { get; set; }
+
+    private ApplicantDto? applicant;
+    private ApplicationDto? application;
+    private List<ApplicantSkillDto> skills = new();
+    private bool isLoading = true;
+    private string? loadError;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var applications = await ApplicationService.GetByJobAsync(JobId);
+            application = applications.FirstOrDefault(a => a.ApplicantId == ApplicantId);
+
+            if (application is null)
+            {
+                loadError = "Application not found for this candidate.";
+                return;
+            }
+
+            applicant = await ApplicantService.GetApplicantAsync(ApplicantId);
+            try
+            {
+                skills = await ApplicantService.GetApplicantSkillsAsync(ApplicantId);
+            }
+            catch
+            {
+                skills = new List<ApplicantSkillDto>();
+            }
+        }
+        catch (Exception ex)
+        {
+            loadError = ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}

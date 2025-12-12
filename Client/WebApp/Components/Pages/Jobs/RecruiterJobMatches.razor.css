@@ -1,0 +1,12 @@
+.pill-back-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid #d0d0d0;
+    background: #ffffff;
+    color: #0f172a;
+    font-weight: 600;
+    text-decoration: none;
+}

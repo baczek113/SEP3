@@ -32,7 +32,8 @@ public class JobListingService
             City          = dto.City,
             Postcode      = dto.Postcode,
             Address       = dto.Address,
-            PostedById  = dto.PostedById
+            PostedById  = dto.PostedById,
+            IsClosed    = false
         };
 
         var reply = await client.CreateJobListingAsync(request);
@@ -133,10 +134,62 @@ public class JobListingService
         };
     
         var reply = await client.GetJobListingsByCityAsync(request);
-    
+
         return reply.Listings
             .Select(MapToDto)
+            .Where(j => !j.IsClosed)
             .ToList();
+    }
+
+    public async Task<JobListingDto?> GetJobListingByIdAsync(long jobId)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
+
+        var request = new GetJobListingByIdRequest
+        {
+            Id = jobId
+        };
+
+        var reply = await client.GetJobListingByIdAsync(request);
+
+        return reply.Id == 0 ? null : MapToDto(reply);
+    }
+
+    public async Task<JobListingDto> UpdateJobListingAsync(UpdateJobListingDto dto)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
+
+        var request = new UpdateJobListingRequest
+        {
+            Id          = dto.Id,
+            Title       = dto.Title,
+            Description = dto.Description ?? string.Empty,
+            Salary      = dto.Salary.HasValue ? dto.Salary.Value.ToString("0.##", CultureInfo.InvariantCulture) : string.Empty,
+            City        = dto.City,
+            Postcode    = dto.Postcode ?? string.Empty,
+            Address     = dto.Address ?? string.Empty,
+            CompanyId   = dto.CompanyId,
+            IsClosed    = dto.IsClosed
+        };
+
+        var reply = await client.UpdateJobListingAsync(request);
+        return MapToDto(reply);
+    }
+
+    public async Task<JobListingDto> CloseJobListingAsync(long jobListingId)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
+
+        var request = new CloseJobListingRequest
+        {
+            Id = jobListingId
+        };
+
+        var reply = await client.CloseJobListingAsync(request);
+        return MapToDto(reply);
     }
     
     private JobListingDto MapToDto(JobListingResponse reply)
@@ -171,7 +224,8 @@ public class JobListingService
             City          = reply.City,
             Postcode      = reply.Postcode,
             Address       = reply.Address,
-            PostedById = postedById
+            PostedById = postedById,
+            IsClosed   = reply.IsClosed
         };
     }
     public async Task<JobListingSkillDto> AddJobListingSkillAsync(AddJobListingSkillDto dto)
@@ -227,5 +281,24 @@ public class JobListingService
     }
 
     
+
+    public async Task<RemoveJobListingSkillResponseDto> RemoveJobListingSkillAsync(long jobListingSkillId)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
+
+        var request = new RemoveJobListingSkillRequest
+        {
+            JobListingSkillId = jobListingSkillId
+        };
+
+        var reply = await client.RemoveJobListingSkillAsync(request);
+
+        return new RemoveJobListingSkillResponseDto
+        {
+            Success = reply.Success,
+            Message = reply.Message
+        };
+    }
 
 }

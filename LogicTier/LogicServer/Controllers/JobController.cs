@@ -94,5 +94,44 @@ public class JobListingController : ControllerBase
     }
 
 
+    [HttpDelete("skills/{jobListingSkillId:long}")]
+    public async Task<ActionResult<RemoveJobListingSkillResponseDto>> RemoveSkillFromJob(long jobListingSkillId)
+    {
+        if (jobListingSkillId <= 0) return BadRequest("Invalid skill id.");
+
+        var result = await _jobListingService.RemoveJobListingSkillAsync(jobListingSkillId);
+
+        if (!result.Success)
+            return BadRequest(result);
+
+        return Ok(result);
+    }
+
+    [HttpGet("{jobId:long}")]
+    public async Task<ActionResult<JobListingDto>> GetJobListingById(long jobId)
+    {
+        var result = await _jobListingService.GetJobListingByIdAsync(jobId);
+        if (result == null)
+            return NotFound($"Job listing with id {jobId} not found.");
+
+        return Ok(result);
+    }
+
+    [HttpPut("{jobId:long}")]
+    public async Task<ActionResult<JobListingDto>> UpdateJobListing(long jobId, [FromBody] UpdateJobListingDto dto)
+    {
+        if (dto == null || dto.Id != jobId)
+            return BadRequest("Mismatched job listing id.");
+
+        var updated = await _jobListingService.UpdateJobListingAsync(dto);
+        return Ok(updated);
+    }
+
+    [HttpPost("{jobId:long}/close")]
+    public async Task<ActionResult<JobListingDto>> CloseJobListing(long jobId)
+    {
+        var updated = await _jobListingService.CloseJobListingAsync(jobId);
+        return Ok(updated);
+    }
 
 }

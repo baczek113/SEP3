@@ -1,0 +1,476 @@
+@page "/job/edit/{JobId:long}"
+@layout MainLayout
+@rendermode InteractiveServer
+
+@using WebApp.DTOs.Job
+@using WebApp.Services
+@using System.Security.Claims
+@using System.Linq
+
+@inject HttpJobListingService JobListingService
+@inject AuthenticationStateProvider AuthStateProvider
+
+<AuthorizeView Roles="recruiter">
+    <Authorized Context="_">
+        <div class="register-shell">
+            <div class="register-card">
+                <div class="register-header">
+                    <h2>Edit Job Listing</h2>
+                    <p>Update the role details. Changes apply immediately, and closed listings stay visible to you.</p>
+                </div>
+
+                <div class="register-form-area">
+                    @if (isLoading)
+                    {
+                        <div class="dash-loading">Loading job listing...</div>
+                    }
+                    else if (!string.IsNullOrEmpty(loadError))
+                    {
+                        <div class="dash-empty">
+                            <h4>Unable to load job listing</h4>
+                            <p>@loadError</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <EditForm Model="@job" OnValidSubmit="HandleSubmit">
+                            <DataAnnotationsValidator/>
+
+                            <div class="form-grid">
+                                <div class="form-group full-width">
+                                    <label for="j-title">Job Title</label>
+                                    <InputText id="j-title" class="form-control" @bind-Value="job.Title"/>
+                                    <ValidationMessage For="@(() => job.Title)" class="validation-message"/>
+                                </div>
+
+                                <div class="form-group full-width">
+                                    <label for="j-description">Description</label>
+                                    <InputTextArea id="j-description" class="form-control" @bind-Value="job.Description"/>
+                                    <ValidationMessage For="@(() => job.Description)" class="validation-message"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="j-salary">Salary (optional)</label>
+                                    <InputNumber id="j-salary" class="form-control" @bind-Value="job.Salary"/>
+                                    <ValidationMessage For="@(() => job.Salary)" class="validation-message"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="j-city">City</label>
+                                    <InputText id="j-city" class="form-control" @bind-Value="job.City"/>
+                                    <ValidationMessage For="@(() => job.City)" class="validation-message"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="j-postcode">Postcode</label>
+                                    <InputText id="j-postcode" class="form-control" @bind-Value="job.Postcode"/>
+                                    <ValidationMessage For="@(() => job.Postcode)" class="validation-message"/>
+                                </div>
+
+                                <div class="form-group full-width">
+                                    <label for="j-address">Address</label>
+                                    <InputText id="j-address" class="form-control" @bind-Value="job.Address"/>
+                                    <ValidationMessage For="@(() => job.Address)" class="validation-message"/>
+                                </div>
+                            </div>
+
+                            <div class="job-status-row">
+                                <span class="status-pill @(job.IsClosed ? "closed" : "open")">
+                                    @(job.IsClosed ? "Closed" : "Open")
+                                </span>
+                                <button type="button" class="submit-btn secondary-btn" @onclick="ToggleClosed" disabled="@isSubmitting">
+                                    @(job.IsClosed ? "Activate job listing" : "Close job listing")
+                                </button>
+                            </div>
+
+                            <div class="skills-card">
+                                <div class="skills-header">
+                                    <div class="skills-title">
+                                        <button type="button" class="add-skill-icon">+</button>
+                                        <div class="skills-title-text">
+                                            <h4>Skills</h4>
+                                            <p>Set the skills that best match this job.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @if (skillsLoading)
+                                {
+                                    <p class="dash-loading mb-0">Loading skills...</p>
+                                }
+                                else
+                                {
+                                    @if (selectedSkills.Any())
+                                    {
+                                        <div class="selected-skills-section">
+                                            <span class="selected-label">Selected skills:</span>
+                                            <div class="selected-skills-chips scrollable-skills">
+                                                @foreach (var s in selectedSkills)
+                                                {
+                                                    <div class="selected-skill-item">
+                                                        <button class="skill-chip selected"
+                                                                type="button"
+                                                                @ondblclick="() => RemoveSkillFromSelection(s)">
+                                                            @s.Skill.Name
+                                                        </button>
+
+                                                        <select class="skill-level-select" @bind="s.Priority">
+                                                            @foreach (var p in priorityOptions)
+                                                            {
+                                                                <option value="@p">@GetPriorityLabel(p)</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="selected-skills-section">
+                                            <span class="selected-label">Selected skills:</span>
+                                            <p class="empty-skills-hint">No skills selected yet. Use the selectors below to add.</p>
+                                        </div>
+                                    }
+
+                                    <div class="skill-add-bar">
+                                        <select class="skill-add-select"
+                                                value="@selectedCategory"
+                                                @onchange="OnCategoryChanged">
+                                            <option value="">Select category</option>
+                                            @foreach (var cat in categories)
+                                            {
+                                                <option value="@cat">@cat</option>
+                                            }
+                                        </select>
+
+                                        <select class="skill-add-select"
+                                                @bind="selectedSkillName"
+                                                disabled="@(string.IsNullOrWhiteSpace(selectedCategory))">
+                                            <option value="">Select skill</option>
+                                            @foreach (var option in skillsForSelectedCategory)
+                                            {
+                                                <option value="@option.Name">@option.Name</option>
+                                            }
+                                        </select>
+
+                                        <select class="skill-add-select"
+                                                @bind="selectedPriority">
+                                            @foreach (var p in priorityOptions)
+                                            {
+                                                <option value="@p">@GetPriorityLabel(p)</option>
+                                            }
+                                        </select>
+
+                                        <button type="button"
+                                                class="skill-add-btn"
+                                                @onclick="AddSkillFromPicker"
+                                                disabled="@(!CanAddFromPicker)">
+                                            Add
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+
+                            <button type="submit" class="submit-btn primary-btn" disabled="@isSubmitting">
+                                @(isSubmitting ? "Saving..." : "Save changes")
+                            </button>
+                        </EditForm>
+                    }
+
+                    <div class="@($"notification-container {(notificationVisible ? "show" : "")}")">
+                        <div class="@($"notification {notificationType}")">
+                            @notificationMessage
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>You must be logged in as a recruiter to edit a job listing.</p>
+        <a href="/login">Go to login</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    [Parameter] public long JobId { get; set; }
+
+    private UpdateJobListingDto job = new()
+    {
+        Title = string.Empty,
+        City = string.Empty,
+        Postcode = string.Empty,
+        Address = string.Empty
+    };
+    private bool isLoading = true;
+    private string? loadError;
+    private bool notificationVisible;
+    private string notificationMessage = string.Empty;
+    private string notificationType = string.Empty;
+    private bool isSubmitting;
+    private bool skillsLoading = true;
+    private List<JobListingSkillDto> loadedSkills = new();
+    private List<SelectedSkill> selectedSkills = new();
+    private long recruiterCompanyId;
+
+    private record SkillOption(string Name, string Category);
+
+    private class SelectedSkill
+    {
+        public SkillOption Skill { get; set; } = default!;
+        public string Priority { get; set; } = "must";
+        public long? JobListingSkillId { get; set; }
+        public long? SkillId { get; set; }
+    }
+
+    private readonly List<SkillOption> allSkills = new()
+    {
+        new("C#",          "Backend"),
+        new("Java",        "Backend"),
+        new("Spring Boot", "Backend"),
+        new(".NET",        "Backend"),
+        new("SQL",         "Backend"),
+        new("PostgreSQL",  "Backend"),
+
+        new("JavaScript",  "Frontend"),
+        new("TypeScript",  "Frontend"),
+        new("React",       "Frontend"),
+        new("Blazor",      "Frontend"),
+        new("HTML/CSS",    "Frontend"),
+
+        new("Docker",      "DevOps"),
+        new("Kubernetes",  "DevOps"),
+        new("CI/CD",       "DevOps"),
+        new("Git",         "DevOps"),
+
+        new("Problem solving", "Soft skills"),
+        new("Teamwork",        "Soft skills"),
+        new("Communication",   "Soft skills"),
+        new("Leadership",      "Soft skills")
+    };
+
+    private ILookup<string, SkillOption> groupedSkills => allSkills.ToLookup(s => s.Category);
+    private IEnumerable<string> categories => groupedSkills.Select(g => g.Key).OrderBy(c => c);
+    private IEnumerable<SkillOption> skillsForSelectedCategory =>
+        string.IsNullOrWhiteSpace(selectedCategory)
+            ? Enumerable.Empty<SkillOption>()
+            : allSkills.Where(s => SkillNameMatches(s.Category, selectedCategory));
+
+    private readonly string[] priorityOptions = new[] { "must", "nice" };
+    private string selectedCategory = string.Empty;
+    private string? selectedSkillName;
+    private string selectedPriority = "must";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            var idClaim = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!long.TryParse(idClaim, out var recruiterId) || recruiterId <= 0)
+            {
+                loadError = "You must be logged in as a recruiter.";
+                return;
+            }
+
+            var dto = await JobListingService.GetJobListingByIdAsync(JobId);
+            if (dto is null)
+            {
+                loadError = "Job listing not found.";
+                return;
+            }
+
+            job = new UpdateJobListingDto
+            {
+                Id = dto.Id,
+                Title = dto.Title,
+                Description = dto.Description,
+                Salary = dto.Salary,
+                CompanyId = dto.CompanyId,
+                City = dto.City,
+                Postcode = dto.Postcode,
+                Address = dto.Address,
+                IsClosed = dto.IsClosed
+            };
+
+            recruiterCompanyId = dto.CompanyId;
+
+            try
+            {
+                loadedSkills = await JobListingService.GetSkillsForJobListingAsync(JobId);
+                HydrateSelectedSkillsFromLoaded();
+            }
+            catch
+            {
+                loadedSkills = new List<JobListingSkillDto>();
+                selectedSkills.Clear();
+            }
+        }
+        catch (Exception ex)
+        {
+            loadError = ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
+            skillsLoading = false;
+        }
+    }
+
+    private async Task HandleSubmit()
+    {
+        try
+        {
+            isSubmitting = true;
+            job.CompanyId = recruiterCompanyId;
+
+            var updated = await JobListingService.UpdateJobListingAsync(job);
+            job.IsClosed = updated.IsClosed;
+
+            await SyncSkillsAsync();
+
+            ShowNotification("Job listing updated.", "success");
+        }
+        catch (Exception ex)
+        {
+            ShowNotification($"Failed to update listing: {ex.Message}", "error");
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    private void ToggleClosed()
+    {
+        job.IsClosed = !job.IsClosed;
+    }
+
+    private void RemoveSkillFromSelection(SelectedSkill skill)
+    {
+        selectedSkills.Remove(skill);
+    }
+
+    private void OnCategoryChanged(ChangeEventArgs e)
+    {
+        selectedCategory = e.Value?.ToString() ?? string.Empty;
+        selectedSkillName = string.Empty;
+    }
+
+    private bool CanAddFromPicker =>
+        !string.IsNullOrWhiteSpace(selectedCategory) &&
+        !string.IsNullOrWhiteSpace(selectedSkillName);
+
+    private void AddSkillFromPicker()
+    {
+        if (!CanAddFromPicker)
+            return;
+
+        var option = EnsureSkillOption(selectedSkillName!, selectedCategory);
+        var existing = selectedSkills.FirstOrDefault(s => SkillNameMatches(s.Skill.Name, option.Name));
+
+        if (existing is not null)
+        {
+            existing.Priority = selectedPriority;
+        }
+        else
+        {
+            selectedSkills.Add(new SelectedSkill
+            {
+                Skill = option,
+                Priority = selectedPriority
+            });
+        }
+    }
+
+    private async Task SyncSkillsAsync()
+    {
+        var toRemove = loadedSkills
+            .Where(existing => selectedSkills.All(s => !SkillNameMatches(existing.SkillName, s.Skill.Name)))
+            .ToList();
+
+        foreach (var remove in toRemove)
+        {
+            await JobListingService.RemoveJobListingSkillAsync(remove.Id);
+        }
+
+        foreach (var staged in selectedSkills)
+        {
+            var existing = loadedSkills.FirstOrDefault(s => SkillNameMatches(s.SkillName, staged.Skill.Name));
+
+            if (existing is not null && string.Equals(existing.Priority, staged.Priority, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            if (existing is not null)
+            {
+                await JobListingService.RemoveJobListingSkillAsync(existing.Id);
+            }
+
+            var dto = new AddJobListingSkillDto
+            {
+                JobListingId = JobId,
+                SkillName    = staged.Skill.Name,
+                Category     = staged.Skill.Category,
+                Priority     = staged.Priority
+            };
+
+            await JobListingService.AddSkillsForJobListing(dto);
+        }
+
+        loadedSkills = await JobListingService.GetSkillsForJobListingAsync(JobId);
+        HydrateSelectedSkillsFromLoaded();
+    }
+
+    private void HydrateSelectedSkillsFromLoaded()
+    {
+        selectedSkills = loadedSkills
+            .Select(s =>
+            {
+                var option = EnsureSkillOption(s.SkillName);
+                return new SelectedSkill
+                {
+                    Skill = option,
+                    Priority = s.Priority,
+                    JobListingSkillId = s.Id,
+                    SkillId = s.SkillId
+                };
+            })
+            .ToList();
+    }
+
+    private SkillOption EnsureSkillOption(string name, string? category = null)
+    {
+        var existing = allSkills.FirstOrDefault(s => SkillNameMatches(s.Name, name));
+        if (existing is not null) return existing;
+
+        var option = new SkillOption(name, string.IsNullOrWhiteSpace(category) ? "Other" : category);
+        allSkills.Add(option);
+        return option;
+    }
+
+    private static bool SkillNameMatches(string left, string right) =>
+        left.Equals(right, StringComparison.OrdinalIgnoreCase);
+
+    private string GetPriorityLabel(string p) => p switch
+    {
+        "must" => "Must-have",
+        "nice" => "Nice to have",
+        _      => p
+    };
+
+    private void ShowNotification(string message, string type)
+    {
+        notificationMessage = message;
+        notificationType = type;
+        notificationVisible = true;
+
+        _ = Task.Delay(3000).ContinueWith(_ =>
+        {
+            notificationVisible = false;
+            InvokeAsync(StateHasChanged);
+        });
+    }
+}

@@ -68,6 +68,11 @@ CREATE TABLE skill (
                        id        BIGSERIAL PRIMARY KEY,
                        name      VARCHAR(120) NOT NULL,
                        category  VARCHAR(120)
+
+
+
+
+
 );
 
 -- ---------- JOBS ----------
@@ -78,8 +83,9 @@ CREATE TABLE job_listing (
                              date_posted   TIMESTAMPTZ NOT NULL DEFAULT now(),
                              salary        NUMERIC(12,2),
                              company_id    BIGINT NOT NULL REFERENCES company(id) ON DELETE CASCADE,
-                             location_id   BIGINT NOT NULL REFERENCES location(id) ON DELETE CASCADE,
-                             posted_by_id  BIGINT REFERENCES recruiter(user_id) ON DELETE SET NULL
+                             location_id   BIGINT NOT NULL REFERENCES location(id) ON DELETE RESTRICT,
+                             posted_by_id  BIGINT REFERENCES recruiter(user_id) ON DELETE SET NULL,
+                             is_closed     BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE job_listing_skills (

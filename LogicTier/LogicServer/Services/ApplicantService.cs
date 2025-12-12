@@ -121,6 +121,25 @@ public class ApplicantService
         }
     }
 
+    public async Task<RemoveApplicantSkillResponseDto> RemoveSkillAsync(long applicantSkillId)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new GrpcApplicantService.ApplicantServiceClient(channel);
+
+        var request = new RemoveApplicantSkillRequest
+        {
+            ApplicantSkillId = applicantSkillId
+        };
+
+        var reply = await client.RemoveApplicantSkillAsync(request);
+
+        return new RemoveApplicantSkillResponseDto
+        {
+            Success = reply.Success,
+            Message = reply.Message
+        };
+    }
+
     
     public async Task<List<ApplicantSkillResponse>> GetApplicantSkillsAsync(long userId)
     {
@@ -274,6 +293,39 @@ public class ApplicantService
         };
 
         var reply = await client.GetApplicantByIdAsync(request);
+
+        if (reply.Id == 0)
+            return null;
+
+        return new ApplicantDto
+        {
+            Id         = reply.Id,
+            Name       = reply.Name,
+            Email      = reply.Email,
+            Experience = reply.Experience,
+            City       = reply.City,
+            Postcode   = reply.Postcode,
+            Address    = reply.Address
+        };
+    }
+
+    public async Task<ApplicantDto?> UpdateApplicantAsync(UpdateApplicantDto dto)
+    {
+        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        var client = new HireFire.Grpc.ApplicantService.ApplicantServiceClient(channel);
+
+        var request = new UpdateApplicantRequest
+        {
+            Id          = dto.Id,
+            Name        = dto.Name,
+            Email       = dto.Email,
+            Experience  = dto.Experience ?? string.Empty,
+            City        = dto.City,
+            Postcode    = dto.Postcode ?? string.Empty,
+            Address     = dto.Address ?? string.Empty
+        };
+
+        var reply = await client.UpdateApplicantAsync(request);
 
         if (reply.Id == 0)
             return null;

@@ -259,6 +259,41 @@ public class ApplicantService extends ApplicantServiceGrpc.ApplicantServiceImplB
 
     @Override
     @Transactional
+    public void removeApplicantSkill(RemoveApplicantSkillRequest request,
+                                     StreamObserver<RemoveApplicantSkillResponse> responseObserver) {
+        try {
+            long skillId = request.getApplicantSkillId();
+            boolean exists = applicantSkillRepository.existsById(skillId);
+
+            if (!exists) {
+                RemoveApplicantSkillResponse response = RemoveApplicantSkillResponse.newBuilder()
+                        .setSuccess(false)
+                        .setMessage("Applicant skill not found.")
+                        .build();
+                responseObserver.onNext(response);
+                responseObserver.onCompleted();
+                return;
+            }
+
+            applicantSkillRepository.deleteById(skillId);
+
+            RemoveApplicantSkillResponse response = RemoveApplicantSkillResponse.newBuilder()
+                    .setSuccess(true)
+                    .setMessage("Skill removed.")
+                    .build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            responseObserver.onError(
+                    io.grpc.Status.INTERNAL
+                            .withDescription(e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName())
+                            .withCause(e)
+                            .asRuntimeException());
+        }
+    }
+
+    @Override
+    @Transactional
     public void getApplicantById(GetApplicantRequest request,
                                    StreamObserver<ApplicantResponse> responseObserver) {
         try {
@@ -324,6 +359,68 @@ public class ApplicantService extends ApplicantServiceGrpc.ApplicantServiceImplB
             case senior   -> SkillLevelProto.SKILL_LEVEL_SENIOR;
             case expert   -> SkillLevelProto.SKILL_LEVEL_EXPERT;
         };
+    }
+
+    @Override
+    @Transactional
+    public void updateApplicant(UpdateApplicantRequest request,
+                                StreamObserver<ApplicantResponse> responseObserver) {
+        try {
+            Applicant applicant = applicantRepository.findById(request.getId())
+                    .orElseThrow(() -> new RuntimeException("Applicant not found with id: " + request.getId()));
+
+            User user = applicant.getUser();
+
+            if (!user.getEmail().equals(request.getEmail()) && userRepository.existsByEmail(request.getEmail())) {
+                responseObserver.onError(
+                        Status.ALREADY_EXISTS
+                                .withDescription("Email already in use: " + request.getEmail())
+                                .asRuntimeException()
+                );
+                return;
+            }
+
+            user.setName(request.getName());
+            user.setEmail(request.getEmail());
+
+            applicant.setExperience(request.getExperience());
+
+            Location location = applicant.getLocation();
+            if (location == null) {
+                location = new Location(request.getCity(), request.getPostcode(), request.getAddress());
+            } else {
+                location.setCity(request.getCity());
+                location.setPostcode(request.getPostcode());
+                location.setAddress(request.getAddress());
+            }
+
+            Location savedLocation = locationRepository.save(location);
+            applicant.setLocation(savedLocation);
+
+            userRepository.save(user);
+            applicantRepository.save(applicant);
+
+            ApplicantResponse response = ApplicantResponse.newBuilder()
+                    .setId(applicant.getId())
+                    .setName(user.getName())
+                    .setEmail(user.getEmail())
+                    .setExperience(applicant.getExperience() == null ? "" : applicant.getExperience())
+                    .setCity(savedLocation.getCity())
+                    .setPostcode(savedLocation.getPostcode() == null ? "" : savedLocation.getPostcode())
+                    .setAddress(savedLocation.getAddress() == null ? "" : savedLocation.getAddress())
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseObserver.onError(
+                    Status.INTERNAL
+                            .withDescription(e.getMessage())
+                            .withCause(e)
+                            .asRuntimeException()
+            );
+        }
     }
 
 

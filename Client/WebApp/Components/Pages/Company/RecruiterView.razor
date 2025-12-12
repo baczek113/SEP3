@@ -1,4 +1,4 @@
-﻿@page "/recruiter/dashboard"
+@page "/recruiter/dashboard"
 @layout MainLayout
 @rendermode InteractiveServer
 
@@ -8,7 +8,6 @@
 @using WebApp.Services
 
 @inject HttpJobListingService JobListingService
-@inject NavigationManager Nav
 
 <AuthorizeView Roles="recruiter">
     <Authorized Context="_">
@@ -31,6 +30,10 @@
                         <div class="dash-loading">
                             Loading your job listings...
                         </div>
+                    }
+                    else if (!string.IsNullOrEmpty(statusMessage))
+                    {
+                        <div class="alert alert-warning" role="alert">@statusMessage</div>
                     }
                     else if (jobListings is null || jobListings.Count == 0)
                     {
@@ -67,16 +70,22 @@
                                             <span class="job-salary">Salary: @job.Salary</span>
                                         }
                                         <span class="job-id">ID: @job.Id</span>
+                                        <span class="job-status-pill @(job.IsClosed ? "closed" : "open")">
+                                            @(job.IsClosed ? "Closed" : "Open")
+                                        </span>
                                     </div>
 
                                     <div class="job-actions-row mt-3 d-flex gap-2">
-                                        <!-- Button 1: Review Pending Applications (The Swiper) -->
                                         <a href="/recruiter/job/@job.Id/applications" class="btn btn-outline-primary flex-grow-1">
-                                            🔍 Review
+                                            Review
                                         </a>
                                         
                                         <a href="/recruiter/job/@job.Id/matches" class="btn btn-success flex-grow-1">
-                                            💬 Matches
+                                            Matches
+                                        </a>
+
+                                        <a href="/job/edit/@job.Id" class="btn btn-secondary flex-grow-1">
+                                            Edit
                                         </a>
                                     </div>
                                 </div>
@@ -100,6 +109,7 @@
     private long recruiterId;
     private List<JobListingDto> jobListings = new();
     private bool isLoading = true;
+    private string? statusMessage;
 
     protected override async Task OnInitializedAsync()
     {
