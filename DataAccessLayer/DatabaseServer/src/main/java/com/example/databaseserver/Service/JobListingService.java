@@ -328,46 +328,6 @@ public class JobListingService extends JobListingServiceGrpc.JobListingServiceIm
             responseObserver.onError(e);
         }
     }
-    @Override
-    @Transactional
-    public void getJobListingById(com.example.databaseserver.generated.GetJobListingByIdRequest request,
-                                  StreamObserver<JobListingResponse> responseObserver) {
-        try {
-            long id = request.getId();
-
-            JobListing job = jobListingRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Job listing not found"));
-
-            JobListingResponse response = JobListingResponse.newBuilder()
-                    .setId(job.getId())
-                    .setTitle(safe(job.getTitle()))
-                    .setDescription(safe(job.getDescription()))
-                    .setDatePosted(job.getDatePosted().toString())
-                    .setSalary(job.getSalary() != null ? job.getSalary().toPlainString() : "")
-                    .setCompanyId(job.getCompany().getId())
-                    .setCity(job.getLocation().getCity())
-                    .setPostcode(
-                            job.getLocation().getPostcode() == null
-                                    ? ""
-                                    : job.getLocation().getPostcode()
-                    )
-                    .setAddress(
-                            job.getLocation().getAddress() == null
-                                    ? ""
-                                    : job.getLocation().getAddress()
-                    )
-                    .setPostedById(job.getPostedBy() != null ? job.getPostedBy().getId() : 0L)
-                    .build();
-
-            responseObserver.onNext(response);
-            responseObserver.onCompleted();
-        }
-        catch (Exception e) {
-            responseObserver.onError(e);
-        }
-    }
-
-
     private String safe(String val) {
         return val == null ? "" : val;
     }

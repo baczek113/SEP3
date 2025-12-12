@@ -141,21 +141,6 @@ public class JobListingService
             .ToList();
     }
 
-    public async Task<JobListingDto?> GetJobListingByIdAsync(long jobId)
-    {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
-        var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
-
-        var request = new GetJobListingByIdRequest
-        {
-            Id = jobId
-        };
-
-        var reply = await client.GetJobListingByIdAsync(request);
-
-        return reply.Id == 0 ? null : MapToDto(reply);
-    }
-
     public async Task<JobListingDto> UpdateJobListingAsync(UpdateJobListingDto dto)
     {
         using var channel = GrpcChannel.ForAddress(_grpcAddress);
