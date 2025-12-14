@@ -13,6 +13,8 @@ service CompanyService {
   rpc GetCompaniesToApprove (GetCompaniesToApproveRequest)
       returns (GetCompaniesToApproveResponse);
 
+  rpc GetCompanyById (GetCompanyByIdRequest) returns (CompanyResponse);
+
   rpc ApproveCompany (ApproveCompanyRequest)
       returns (CompanyResponse);
   rpc RemoveCompany (RemoveCompanyRequest) returns (RemoveCompanyResponse);
@@ -55,6 +57,10 @@ message CompanyResponse {
   string address     = 8;
 
   int64 company_representative_id = 9;
+}
+
+message GetCompanyByIdRequest {
+  int64 company_id = 1;
 }
 
 message GetCompaniesForRepresentativeRequest {
