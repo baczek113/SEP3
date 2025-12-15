@@ -102,10 +102,16 @@
                                 else if (app.Status.Equals("DECLINED", StringComparison.OrdinalIgnoreCase))
                                 {
                                     <button disabled class="secondary-btn w-100">Declined</button>
+                                    <a href="/applicant/job/@job.Id/company" class="primary-btn w-100 mt-2">
+                                        🏢 View Company Details
+                                    </a>
                                 }
                                 else
                                 {
                                     <button disabled class="secondary-btn w-100">Pending Review...</button>
+                                    <a href="/applicant/job/@job.Id/company" class="primary-btn w-100 mt-2">
+                                        🏢 View Company Details
+                                    </a>
                                 }
                             </div>
                         </div>

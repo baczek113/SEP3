@@ -73,6 +73,12 @@
     color: #0f172a;
     font-weight: 600;
     text-decoration: none;
+
+    cursor: pointer;
+}
+
+.pill-back-link:hover {
+    background-color: #f1f5f9;
 }
 
 .job-meta-pill {
