@@ -1,0 +1,105 @@
+﻿.profile-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.profile-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.profile-body {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+}
+
+.profile-section h5 {
+    margin: 0 0 6px;
+    color: #1a202c;
+    font-size: 1rem;
+}
+
+.profile-section p {
+    margin: 0 0 4px;
+    color: #4a5568;
+}
+
+.skills-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.skill-chip {
+    border-radius: 999px;
+    border: 1px solid #cbd5e0;
+    background-color: #edf2f7;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.skill-chip.selected {
+    background-color: #3182ce;
+    border-color: #3182ce;
+    color: #ffffff;
+}
+
+.pill-back-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid #d0d0d0;
+    background: #ffffff;
+    color: #0f172a;
+    font-weight: 600;
+    text-decoration: none;
+
+    cursor: pointer;
+}
+
+.pill-back-link:hover {
+    background-color: #f1f5f9;
+}
+
+.job-meta-pill {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #e2e8f0;
+    color: #1f2937;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.job-meta-pill.subtle {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+@media (max-width: 768px) {
+    .profile-header {
+        flex-direction: column;
+    }
+    .profile-meta {
+        justify-content: flex-start;
+    }
+}

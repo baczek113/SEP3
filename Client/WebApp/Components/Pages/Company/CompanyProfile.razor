@@ -1,0 +1,135 @@
+﻿@page "/applicant/job/{JobId:long}/company"
+@layout MainLayout
+@rendermode InteractiveServer
+
+@using WebApp.DTOs.Company
+@using WebApp.Services
+
+@inject HttpCompanyService CompanyService
+@inject HttpJobListingService JobListingService
+@inject NavigationManager Nav
+
+<div class="dash-shell">
+    <div class="dash-card">
+        <div class="dash-header">
+            <div class="dash-title">
+                <h2>Company Profile</h2>
+                <p>Read-only profile for the company behind Job #@JobId.</p>
+            </div>
+
+            <a class="pill-back-link" @onclick="GoBack">
+                Back to applications
+            </a>
+        </div>
+
+        <div class="dash-content">
+            @if (isLoading)
+            {
+                <p class="dash-loading">Loading profile...</p>
+            }
+            else if (!string.IsNullOrWhiteSpace(loadError))
+            {
+                <div class="dash-empty">
+                    <h4>Unable to load profile</h4>
+                    <p>@loadError</p>
+                </div>
+            }
+            else if (company is not null)
+            {
+                <div class="profile-card">
+                    <!-- HEADER -->
+                    <div class="profile-header">
+                        <div>
+                            <h3>@company.Name</h3>
+
+                            @if (!string.IsNullOrWhiteSpace(company.Website))
+                            {
+                                <p class="text-muted mb-1">
+                                    🌐
+                                    <a href="@company.Website" target="_blank">
+                                        @company.Website
+                                    </a>
+                                </p>
+                            }
+                        </div>
+
+                        <div class="profile-meta">
+                            <span class="job-meta-pill subtle">
+                                @(company.IsApproved ? "Approved" : "Pending approval")
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- BODY -->
+                    <div class="profile-body">
+
+                        <div class="profile-section">
+                            <h5>Location</h5>
+                            <p>
+                                @company.City
+                                @if (!string.IsNullOrWhiteSpace(company.Postcode))
+                                {
+                                    <span>(@company.Postcode)</span>
+                                }
+                            </p>
+                            <p class="text-muted mb-0">@company.Address</p>
+                        </div>
+
+                        <div class="profile-section">
+                            <h5>About the company</h5>
+                            <p>
+                                @(string.IsNullOrWhiteSpace(company.Description)
+                                    ? "No description provided."
+                                    : company.Description)
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public long JobId { get; set; }
+
+    private CompanyDto? company;
+    private bool isLoading = true;
+    private string? loadError;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var job = await JobListingService.GetByIdAsync(JobId);
+            if (job is null)
+            {
+                loadError = "Job not found.";
+                return;
+            }
+
+            company = await CompanyService.GetCompanyByIdAsync(job.CompanyId);
+
+            if (company is null)
+            {
+                loadError = "Company not found.";
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+            loadError = ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private void GoBack()
+    {
+        Nav.NavigateTo("/applicant/applications");
+    }
+}
+

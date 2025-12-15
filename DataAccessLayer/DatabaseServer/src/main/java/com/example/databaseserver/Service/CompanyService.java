@@ -7,17 +7,8 @@ import com.example.databaseserver.Entities.Location;
 import com.example.databaseserver.Repositories.CompanyRepository;
 import com.example.databaseserver.Repositories.LocationRepository;
 import com.example.databaseserver.Repositories.RepresentativeRepository;
-import com.example.databaseserver.generated.ApproveCompanyRequest;
-import com.example.databaseserver.generated.CompanyResponse;
-import com.example.databaseserver.generated.CompanyServiceGrpc;
-import com.example.databaseserver.generated.CreateCompanyRequest;
-import com.example.databaseserver.generated.GetCompaniesForRepresentativeRequest;
-import com.example.databaseserver.generated.GetCompaniesForRepresentativeResponse;
-import com.example.databaseserver.generated.GetCompaniesToApproveRequest;
-import com.example.databaseserver.generated.GetCompaniesToApproveResponse;
-import com.example.databaseserver.generated.RemoveCompanyRequest;
-import com.example.databaseserver.generated.RemoveCompanyResponse;
-import com.example.databaseserver.generated.UpdateCompanyRequest;
+import com.example.databaseserver.generated.*;
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import jakarta.transaction.Transactional;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -131,6 +122,53 @@ public class CompanyService extends CompanyServiceGrpc.CompanyServiceImplBase {
             responseObserver.onError(e);
         }
     }
+
+    @Override
+    @Transactional
+    public void getCompanyById(
+            GetCompanyByIdRequest request,
+            StreamObserver<CompanyResponse> responseObserver
+    ) {
+        try {
+            long companyId = request.getCompanyId();
+
+            var companyOpt = companyRepository.findById(companyId);
+            if (companyOpt.isEmpty()) {
+                responseObserver.onError(
+                        Status.NOT_FOUND
+                                .withDescription("Company with id " + companyId + " not found")
+                                .asRuntimeException()
+                );
+                return;
+            }
+
+            Company company = companyOpt.get();
+
+            CompanyResponse response = CompanyResponse.newBuilder()
+                    .setId(company.getId())
+                    .setName(company.getName())
+                    .setDescription(company.getDescription() == null ? "" : company.getDescription())
+                    .setWebsite(company.getWebsite() == null ? "" : company.getWebsite())
+                    .setIsApproved(company.isApproved())
+                    .setCity(company.getLocation().getCity())
+                    .setPostcode(company.getLocation().getPostcode())
+                    .setAddress(company.getLocation().getAddress())
+                    .setCompanyRepresentativeId(company.getCompanyRepresentative().getId())
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
+        catch (Exception e) {
+            responseObserver.onError(
+                    Status.INTERNAL
+                            .withDescription(e.getMessage())
+                            .withCause(e)
+                            .asRuntimeException()
+            );
+        }
+    }
+
 
     @Override
     @Transactional

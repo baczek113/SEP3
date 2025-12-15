@@ -42,6 +42,17 @@ namespace LogicServer.Controllers;
         return Ok(result);
     }
     
+    [HttpGet("{id:long}")]
+    public async Task<ActionResult<CompanyDto>> GetCompanyById(long id)
+    {
+        var company = await _companyService.GetCompanyByIdAsync(id);
+
+        if (company == null)
+            return NotFound($"Company with id {id} not found");
+
+        return Ok(company);
+    }
+    
     [HttpGet("by-representative/{representativeId:long}")]
     public async Task<ActionResult<List<CompanyDto>>> GetMyCompanies(long representativeId)
     {

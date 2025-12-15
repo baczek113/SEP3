@@ -10,6 +10,8 @@ service CompanyService {
   rpc GetCompaniesForRepresentative (GetCompaniesForRepresentativeRequest)
       returns (GetCompaniesForRepresentativeResponse);
 
+  rpc GetCompanyById (GetCompanyByIdRequest) returns (CompanyResponse);
+
   rpc GetCompaniesToApprove (GetCompaniesToApproveRequest)
       returns (GetCompaniesToApproveResponse);
 
@@ -41,6 +43,10 @@ message UpdateCompanyRequest {
   string address     = 7;
 
   int64 company_representative_id = 8;
+}
+
+message GetCompanyByIdRequest {
+  int64 company_id = 1;
 }
 
 message CompanyResponse {

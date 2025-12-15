@@ -1,4 +1,5 @@
-﻿using Grpc.Net.Client;
+﻿using Grpc.Core;
+using Grpc.Net.Client;
 using HireFire.Grpc;
 using LogicServer.DTOs.Company;
 
@@ -86,6 +87,40 @@ namespace LogicServer.Services;
                 return null;
             }
         }
+        
+        public async Task<CompanyDto?> GetCompanyByIdAsync(long companyId)
+        {
+            using var channel = GrpcChannel.ForAddress(_grpcAddress);
+            var client = new HireFire.Grpc.CompanyService.CompanyServiceClient(channel);
+
+            var request = new GetCompanyByIdRequest
+            {
+                CompanyId = companyId
+            };
+
+            try
+            {
+                var reply = await client.GetCompanyByIdAsync(request);
+
+                return new CompanyDto
+                {
+                    Id = reply.Id,
+                    Name = reply.Name,
+                    Description = reply.Description,
+                    Website = reply.Website,
+                    IsApproved = reply.IsApproved,
+                    City = reply.City,
+                    Postcode = reply.Postcode,
+                    Address = reply.Address,
+                    CompanyRepresentativeId = reply.CompanyRepresentativeId
+                };
+            }
+            catch (RpcException ex) when (ex.StatusCode == StatusCode.NotFound)
+            {
+                return null;
+            }
+        }
+
 
         public async Task<List<CompanyDto>> GetCompaniesForRepresentativeAsync(long representativeId)
         {
