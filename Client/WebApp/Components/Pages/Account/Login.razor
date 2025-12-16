@@ -9,6 +9,7 @@
 @layout MainLayout
 @rendermode InteractiveServer
 @using System.Security.Claims
+@using WebApp.Helpers
 
 <div class="profile-form-container">
     <h3>Log in to your account</h3>
@@ -43,8 +44,12 @@
     {
         try
         {
-          
-            await ((AuthProvider)AuthProvider).LoginAsync(loginRequest);
+            var secureRequest = new LoginRequestDto
+            {
+                Email = loginRequest.Email,
+                Password = HashingHelper.HashPassword(loginRequest.Password)
+            };
+            await ((AuthProvider)AuthProvider).LoginAsync(secureRequest);
 
             
             var authState = await AuthProvider.GetAuthenticationStateAsync();

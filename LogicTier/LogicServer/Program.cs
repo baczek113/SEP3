@@ -1,5 +1,6 @@
 using HireFire.Grpc;
 using LogicServer.Services;
+using LogicServer.Services.Helper;
 using ApplicantService = LogicServer.Services.ApplicantService;
 using ApplicationService = LogicServer.Services.ApplicationService;
 using AuthenticationService = LogicServer.Services.AuthenticationService;
@@ -10,7 +11,7 @@ using RepresentativeService = LogicServer.Services.RepresentativeService;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string chatServiceUrl = builder.Configuration["GrpcSettings:ChatServiceUrl"] ?? "http://localhost:9090";
+string chatServiceUrl = builder.Configuration["GrpcSettings:ChatServiceUrl"] ?? "https://localhost:9090";
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -27,7 +28,7 @@ builder.Services.AddSingleton<ApplicationService>();
 builder.Services.AddGrpcClient<ChatService.ChatServiceClient>(o =>
 {
     o.Address = new Uri(chatServiceUrl); 
-});
+}).ConfigurePrimaryHttpMessageHandler(() => GrpcChannelHelper.GetSecureHandler());;
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -35,7 +36,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthorization();
 app.MapControllers();

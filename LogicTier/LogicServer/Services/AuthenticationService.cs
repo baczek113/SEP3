@@ -5,7 +5,7 @@ using System.Text;
 using Grpc.Core;
 using LogicServer.DTOs.Authentication;
 using LogicServer.DTOs.Representative;
-
+using LogicServer.Services.Helper;
 namespace LogicServer.Services;
 
 public class AuthenticationService
@@ -14,22 +14,22 @@ public class AuthenticationService
     
     public AuthenticationService(IConfiguration config)
     {
-        _grpcAddress = config["GrpcSettings:AuthenticationServiceUrl"] ?? "http://localhost:9090";
+        _grpcAddress = config["GrpcSettings:AuthenticationServiceUrl"] ?? "https://localhost:9090";
     }
 
     public async Task<LoginResponseDto> LoginAsync(LoginRequestDto loginRequest)
     {
         try
         {
-            using var channel = GrpcChannel.ForAddress(_grpcAddress);
+            using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
+
             var client = new HireFire.Grpc.AuthenticationService.AuthenticationServiceClient(channel);
 
-            var passwordHash = HashPassword(loginRequest.Password);
 
             var request = new LoginRequest
             {
                 Email = loginRequest.Email,
-                PasswordHash = passwordHash
+                PasswordHash = loginRequest.Password
             };
 
             var response = await client.LoginAsync(request);
@@ -52,12 +52,5 @@ public class AuthenticationService
         {
             Success = false
         };
-    }
-    
-    public static string HashPassword(string password)
-    {
-        using var sha256 = SHA256.Create();
-        var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-        return BitConverter.ToString(bytes).Replace("-", "").ToLowerInvariant();
     }
 }

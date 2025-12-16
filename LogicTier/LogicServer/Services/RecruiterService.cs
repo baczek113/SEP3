@@ -1,6 +1,7 @@
 ﻿using Grpc.Net.Client;
 using HireFire.Grpc;
 using LogicServer.DTOs.Recruiter;
+using LogicServer.Services.Helper;
 
 namespace LogicServer.Services;
 
@@ -10,19 +11,18 @@ public class RecruiterService
 
     public RecruiterService(IConfiguration config)
     {
-        _grpcAddress = config["GrpcSettings:RecruiterServiceUrl"] ?? "http://localhost:9090";
+        _grpcAddress = config["GrpcSettings:RecruiterServiceUrl"] ?? "https://localhost:9090";
     }
 
     public async Task<RecruiterDto> CreateRecruiterAsync(CreateRecruiterDto dto)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.RecruiterService.RecruiterServiceClient(channel);
-        var passwordHash = AuthenticationService.HashPassword(dto.Password);
 
         var request = new RegisterRecruiterRequest
         {
             Email                    = dto.Email,
-            PasswordHash                = passwordHash,
+            PasswordHash             = dto.Password,
             Name                     = dto.Name,
             Position                 = dto.Position ?? string.Empty,
             HiredByRepresentativeId  = dto.HiredByRepresentativeId,
@@ -44,7 +44,7 @@ public class RecruiterService
 
     public async Task<List<RecruiterDto>> GetRecruitersForCompanyAsync(long companyId)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.RecruiterService.RecruiterServiceClient(channel);
 
         var request = new GetRecruitersForCompanyRequest
@@ -68,7 +68,7 @@ public class RecruiterService
     }
     public async Task<RecruiterDto?> GetByIdAsync(long recruiterId)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.RecruiterService.RecruiterServiceClient(channel);
 
         var request = new GetRecruiterByIdRequest
@@ -95,19 +95,16 @@ public class RecruiterService
 
     public async Task<RecruiterDto?> UpdateRecruiterAsync(UpdateRecruiterDto dto)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.RecruiterService.RecruiterServiceClient(channel);
-
-        var passwordHash = string.IsNullOrWhiteSpace(dto.Password)
-            ? string.Empty
-            : AuthenticationService.HashPassword(dto.Password);
+        
 
         var request = new UpdateRecruiterRequest
         {
             RecruiterId = dto.Id,
             Email = dto.Email ?? string.Empty,
             Name = dto.Name ?? string.Empty,
-            PasswordHash = passwordHash,
+            PasswordHash = dto.Password,
             Position = dto.Position ?? string.Empty,
             WorksInCompanyId = dto.WorksInCompanyId,
             RepresentativeId = dto.RepresentativeId
@@ -132,7 +129,7 @@ public class RecruiterService
     }
     public async Task<bool> RemoveRecruiterAsync(long recruiterId)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.RecruiterService.RecruiterServiceClient(channel);
 
         var request = new RemoveRecruiterRequest

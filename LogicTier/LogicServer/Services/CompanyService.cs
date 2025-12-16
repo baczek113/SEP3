@@ -2,6 +2,7 @@
 using Grpc.Net.Client;
 using HireFire.Grpc;
 using LogicServer.DTOs.Company;
+using LogicServer.Services.Helper;
 
 namespace LogicServer.Services;
 
@@ -11,12 +12,12 @@ namespace LogicServer.Services;
 
     public CompanyService(IConfiguration config)
         {
-            _grpcAddress = config["GrpcSettings:CompanyServiceUrl"] ?? "http://localhost:9090";
+            _grpcAddress = config["GrpcSettings:CompanyServiceUrl"] ?? "https://localhost:9090";
         }
 
         public async Task<CompanyDto> CreateCompanyAsync(CreateCompanyDto dto)
         {
-            using var channel = GrpcChannel.ForAddress(_grpcAddress);
+            using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
             var client = new HireFire.Grpc.CompanyService.CompanyServiceClient(channel);
 
         var request = new CreateCompanyRequest
@@ -50,7 +51,7 @@ namespace LogicServer.Services;
 
         public async Task<CompanyDto?> UpdateCompanyAsync(UpdateCompanyDto dto)
         {
-            using var channel = GrpcChannel.ForAddress(_grpcAddress);
+            using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
             var client = new HireFire.Grpc.CompanyService.CompanyServiceClient(channel);
 
             var request = new UpdateCompanyRequest
@@ -90,7 +91,7 @@ namespace LogicServer.Services;
         
         public async Task<CompanyDto?> GetCompanyByIdAsync(long companyId)
         {
-            using var channel = GrpcChannel.ForAddress(_grpcAddress);
+            using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
             var client = new HireFire.Grpc.CompanyService.CompanyServiceClient(channel);
 
             var request = new GetCompanyByIdRequest
@@ -124,7 +125,7 @@ namespace LogicServer.Services;
 
         public async Task<List<CompanyDto>> GetCompaniesForRepresentativeAsync(long representativeId)
         {
-            using var channel = GrpcChannel.ForAddress(_grpcAddress);
+            using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
             var client = new HireFire.Grpc.CompanyService.CompanyServiceClient(channel);
 
         var request = new GetCompaniesForRepresentativeRequest
@@ -153,7 +154,7 @@ namespace LogicServer.Services;
     
     public async Task<List<CompanyDto>> GetCompaniesToApproveAsync()
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.CompanyService.CompanyServiceClient(channel);
 
         var request = new GetCompaniesToApproveRequest();
@@ -178,7 +179,7 @@ namespace LogicServer.Services;
     
     public async Task<CompanyDto> ApproveCompanyAsync(long companyId)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.CompanyService.CompanyServiceClient(channel);
 
         var request = new ApproveCompanyRequest
@@ -203,7 +204,7 @@ namespace LogicServer.Services;
     }
     public async Task<bool> RemoveCompanyAsync(long companyId)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.CompanyService.CompanyServiceClient(channel);
 
         var request = new RemoveCompanyRequest

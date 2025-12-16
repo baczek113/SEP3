@@ -1,7 +1,7 @@
 ﻿@page "/company/{CompanyId:long}/register-recruiter"
 @layout MainLayout
 @using System.Security.Claims
-
+@using WebApp.Helpers
 @using WebApp.DTOs.Recruiter
 @using WebApp.Services
 
@@ -104,7 +104,6 @@
             passwordError = "Passwords do not match.";
             return;
         }
-
         try
         {
             var authState = await AuthStateProvider.GetAuthenticationStateAsync();
@@ -119,10 +118,17 @@
                 return;
             }
 
-            recruiterProfile.HiredByRepresentativeId = representativeId;
-            recruiterProfile.WorksInCompanyId = CompanyId;
+            var recruiterToSend = new CreateRecruiterDto
+            {
+                Name = recruiterProfile.Name,
+                Email = recruiterProfile.Email,
+                Position = recruiterProfile.Position,
+                WorksInCompanyId = CompanyId,
+                HiredByRepresentativeId = representativeId,
+                Password = HashingHelper.HashPassword(recruiterProfile.Password)
+            };
 
-            var created = await HttpRecruiterService.AddRecruiter(recruiterProfile);
+            var created = await HttpRecruiterService.AddRecruiter(recruiterToSend);
 
             ShowNotification("Recruiter account created successfully!", "success");
 
