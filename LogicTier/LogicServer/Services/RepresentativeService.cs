@@ -1,6 +1,7 @@
 ﻿using HireFire.Grpc;
 using Grpc.Net.Client;
 using LogicServer.DTOs.Representative;
+using LogicServer.Services.Helper;
 
 namespace LogicServer.Services;
 
@@ -10,22 +11,20 @@ public class RepresentativeService
     
     public RepresentativeService(IConfiguration config)
     {
-        _grpcAddress = config["GrpcSettings:RepresentativeServiceUrl"] ?? "http://localhost:9090";
+        _grpcAddress = config["GrpcSettings:RepresentativeServiceUrl"] ?? "https://localhost:9090";
     }
 
     public async Task<RepresentativeDto> CreateRepresentativeAsync(CreateRepresentativeDto dto)
     {
         Console.WriteLine("LOGIC: Mapping RepresentativeDto to gRPC request for DatabaseServer");
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.RepresentativeService.RepresentativeServiceClient(channel);
-
-        var passwordHash = AuthenticationService.HashPassword(dto.Password);
         
         var request = new CreateRepRequest
         {
             Name = dto.Name,
             Email = dto.Email,
-            PasswordHash = passwordHash,
+            PasswordHash = dto.Password,
             Position = dto.Position
         };
         Console.WriteLine("LOGIC: Sending CreateRepresentative gRPC request to DatabaseServer");
@@ -43,12 +42,8 @@ public class RepresentativeService
 
     public async Task<RepresentativeDto> UpdateRepresentativeAsync(UpdateRepresentativeDto dto)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.RepresentativeService.RepresentativeServiceClient(channel);
-
-        var passwordHash = string.IsNullOrEmpty(dto.Password) 
-            ? "" 
-            : AuthenticationService.HashPassword(dto.Password);
 
         var request = new UpdateRepRequest
         {
@@ -56,7 +51,7 @@ public class RepresentativeService
             Name = dto.Name,
             Email = dto.Email,
             Position = dto.Position,
-            PasswordHash = passwordHash
+            PasswordHash = dto.Password
         };
 
         var reply = await client.UpdateRepresentativeAsync(request);
@@ -72,7 +67,7 @@ public class RepresentativeService
 
     public async Task<bool> DeleteRepresentativeAsync(long id)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.RepresentativeService.RepresentativeServiceClient(channel);
 
         var request = new RemoveRepresentativeRequest

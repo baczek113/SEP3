@@ -9,7 +9,7 @@
 @inject NavigationManager Nav
 @using WebApp.DTOs.Applicant
 @using WebApp.Services
-
+@using WebApp.Helpers
 
 <div class="register-shell">
     <div class="register-card">
@@ -166,7 +166,7 @@
             {
                 Name      = applicantProfile.Name,
                 Email     = applicantProfile.Email,
-                Password  = applicantProfile.Password,
+                Password  = HashingHelper.HashPassword(applicantProfile.Password),
                 Experience= applicantProfile.Experience,
                 City      = applicantProfile.City,
                 Postcode  = applicantProfile.Postcode,
@@ -193,8 +193,15 @@
     {
         try
         {
+            var representativeToSend = new AddCompanyRepresentativeDto
+            {
+                Name = representativeProfile.Name,
+                Email = representativeProfile.Email,
+                Position = representativeProfile.Position,
+                Password = HashingHelper.HashPassword(representativeProfile.Password) 
+            };
             Console.WriteLine("CLIENT: Create Company Representative button clicked");
-            await HttpCompanyRepresentativeService.AddCompanyRepresentativeAsync(representativeProfile);
+            await HttpCompanyRepresentativeService.AddCompanyRepresentativeAsync(representativeToSend);
             Console.WriteLine("CLIENT: Create Company Representative request finished");
 
             ShowNotification("Company representative account created successfully!", "success");

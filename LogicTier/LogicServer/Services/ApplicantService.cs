@@ -6,6 +6,7 @@ using LogicServer.DTOs.Applicant;
 using LogicServer.DTOs.Application;
 using LogicServer.DTOs.Job;
 using LogicServer.DTOs.JobListing;
+using LogicServer.Services.Helper;
 using GrpcApplicantService = HireFire.Grpc.ApplicantService;
 
 
@@ -20,25 +21,22 @@ public class ApplicantService
     public ApplicantService(IConfiguration config, JobListingService jobListingService, ApplicationService applicationService)
     {
         
-        _grpcAddress = config["GrpcSettings:ApplicantServiceUrl"] ?? "http://localhost:9090";
+        _grpcAddress = config["GrpcSettings:ApplicantServiceUrl"] ?? "https://localhost:9090";
         _jobListingService = jobListingService;
         _applicationService = applicationService;
     }
 
     public async Task<ApplicantDto> CreateApplicantAsync(CreateApplicantDto dto)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         
         var client = new HireFire.Grpc.ApplicantService.ApplicantServiceClient(channel);
-
-        
-        var passwordHash = HashPassword(dto.Password);
         
         var request = new CreateApplicantRequest
         {
             Name          = dto.Name,
             Email         = dto.Email,
-            PasswordHash  = passwordHash,
+            PasswordHash  = dto.Password,
             Experience    = dto.Experience,
             City          = dto.City,
             Postcode      = dto.Postcode,
@@ -59,17 +57,10 @@ public class ApplicantService
             Address     = reply.Address
         };
     }
-
-    private static string HashPassword(string password)
-    {
-        using var sha256 = SHA256.Create();
-        var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-        return BitConverter.ToString(bytes).Replace("-", "").ToLowerInvariant();
-    }
     public async Task<ApplicantSkillDto> AddSkillAsync(AddApplicantSkillDto dto)
     {
     
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new GrpcApplicantService.ApplicantServiceClient(channel);
 
 
@@ -96,7 +87,7 @@ public class ApplicantService
 
     public async Task<RemoveApplicantResponseDto> RemoveApplicantAsync(long id)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.ApplicantService.ApplicantServiceClient(channel);
 
         var request = new RemoveApplicantRequest { Id = id };
@@ -123,7 +114,7 @@ public class ApplicantService
 
     public async Task<RemoveApplicantSkillResponseDto> RemoveSkillAsync(long applicantSkillId)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new GrpcApplicantService.ApplicantServiceClient(channel);
 
         var request = new RemoveApplicantSkillRequest
@@ -143,7 +134,7 @@ public class ApplicantService
     
     public async Task<List<ApplicantSkillResponse>> GetApplicantSkillsAsync(long userId)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new GrpcApplicantService.ApplicantServiceClient(channel);
     
     
@@ -166,7 +157,7 @@ public class ApplicantService
 
     public async Task<List<JobListingDto>> GetSuggestedJobsAsync(long userId)
 {
-    using var channel = GrpcChannel.ForAddress(_grpcAddress);
+    using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
     var client = new GrpcApplicantService.ApplicantServiceClient(channel);
 
     try
@@ -284,7 +275,7 @@ public class ApplicantService
         };
     public async Task<ApplicantDto?> GetByIdAsync(long applicantId)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.ApplicantService.ApplicantServiceClient(channel);
 
         var request = new GetApplicantRequest
@@ -311,7 +302,7 @@ public class ApplicantService
 
     public async Task<ApplicantDto?> UpdateApplicantAsync(UpdateApplicantDto dto)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.ApplicantService.ApplicantServiceClient(channel);
 
         var request = new UpdateApplicantRequest

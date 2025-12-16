@@ -33,4 +33,8 @@
       <AdditionalFiles Include="Components\Pages\Recruitment\ReviewingApplications.razor" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="wwwroot\keystore.p12" />
+    </ItemGroup>
+
 </Project>

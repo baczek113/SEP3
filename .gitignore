@@ -45,3 +45,10 @@ obj/
 riderModule.iml
 /_ReSharper.Caches/
 GeneratedGrpc/
+
+# Ignore security files
+*.p12
+*.jks
+*.key
+*.crt
+*.pem

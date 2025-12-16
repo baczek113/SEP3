@@ -2,6 +2,7 @@ using System.Globalization;
 using Grpc.Net.Client;
 using HireFire.Grpc;
 using LogicServer.DTOs.Application;
+using LogicServer.Services.Helper;
 
 namespace LogicServer.Services;
 
@@ -11,12 +12,13 @@ public class ApplicationService
 
     public ApplicationService(IConfiguration config)
     {
-        _grpcAddress = config["GrpcSettings:ApplicantServiceUrl"] ?? "http://localhost:9090";
+        _grpcAddress = config["GrpcSettings:ApplicantServiceUrl"] ?? "https://localhost:9090";
     }
 
     public async Task<ApplicationDto> CreateApplicationAsync(CreateApplicationDto dto)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
+
         var client = new HireFire.Grpc.ApplicationService.ApplicationServiceClient(channel);
     
         var request = new CreateApplicationRequest()
@@ -49,7 +51,8 @@ public class ApplicationService
     
     public async Task<List<ApplicationDto>> GetApplicationsForJobAsync(long jobId)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
+
         var client = new HireFire.Grpc.ApplicationService.ApplicationServiceClient(channel);
 
         var request = new GetApplicationsForJobRequest()
@@ -93,7 +96,7 @@ public class ApplicationService
 
     public async Task<ApplicationsDto> GetApplicationsForApplicantAsync(long applicantId)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.ApplicationService.ApplicationServiceClient(channel);
     
         var request = new GetApplicationsForApplicantRequest()
@@ -146,7 +149,7 @@ public class ApplicationService
 
     private async Task<ApplicationDto> UpdateApplicationStatusHelperAsync(bool accept, long applicationId)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.ApplicationService.ApplicationServiceClient(channel);
     
         var request = new ChangeStatusRequest()

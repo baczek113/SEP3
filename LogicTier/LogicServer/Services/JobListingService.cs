@@ -4,6 +4,7 @@ using Grpc.Net.Client;
 using HireFire.Grpc;
 using LogicServer.DTOs.Job;
 using LogicServer.DTOs.JobListing;
+using LogicServer.Services.Helper;
 
 namespace LogicServer.Services;
 
@@ -13,12 +14,12 @@ public class JobListingService
 
     public JobListingService(IConfiguration config)
     {
-        _grpcAddress = config["GrpcSettings:JobListingServiceUrl"] ?? "http://localhost:9090";
+        _grpcAddress = config["GrpcSettings:JobListingServiceUrl"] ?? "https://localhost:9090";
     }
 
     public async Task<JobListingDto> CreateJobListingAsync(CreateJobListingDto dto)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
 
         var request = new CreateJobListingRequest
@@ -43,7 +44,7 @@ public class JobListingService
 
     public async Task<RemoveJobListingResponseDto> RemoveJobListingAsync(RemoveJobListingRequestDto requestDto)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
 
         var request = new RemoveJobListingRequest
@@ -62,7 +63,7 @@ public class JobListingService
     
     public async Task<List<JobListingDto>> GetJobListingsForCompanyAsync(long companyId)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
 
         var request = new GetJobListingsForCompanyRequest
@@ -80,7 +81,7 @@ public class JobListingService
     
     public async Task<List<JobListingDto>> GetJobListingsForRecruiterAsync(long recruiterId)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
 
         var request = new GetJobListingsForRecruiterRequest
@@ -97,7 +98,7 @@ public class JobListingService
 
     public async Task<List<JobListingSkillDto>> GetJobListingSkillsAsync(long jobId)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
 
         var request = new GetJobListingSkillsRequest
@@ -125,7 +126,7 @@ public class JobListingService
     }
     public async Task<List<JobListingDto>> GetJobListingsByCityAsync(string city)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
     
         var request = new GetJobListingsByCityRequest()
@@ -143,7 +144,7 @@ public class JobListingService
 
     public async Task<JobListingDto> UpdateJobListingAsync(UpdateJobListingDto dto)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
 
         var request = new UpdateJobListingRequest
@@ -165,7 +166,7 @@ public class JobListingService
 
     public async Task<JobListingDto> CloseJobListingAsync(long jobListingId)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
 
         var request = new CloseJobListingRequest
@@ -215,7 +216,7 @@ public class JobListingService
     }
     public async Task<JobListingSkillDto> AddJobListingSkillAsync(AddJobListingSkillDto dto)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
 
         if (string.IsNullOrWhiteSpace(dto.SkillName))
@@ -246,7 +247,7 @@ public class JobListingService
     }
     public async Task<JobListingDto?> GetJobListingByIdAsync(long jobId)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
 
         var request = new GetJobListingByIdRequest
@@ -269,7 +270,7 @@ public class JobListingService
 
     public async Task<RemoveJobListingSkillResponseDto> RemoveJobListingSkillAsync(long jobListingSkillId)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcAddress);
+        using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
 
         var request = new RemoveJobListingSkillRequest
