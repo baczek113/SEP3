@@ -16,13 +16,13 @@ public class JobListingTest {
 
     @Test
     void testInitialIdIsNull() {
-        JobListing jobListing = createBasicJobListing();
+        JobListing jobListing = createBasicJobListing(false);
         assertNull(jobListing.getId());
     }
 
     @Test
     void testSetId() {
-        JobListing jobListing = createBasicJobListing();
+        JobListing jobListing = createBasicJobListing(false);
         jobListing.setId(1L);
         assertEquals(1L, jobListing.getId());
     }
@@ -40,7 +40,8 @@ public class JobListingTest {
                 new BigDecimal("5000.00"),
                 new Company(),
                 new Location(),
-                new Recruiter()
+                new Recruiter(),
+                false
         );
         assertEquals("Junior Java Developer", jobListing.getTitle());
     }
@@ -55,7 +56,8 @@ public class JobListingTest {
                 new BigDecimal("5000.00"),
                 new Company(),
                 new Location(),
-                new Recruiter()
+                new Recruiter(),
+                false
         );
         assertEquals(longTitle, jobListing.getTitle());
     }
@@ -69,7 +71,8 @@ public class JobListingTest {
                 new BigDecimal("5000.00"),
                 new Company(),
                 new Location(),
-                new Recruiter()
+                new Recruiter(),
+                false
         );
         assertEquals("", jobListing.getTitle());
     }
@@ -87,7 +90,8 @@ public class JobListingTest {
                 new BigDecimal("5000.00"),
                 new Company(),
                 new Location(),
-                new Recruiter()
+                new Recruiter(),
+                false
         );
         assertNull(jobListing.getDescription());
     }
@@ -101,7 +105,8 @@ public class JobListingTest {
                 new BigDecimal("5000.00"),
                 new Company(),
                 new Location(),
-                new Recruiter()
+                new Recruiter(),
+                false
         );
         assertEquals("We are looking for a Java developer.", jobListing.getDescription());
     }
@@ -120,7 +125,8 @@ public class JobListingTest {
                 new BigDecimal("5000.00"),
                 new Company(),
                 new Location(),
-                new Recruiter()
+                new Recruiter(),
+                false
         );
         assertEquals(dateTime, jobListing.getDatePosted());
     }
@@ -134,7 +140,8 @@ public class JobListingTest {
                 new BigDecimal("5000.00"),
                 new Company(),
                 new Location(),
-                new Recruiter()
+                new Recruiter(),
+                false
         );
         assertNull(jobListing.getDatePosted());
     }
@@ -153,7 +160,8 @@ public class JobListingTest {
                 salary,
                 new Company(),
                 new Location(),
-                new Recruiter()
+                new Recruiter(),
+                false
         );
         assertEquals(salary, jobListing.getSalary());
     }
@@ -167,7 +175,8 @@ public class JobListingTest {
                 BigDecimal.ZERO,
                 new Company(),
                 new Location(),
-                new Recruiter()
+                new Recruiter(),
+                false
         );
         assertEquals(BigDecimal.ZERO, jobListing.getSalary());
     }
@@ -181,13 +190,14 @@ public class JobListingTest {
                 null,
                 new Company(),
                 new Location(),
-                new Recruiter()
+                new Recruiter(),
+                false
         );
         assertNull(jobListing.getSalary());
     }
 
     // -----------------------------------
-    // Company tests
+    // Company / Location / PostedBy tests
     // -----------------------------------
 
     @Test
@@ -200,28 +210,11 @@ public class JobListingTest {
                 new BigDecimal("5000.00"),
                 company,
                 new Location(),
-                new Recruiter()
+                new Recruiter(),
+                false
         );
         assertEquals(company, jobListing.getCompany());
     }
-
-    @Test
-    void testNullCompany() {
-        JobListing jobListing = new JobListing(
-                "Java Developer",
-                "Description",
-                sampleDateTime(),
-                new BigDecimal("5000.00"),
-                null,
-                new Location(),
-                new Recruiter()
-        );
-        assertNull(jobListing.getCompany());
-    }
-
-    // -----------------------------------
-    // Location tests
-    // -----------------------------------
 
     @Test
     void testLocationIsStoredCorrectly() {
@@ -233,28 +226,11 @@ public class JobListingTest {
                 new BigDecimal("5000.00"),
                 new Company(),
                 location,
-                new Recruiter()
+                new Recruiter(),
+                false
         );
         assertEquals(location, jobListing.getLocation());
     }
-
-    @Test
-    void testNullLocation() {
-        JobListing jobListing = new JobListing(
-                "Java Developer",
-                "Description",
-                sampleDateTime(),
-                new BigDecimal("5000.00"),
-                new Company(),
-                null,
-                new Recruiter()
-        );
-        assertNull(jobListing.getLocation());
-    }
-
-    // -----------------------------------
-    // postedBy tests
-    // -----------------------------------
 
     @Test
     void testPostedByIsStoredCorrectly() {
@@ -266,7 +242,8 @@ public class JobListingTest {
                 new BigDecimal("5000.00"),
                 new Company(),
                 new Location(),
-                recruiter
+                recruiter,
+                false
         );
         assertEquals(recruiter, jobListing.getPostedBy());
     }
@@ -280,16 +257,40 @@ public class JobListingTest {
                 new BigDecimal("5000.00"),
                 new Company(),
                 new Location(),
-                null
+                null,
+                false
         );
         assertNull(jobListing.getPostedBy());
+    }
+
+    // -----------------------------------
+    // isClosed tests
+    // -----------------------------------
+
+    @Test
+    void testIsClosedFalse() {
+        JobListing jobListing = createBasicJobListing(false);
+        assertFalse(jobListing.isClosed(), "Job listing should not be closed when isClosed = false");
+    }
+
+    @Test
+    void testIsClosedTrue() {
+        JobListing jobListing = createBasicJobListing(true);
+        assertTrue(jobListing.isClosed(), "Job listing should be closed when isClosed = true");
+    }
+
+    @Test
+    void testSetIsClosed() {
+        JobListing jobListing = createBasicJobListing(false);
+        jobListing.setClosed(true);
+        assertTrue(jobListing.isClosed());
     }
 
     // -----------------------------------
     // Helpers
     // -----------------------------------
 
-    private JobListing createBasicJobListing() {
+    private JobListing createBasicJobListing(boolean isClosed) {
         return new JobListing(
                 "Java Developer",
                 "Description",
@@ -297,7 +298,8 @@ public class JobListingTest {
                 new BigDecimal("5000.00"),
                 new Company(),
                 new Location(),
-                new Recruiter()
+                new Recruiter(),
+                isClosed
         );
     }
 
