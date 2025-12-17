@@ -4,9 +4,7 @@ import com.example.databaseserver.DTOs.UpdateCompanyDto;
 import com.example.databaseserver.Entities.Company;
 import com.example.databaseserver.Entities.CompanyRepresentative;
 import com.example.databaseserver.Entities.Location;
-import com.example.databaseserver.Repositories.CompanyRepository;
-import com.example.databaseserver.Repositories.LocationRepository;
-import com.example.databaseserver.Repositories.RepresentativeRepository;
+import com.example.databaseserver.Repositories.*;
 import com.example.databaseserver.generated.*;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
@@ -23,14 +21,25 @@ public class CompanyService extends CompanyServiceGrpc.CompanyServiceImplBase {
     private final LocationRepository locationRepository;
     private final RepresentativeRepository representativeRepository;
 
+    private final RecruiterRepository recruiterRepository;
+    private final UserRepository userRepository;
+    private final JobListingRepository jobListingRepository;
+
     @Autowired
     public CompanyService(CompanyRepository companyRepository,
                           LocationRepository locationRepository,
-                          RepresentativeRepository representativeRepository) {
+                          RepresentativeRepository representativeRepository,
+                          RecruiterRepository recruiterRepository,
+                          UserRepository userRepository,
+                          JobListingRepository jobListingRepository) {
         this.companyRepository = companyRepository;
         this.locationRepository = locationRepository;
         this.representativeRepository = representativeRepository;
+        this.recruiterRepository = recruiterRepository;
+        this.userRepository = userRepository;
+        this.jobListingRepository = jobListingRepository;
     }
+
 
     @Override
     @Transactional
@@ -246,7 +255,6 @@ public class CompanyService extends CompanyServiceGrpc.CompanyServiceImplBase {
         }
     }
 
-    // === HELPER: mapowanie encji JPA -> protobuf ===
     private CompanyResponse toCompanyResponse(Company company) {
         Location loc = company.getLocation();
         CompanyRepresentative rep = company.getCompanyRepresentative();
@@ -268,9 +276,9 @@ public class CompanyService extends CompanyServiceGrpc.CompanyServiceImplBase {
     public void removeCompany(RemoveCompanyRequest request,
                               StreamObserver<RemoveCompanyResponse> responseObserver) {
 
-        try {
-            long companyId = request.getId();
+        long companyId = request.getId();
 
+        try {
             boolean exists = companyRepository.existsById(companyId);
             if (!exists) {
                 RemoveCompanyResponse response = RemoveCompanyResponse.newBuilder()
@@ -282,6 +290,13 @@ public class CompanyService extends CompanyServiceGrpc.CompanyServiceImplBase {
                 responseObserver.onCompleted();
                 return;
             }
+            List<Long> recruiterUserIds = recruiterRepository.findRecruiterUserIdsByCompanyId(companyId);
+
+            recruiterRepository.deleteAllByCompanyId(companyId);
+
+            if (recruiterUserIds != null && !recruiterUserIds.isEmpty()) {
+                userRepository.deleteAllById(recruiterUserIds);
+            }
 
             companyRepository.deleteById(companyId);
 
@@ -292,6 +307,7 @@ public class CompanyService extends CompanyServiceGrpc.CompanyServiceImplBase {
 
             responseObserver.onNext(response);
             responseObserver.onCompleted();
+
         } catch (Exception e) {
             RemoveCompanyResponse response = RemoveCompanyResponse.newBuilder()
                     .setSuccess(false)
