@@ -315,6 +315,7 @@
             await SyncSkillsAsync();
 
             ShowNotification("Profile and skills updated successfully.", "success");
+
             applicant = new UpdateApplicantDto
             {
                 Id = updated.Id,
@@ -325,6 +326,9 @@
                 Postcode = updated.Postcode,
                 Address = updated.Address
             };
+
+            await Task.Delay(600); 
+            Nav.NavigateTo("/applicant/dashboard");
         }
         catch (Exception ex)
         {
@@ -335,6 +339,7 @@
             isSubmitting = false;
         }
     }
+
 
     private void ToggleSkill(SkillOption skill)
     {

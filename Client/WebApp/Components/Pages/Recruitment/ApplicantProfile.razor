@@ -16,7 +16,6 @@
                 <div class="dash-header">
                     <div class="dash-title">
                         <h2>Applicant Profile</h2>
-                        <p>Read-only profile for candidate matched to Job #@JobId.</p>
                     </div>
                     
                     <a href="/recruiter/job/@JobId/matches" class="pill-back-link">Back to matches</a>
@@ -44,7 +43,6 @@
                                     <p class="text-muted mb-0">Application submitted: @application.SubmittedAt.ToLocalTime().ToString("g")</p>
                                 </div>
                                 <div class="profile-meta">
-                                    <span class="job-meta-pill">Job ID: @application.JobId</span>
                                     <span class="job-meta-pill subtle">Status: @application.Status</span>
                                 </div>
                             </div>

@@ -172,11 +172,6 @@
                 Postcode  = applicantProfile.Postcode,
                 Address   = applicantProfile.Address
             });
-
-            ShowNotification(message: "Applicant account created successfully!", type: "success");
-
-            await Task.Delay(800); // opcjonalne
-
             
             Nav.NavigateTo($"/applicant/skills/{created.Id}");
         }

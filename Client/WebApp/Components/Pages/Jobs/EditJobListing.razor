@@ -34,43 +34,44 @@
                     else
                     {
                         <EditForm Model="@job" OnValidSubmit="HandleSubmit">
-                            <DataAnnotationsValidator/>
+                            <DataAnnotationsValidator />
+                            <ValidationSummary class="validation-summary" />
 
                             <div class="form-grid">
                                 <div class="form-group full-width">
                                     <label for="j-title">Job Title</label>
-                                    <InputText id="j-title" class="form-control" @bind-Value="job.Title"/>
-                                    <ValidationMessage For="@(() => job.Title)" class="validation-message"/>
+                                    <InputText id="j-title" class="form-control" @bind-Value="job.Title" />
+                                    <ValidationMessage For="@(() => job.Title)" class="validation-message" />
                                 </div>
 
                                 <div class="form-group full-width">
                                     <label for="j-description">Description</label>
-                                    <InputTextArea id="j-description" class="form-control" @bind-Value="job.Description"/>
-                                    <ValidationMessage For="@(() => job.Description)" class="validation-message"/>
+                                    <InputTextArea id="j-description" class="form-control" @bind-Value="job.Description" />
+                                    <ValidationMessage For="@(() => job.Description)" class="validation-message" />
                                 </div>
 
                                 <div class="form-group">
                                     <label for="j-salary">Salary (optional)</label>
-                                    <InputNumber id="j-salary" class="form-control" @bind-Value="job.Salary"/>
-                                    <ValidationMessage For="@(() => job.Salary)" class="validation-message"/>
+                                    <InputNumber id="j-salary" class="form-control" @bind-Value="job.Salary" />
+                                    <ValidationMessage For="@(() => job.Salary)" class="validation-message" />
                                 </div>
 
                                 <div class="form-group">
                                     <label for="j-city">City</label>
-                                    <InputText id="j-city" class="form-control" @bind-Value="job.City"/>
-                                    <ValidationMessage For="@(() => job.City)" class="validation-message"/>
+                                    <InputText id="j-city" class="form-control" @bind-Value="job.City" />
+                                    <ValidationMessage For="@(() => job.City)" class="validation-message" />
                                 </div>
 
                                 <div class="form-group">
                                     <label for="j-postcode">Postcode</label>
-                                    <InputText id="j-postcode" class="form-control" @bind-Value="job.Postcode"/>
-                                    <ValidationMessage For="@(() => job.Postcode)" class="validation-message"/>
+                                    <InputText id="j-postcode" class="form-control" @bind-Value="job.Postcode" />
+                                    <ValidationMessage For="@(() => job.Postcode)" class="validation-message" />
                                 </div>
 
                                 <div class="form-group full-width">
                                     <label for="j-address">Address</label>
-                                    <InputText id="j-address" class="form-control" @bind-Value="job.Address"/>
-                                    <ValidationMessage For="@(() => job.Address)" class="validation-message"/>
+                                    <InputText id="j-address" class="form-control" @bind-Value="job.Address" />
+                                    <ValidationMessage For="@(() => job.Address)" class="validation-message" />
                                 </div>
                             </div>
 
@@ -93,6 +94,11 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                @if (!string.IsNullOrEmpty(skillsError))
+                                {
+                                    <div class="validation-message">@skillsError</div>
+                                }
 
                                 @if (skillsLoading)
                                 {
@@ -199,20 +205,25 @@
     private UpdateJobListingDto job = new()
     {
         Title = string.Empty,
+        Description = string.Empty,
         City = string.Empty,
         Postcode = string.Empty,
         Address = string.Empty
     };
+
     private bool isLoading = true;
     private string? loadError;
     private bool notificationVisible;
     private string notificationMessage = string.Empty;
     private string notificationType = string.Empty;
     private bool isSubmitting;
+
     private bool skillsLoading = true;
     private List<JobListingSkillDto> loadedSkills = new();
     private List<SelectedSkill> selectedSkills = new();
     private long recruiterCompanyId;
+
+    private string? skillsError;
 
     private record SkillOption(string Name, string Category);
 
@@ -286,13 +297,13 @@
             job = new UpdateJobListingDto
             {
                 Id = dto.Id,
-                Title = dto.Title,
-                Description = dto.Description,
+                Title = dto.Title ?? string.Empty,
+                Description = dto.Description ?? string.Empty,
                 Salary = dto.Salary,
                 CompanyId = dto.CompanyId,
-                City = dto.City,
-                Postcode = dto.Postcode,
-                Address = dto.Address,
+                City = dto.City ?? string.Empty,
+                Postcode = dto.Postcode ?? string.Empty,
+                Address = dto.Address ?? string.Empty,
                 IsClosed = dto.IsClosed
             };
 
@@ -322,6 +333,15 @@
 
     private async Task HandleSubmit()
     {
+        skillsError = null;
+
+        if (!selectedSkills.Any())
+        {
+            skillsError = "Job listing must have at least one skill.";
+            ShowNotification(skillsError, "error");
+            return;
+        }
+
         try
         {
             isSubmitting = true;
@@ -352,6 +372,11 @@
     private void RemoveSkillFromSelection(SelectedSkill skill)
     {
         selectedSkills.Remove(skill);
+
+        if (selectedSkills.Any())
+        {
+            skillsError = null;
+        }
     }
 
     private void OnCategoryChanged(ChangeEventArgs e)
@@ -384,6 +409,8 @@
                 Priority = selectedPriority
             });
         }
+
+        skillsError = null;
     }
 
     private async Task SyncSkillsAsync()
@@ -412,9 +439,9 @@
             var dto = new AddJobListingSkillDto
             {
                 JobListingId = JobId,
-                SkillName    = staged.Skill.Name,
-                Category     = staged.Skill.Category,
-                Priority     = staged.Priority
+                SkillName = staged.Skill.Name,
+                Category = staged.Skill.Category,
+                Priority = staged.Priority
             };
 
             await JobListingService.AddSkillsForJobListing(dto);
@@ -458,7 +485,7 @@
     {
         "must" => "Must-have",
         "nice" => "Nice to have",
-        _      => p
+        _ => p
     };
 
     private void ShowNotification(string message, string type)

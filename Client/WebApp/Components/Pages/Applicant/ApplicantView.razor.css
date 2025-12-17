@@ -1,14 +1,17 @@
-﻿/* Shell i card już masz – używamy ich dalej */
-
-/* Dostosowanie card pod swipe */
-.job-swipe-shell {
+﻿.job-swipe-shell {
     min-height: 320px;
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-/* Główna karta joba */
+/* Remove the black focus outline around the swipe container */
+.job-swipe-shell:focus,
+.job-swipe-shell:focus-visible {
+    outline: none;
+    box-shadow: none;
+}
+
 .job-card-main {
     background-color: #f9fafb;
     border-radius: 16px;
@@ -22,8 +25,15 @@
 .job-card-header {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: flex-start;
     gap: 10px;
+}
+
+.job-title-block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
 }
 
 .job-card-header h3 {
@@ -51,12 +61,19 @@
     overflow: hidden;
 }
 
-/* Meta info */
-.job-meta-row {
+/* Footer inside card */
+.job-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+    margin-top: 10px;
+}
+
+.job-meta-left {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-top: 6px;
 }
 
 .job-meta-pill {
@@ -67,12 +84,13 @@
     color: #4a5568;
 }
 
-.job-meta-pill.subtle {
-    background-color: #f7fafc;
-    color: #a0aec0;
+.job-meta-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    min-width: 280px;
 }
 
-/* Akcje (Tinder-style) */
 .job-actions {
     display: flex;
     justify-content: space-between;
@@ -122,9 +140,62 @@
     margin-top: 4px;
 }
 
+.w-100 { width: 100%; }
+.mt-2 { margin-top: 10px; }
+
+.dash-muted-btn {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #cbd5e0;
+    background-color: #ffffff;
+    color: #a0aec0;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.dash-company-btn {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 999px;
+    border: none;
+    background-color: #3182ce;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.98rem;
+    text-decoration: none;
+    box-shadow: 0 10px 22px rgba(49, 130, 206, 0.35);
+    transition: transform 0.08s ease, box-shadow 0.12s ease, background-color 0.12s ease;
+}
+
+.dash-company-btn:hover {
+    background-color: #2b6cb0;
+    box-shadow: 0 12px 26px rgba(49, 130, 206, 0.42);
+    transform: translateY(-1px);
+}
+
+.dash-company-btn:active {
+    transform: scale(0.99);
+}
+
 @media (max-width: 768px) {
     .job-card-main {
         padding: 16px 16px;
+    }
+
+    .job-card-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .job-meta-actions {
+        min-width: 0;
     }
 
     .job-actions {

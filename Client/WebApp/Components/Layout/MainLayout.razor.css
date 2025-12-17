@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: column;
     background: linear-gradient(135deg, #edf2f7, #ebf8ff);
-    overflow: hidden;
+    overflow: hidden; 
 }
 
 .auth-header {
@@ -41,10 +41,12 @@
 .auth-main {
     flex: 1;
     display: flex;
-    align-items: center;
+    align-items: flex-start;     
     justify-content: center;
     padding: 32px 16px;
-    overflow: hidden;
+    overflow-y: auto;         
+    overflow-x: hidden;
+    min-height: 0;               
 }
 
 .auth-footer {
@@ -55,21 +57,27 @@
     border-top: 1px solid #e2e8f0;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 8px;
+    justify-content: center;   
+    align-items: center;
+    gap: 12px;
+    text-align: center;
 }
 
 .auth-footer-main {
     display: flex;
     flex-direction: column;
     gap: 2px;
+    align-items: center;       
 }
 
 .auth-footer-links {
     display: flex;
-    align-items: center;
-    gap: 6px;
+    gap: 8px;
+    justify-content: center;   
+    align-items: center;       
+    width: 100%;               
 }
+
 
 .auth-footer-links a {
     color: #4a5568;

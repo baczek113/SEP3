@@ -1,20 +1,29 @@
-﻿@using WebApp.Authentication
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@using WebApp.Authentication
 @inherits LayoutComponentBase
 @inject NavigationManager Nav
 @inject AuthProvider AuthState
 
 <div class="auth-shell">
     <header class="auth-header">
-        <a href="/" class="auth-logo">
+        <a href="#"
+           class="auth-logo"
+           @onclick="OnLogoClick"
+           @onclick:preventDefault="true">
             <span class="logo-mark">🔥</span>
             <span class="logo-text">
                 Hire<span>Fire</span>
             </span>
         </a>
 
-        <button class="logout-btn" @onclick="OnLogoutClicked">
-            Logout
-        </button>
+        <AuthorizeView>
+            <Authorized>
+                <button class="logout-btn" @onclick="OnLogoutClicked">
+                    Logout
+                </button>
+            </Authorized>
+        </AuthorizeView>
     </header>
 
     <main class="auth-main">
@@ -26,13 +35,6 @@
             <span>© @DateTime.Now.Year HireFire</span>
             <span>Hiring great people at fire companies.</span>
         </div>
-        <div class="auth-footer-links">
-            <a href="#">Privacy</a>
-            <span>·</span>
-            <a href="#">Terms</a>
-            <span>·</span>
-            <a href="#">Support</a>
-        </div>
     </footer>
 </div>
 
@@ -40,6 +42,42 @@
     private async Task OnLogoutClicked()
     {
         await AuthState.LogoutAsync();
+        Nav.NavigateTo("/");
+    }
+
+    private async Task OnLogoClick()
+    {
+        var authState = await AuthState.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user?.Identity?.IsAuthenticated != true)
+        {
+            Nav.NavigateTo("/");
+            return;
+        }
+
+        // admin - nic
+        if (user.IsInRole("admin"))
+            return;
+
+        if (user.IsInRole("company_representative"))
+        {
+            Nav.NavigateTo("/company-representative/dashboard");
+            return;
+        }
+
+        if (user.IsInRole("applicant"))
+        {
+            Nav.NavigateTo("/applicant/dashboard");
+            return;
+        }
+
+        if (user.IsInRole("recruiter"))
+        {
+            Nav.NavigateTo("/recruiter/dashboard");
+            return;
+        }
+
         Nav.NavigateTo("/");
     }
 }

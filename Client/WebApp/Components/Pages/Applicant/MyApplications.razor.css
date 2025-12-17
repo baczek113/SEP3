@@ -1,4 +1,4 @@
-﻿/* --- MY APPLICATIONS / JOB CARDS --- */
+﻿
 
 .job-list {
     display: flex;
@@ -47,7 +47,6 @@
     font-size: 0.92rem;
     color: #4a5568;
     margin: 0;
-    /* opcjonalnie delikatne ucięcie tekstu */
     max-height: 4.5em;
     overflow: hidden;
 }
@@ -75,7 +74,7 @@
     padding: 0;
 }
 
-/* STATUS PILL */
+
 
 .app-status-pill {
     font-size: 0.8rem;
@@ -100,7 +99,6 @@
     color: #744210;
 }
 
-/* AKCJE (przyciski na dole karty) */
 
 .application-actions {
     margin-top: 8px;
@@ -110,7 +108,7 @@
     width: 100%;
 }
 
-/* Prosty primary button w stylu dash */
+
 
 .primary-btn {
     display: inline-flex;
@@ -138,8 +136,36 @@
     transform: scale(0.98);
 }
 
-/* Upewnij się, że secondary-btn dobrze wygląda jako link/btn w headerze */
 
 .secondary-btn.w-100 {
     width: 100%;
 }
+
+.btn-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.secondary-btn.btn-pill {
+    border: 1px solid #cbd5e0;
+    background-color: #ffffff;
+    color: #4a5568;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease;
+}
+
+.secondary-btn.btn-pill:hover {
+    background-color: #f7fafc;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.10);
+}
+
+.secondary-btn.btn-pill:active {
+    transform: scale(0.99);
+}
+

@@ -2,10 +2,14 @@
 @using System.Security.Claims
 @using Microsoft.AspNetCore.SignalR.Client
 @using WebApp.DTOs.Chat
+@using WebApp.Services
+
 @inject NavigationManager Navigation
-@implements IAsyncDisposable
 @inject AuthenticationStateProvider AuthStateProvider
 @inject IJSRuntime JS
+@inject HttpApplicantService HttpApplicantService
+
+@implements IAsyncDisposable
 @rendermode InteractiveServer
 @attribute [Authorize]
 
@@ -14,10 +18,31 @@
     <div class="alert alert-danger">
         <strong>Chat Unavailable:</strong> @errorMessage
     </div>
-}else
+}
+else
 {
     <div class="chat-wrapper">
         <div class="chat-container">
+            <div class="chat-header">
+                <div class="chat-header-left">
+                    <button type="button" class="chat-back-btn" @onclick="GoBack">
+                        Go back
+                    </button>
+
+                    <div class="chat-title">
+                        <span class="chat-title-label">Chat with</span>
+                        <h3 class="chat-title-name">
+                            @GetChatTitle()
+                        </h3>
+                    </div>
+                </div>
+
+                <div class="chat-status">
+                    <span class="status-dot @(CanSend ? "online" : "offline")"></span>
+                    <span class="status-text">@(CanSend ? "Connected" : "Connecting...")</span>
+                </div>
+            </div>
+
             <div id="messagesList" class="messages-list">
                 @foreach (var msg in messages)
                 {
@@ -40,6 +65,7 @@
                        placeholder="Type a message..."
                        class="message-input"
                        disabled="@(!CanSend)" />
+
                 <button @onclick="Send"
                         disabled="@(!CanSend || string.IsNullOrWhiteSpace(messageInput))"
                         class="send-button">
@@ -49,65 +75,81 @@
         </div>
     </div>
 }
+
 @code {
     [Parameter] public long JobId { get; set; }
     [Parameter] public long ApplicantId { get; set; }
-    private long CurrentUserId; 
+
+    private long CurrentUserId;
     private string CurrentUserName = string.Empty;
+
     private HubConnection? _hubConnection;
-    private List<ChatMessageDto> messages = new();
+    private readonly List<ChatMessageDto> messages = new();
+
     private string? errorMessage;
     private string? messageInput;
     private long? activeApplicationId;
+
+    // NEW: applicant name for header
+    private string applicantDisplayName = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
-        
+
         if (user.Identity is null || !user.Identity.IsAuthenticated)
         {
             errorMessage = "You must be logged in to chat.";
             return;
         }
-        if (user.Identity is not null && user.Identity.IsAuthenticated)
+
+        CurrentUserName = user.Identity?.Name ?? string.Empty;
+
+        var idClaim = user.FindFirst(ClaimTypes.NameIdentifier);
+        if (idClaim != null && long.TryParse(idClaim.Value, out var parsedId))
         {
-            CurrentUserName = user.Identity.Name;
-            var idClaim = user.FindFirst(ClaimTypes.NameIdentifier);
-            if (idClaim != null && long.TryParse(idClaim.Value, out var parsedId))
-            {
-                CurrentUserId = parsedId;
-            }
+            CurrentUserId = parsedId;
         }
+
+        // NEW: load applicant name for the header
+        await LoadApplicantNameAsync();
 
         _hubConnection = new HubConnectionBuilder()
             .WithUrl("https://localhost:5177/hub/chat")
             .WithAutomaticReconnect()
             .Build();
-        
+
         _hubConnection.On<string, string, string, long>("ReceiveMessage", async (user, body, time, senderId) =>
         {
-            messages.Add(new ChatMessageDto{SenderName = user, Body = body, SendAt = time, SenderId = senderId});
-            
+            messages.Add(new ChatMessageDto
+            {
+                SenderName = user,
+                Body = body,
+                SendAt = time,
+                SenderId = senderId
+            });
+
             await InvokeAsync(async () =>
             {
                 StateHasChanged();
                 await JS.InvokeVoidAsync("chatScroll.scrollToBottom", "messagesList");
             });
         });
-        
+
         _hubConnection.On<List<ChatMessageDto>, long>("ReceiveHistory", async (history, appId) =>
         {
             activeApplicationId = appId;
             messages.AddRange(history);
+
             await InvokeAsync(async () =>
             {
                 StateHasChanged();
                 await JS.InvokeVoidAsync("chatScroll.scrollToBottom", "messagesList");
-
             });
         });
-        _hubConnection.On<String>("ErrorMessage", (reason) =>
+
+        _hubConnection.On<string>("ErrorMessage", (reason) =>
         {
             errorMessage = reason;
             InvokeAsync(StateHasChanged);
@@ -116,17 +158,54 @@
         await _hubConnection.StartAsync();
         await _hubConnection.SendAsync("JoinChat", JobId, ApplicantId);
     }
-    
+
+    private async Task LoadApplicantNameAsync()
+    {
+        applicantDisplayName = $"Applicant #{ApplicantId}";
+
+        try
+        {
+            var applicant = await HttpApplicantService.GetApplicantAsync(ApplicantId);
+            if (!string.IsNullOrWhiteSpace(applicant?.Name))
+            {
+                applicantDisplayName = applicant.Name;
+            }
+        }
+        catch
+        {
+            // keep fallback
+        }
+    }
+
+    private string GetChatTitle()
+        => string.IsNullOrWhiteSpace(applicantDisplayName)
+            ? $"Applicant #{ApplicantId}"
+            : applicantDisplayName;
+
+    public bool CanSend =>
+        _hubConnection?.State == HubConnectionState.Connected && activeApplicationId.HasValue;
+
     public async Task Send()
     {
-        if(_hubConnection is not null && activeApplicationId.HasValue)
+        if (_hubConnection is not null && activeApplicationId.HasValue)
         {
             await _hubConnection.SendAsync("SendMessage", activeApplicationId.Value, messageInput, CurrentUserId);
             messageInput = "";
+
             await JS.InvokeVoidAsync("chatScroll.scrollToBottom", "messagesList");
         }
     }
-    public bool CanSend => _hubConnection?.State == HubConnectionState.Connected && activeApplicationId.HasValue;
+
+    private async Task HandleKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+            await Send();
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo($"/recruiter/job/{JobId}/matches");
+    }
 
     public async ValueTask DisposeAsync()
     {
@@ -135,9 +214,4 @@
             await _hubConnection.DisposeAsync();
         }
     }
-    private async Task HandleKeyUp(KeyboardEventArgs e)
-    {
-        if (e.Key == "Enter") await Send();
-    }
-
 }

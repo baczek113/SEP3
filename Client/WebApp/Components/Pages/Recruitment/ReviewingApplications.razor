@@ -3,7 +3,7 @@
 @using WebApp.DTOs.Application
 @using WebApp.DTOs.Applicant
 @using WebApp.Services
-
+@inject NavigationManager Nav
 @inject HttpApplicationService ApplicationService
 @inject HttpApplicantService  HttpApplicantService
 
@@ -18,6 +18,9 @@
                     <div class="dash-title">
                         <h2>Review applicants</h2>
                         <p>Use ← to decline, → to match this applicant for the job.</p>
+                        <a @onclick="GoBack" class="btn btn-outline-primary">
+                            ← Go Back
+                        </a>
                     </div>
                 </div>
 
@@ -37,7 +40,6 @@
                             {
                                 <p>@totalAppsCount total applications found, but none are pending review.</p>
                             }
-                            <p>Loaded applications: @applications.Count</p>
                             <h4>No more applications to review</h4>
                             <p>All candidates for this job have been processed.</p>
                         </div>
@@ -53,10 +55,7 @@
                                             : $"Applicant #{CurrentApplication.ApplicantId}"
                                      )
                                 </h3>
-
-                                <span class="job-location">
-                                    Application ID: @CurrentApplication.Id
-                                </span>
+                                
                             </div>
 
                             <p class="job-description">
@@ -93,10 +92,7 @@
                                 </div>
                             }
 
-                            <div class="job-meta-row" style="margin-top: 12px;">
-                                <span class="job-meta-pill">
-                                    Job ID: @CurrentApplication.JobId
-                                </span>
+                            <div class="job-meta-row" style="margin-top: 12px;">    
                                 <span class="job-meta-pill subtle">
                                     Status: @CurrentApplication.Status
                                 </span>
@@ -272,5 +268,9 @@
         {
             await DeclineAsync();
         }
+    }
+    private void GoBack()
+    {
+        Nav.NavigateTo($"/recruiter/dashboard");
     }
 }

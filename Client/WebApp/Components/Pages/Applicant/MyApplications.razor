@@ -9,7 +9,6 @@
 @inject AuthenticationStateProvider AuthState
 @inject NavigationManager Nav
 
-
 @rendermode InteractiveServer
 
 <div class="dash-shell">
@@ -19,7 +18,8 @@
                 <h2>My Applications</h2>
                 <p>Track the status of jobs you've applied to.</p>
             </div>
-            <a href="/applicant/dashboard" class="secondary-btn">
+            
+            <a href="/applicant/dashboard" class="btn btn-outline-primary">
                 ← Find Jobs
             </a>
         </div>
@@ -48,25 +48,23 @@
                             <div class="job-card-header">
                                 <h3>@job.Title</h3>
 
-                              
                                 @if (!string.IsNullOrWhiteSpace(job.City))
                                 {
                                     <span class="job-location">@job.City</span>
                                 }
-                                
+
                                 <span class="app-status-pill @GetStatusClass(app.Status)">
                                     @FormatStatus(app.Status)
                                 </span>
                             </div>
 
-                            
                             @if (job.Salary is not null)
                             {
                                 <p class="job-salary">
                                     @($"{job.Salary:C0}")
                                 </p>
                             }
-                            
+
                             @if (!string.IsNullOrWhiteSpace(job.Description))
                             {
                                 <p class="job-description">
@@ -93,11 +91,10 @@
                                     <a href="/chat/@job.Id/@_applicantId" class="primary-btn w-100">
                                         💬 Chat with Recruiter
                                     </a>
-                                    
+
                                     <a href="/applicant/job/@job.Id/company" class="primary-btn w-100 mt-2">
                                         🏢 View Company Details
                                     </a>
-                                    
                                 }
                                 else if (app.Status.Equals("DECLINED", StringComparison.OrdinalIgnoreCase))
                                 {
@@ -125,7 +122,6 @@
 @code {
     private long _applicantId;
 
-    
     private List<ApplicationWithJob>? _items;
     private class ApplicationWithJob
     {
@@ -159,7 +155,6 @@
         {
             try
             {
-               
                 var job = await JobListingService.GetByIdAsync(app.JobId);
 
                 if (job != null)
@@ -172,7 +167,7 @@
                 }
             }
             catch
-            { 
+            {
             }
         }
 

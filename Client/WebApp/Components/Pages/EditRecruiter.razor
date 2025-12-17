@@ -17,6 +17,10 @@
                 <div class="register-header">
                     <h2>Edit Recruiter</h2>
                     <p>Update recruiter details for your company.</p>
+
+                    <a @onclick="GoBack" class="btn btn-outline-primary">
+                        ← Go Back
+                    </a>
                 </div>
 
                 <div class="register-form-area">
@@ -35,42 +39,26 @@
                     else
                     {
                         <EditForm Model="@recruiterProfile" OnValidSubmit="HandleSubmit">
-                            <DataAnnotationsValidator/>
+                            <DataAnnotationsValidator />
+                            <ValidationSummary class="validation-summary" />
 
                             <div class="form-grid">
                                 <div class="form-group full-width">
                                     <label for="r-name">Full name</label>
-                                    <InputText id="r-name" class="form-control" @bind-Value="recruiterProfile.Name"/>
-                                    <ValidationMessage For="@(() => recruiterProfile.Name)" class="validation-message"/>
+                                    <InputText id="r-name" class="form-control" @bind-Value="recruiterProfile.Name" />
+                                    <ValidationMessage For="@(() => recruiterProfile.Name)" class="validation-message" />
                                 </div>
 
                                 <div class="form-group full-width">
                                     <label for="r-email">Work email</label>
-                                    <InputText id="r-email" class="form-control" @bind-Value="recruiterProfile.Email"/>
-                                    <ValidationMessage For="@(() => recruiterProfile.Email)" class="validation-message"/>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="r-password">New password (optional)</label>
-                                    <InputText id="r-password" type="password" class="form-control"
-                                               @bind-Value="recruiterProfile.Password"/>
-                                    <ValidationMessage For="@(() => recruiterProfile.Password)" class="validation-message"/>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="r-password-confirm">Confirm password</label>
-                                    <InputText id="r-password-confirm" type="password" class="form-control"
-                                               @bind-Value="confirmPassword"/>
-                                    @if (!string.IsNullOrEmpty(passwordError))
-                                    {
-                                        <span class="validation-message">@passwordError</span>
-                                    }
+                                    <InputText id="r-email" class="form-control" @bind-Value="recruiterProfile.Email" />
+                                    <ValidationMessage For="@(() => recruiterProfile.Email)" class="validation-message" />
                                 </div>
 
                                 <div class="form-group full-width">
                                     <label for="r-position">Position / title</label>
-                                    <InputText id="r-position" class="form-control" @bind-Value="recruiterProfile.Position"/>
-                                    <ValidationMessage For="@(() => recruiterProfile.Position)" class="validation-message"/>
+                                    <InputText id="r-position" class="form-control" @bind-Value="recruiterProfile.Position" />
+                                    <ValidationMessage For="@(() => recruiterProfile.Position)" class="validation-message" />
                                 </div>
                             </div>
 
@@ -100,8 +88,6 @@
     [Parameter] public long RecruiterId { get; set; }
 
     private UpdateRecruiterDto recruiterProfile = new();
-    private string confirmPassword = string.Empty;
-    private string? passwordError;
     private bool isLoading = true;
     private string? loadError;
     private bool notificationVisible;
@@ -153,21 +139,12 @@
 
     private async Task HandleSubmit()
     {
-        passwordError = null;
-
-        if (!string.IsNullOrEmpty(recruiterProfile.Password) &&
-            recruiterProfile.Password != confirmPassword)
-        {
-            passwordError = "Passwords do not match.";
-            return;
-        }
-
         try
         {
             isSubmitting = true;
             recruiterProfile.WorksInCompanyId = CompanyId;
 
-            var updated = await RecruiterService.UpdateRecruiterAsync(recruiterProfile);
+            await RecruiterService.UpdateRecruiterAsync(recruiterProfile);
 
             ShowNotification("Recruiter updated successfully.", "success");
             await Task.Delay(700);
@@ -175,12 +152,26 @@
         }
         catch (Exception ex)
         {
-            ShowNotification($"Failed to update recruiter: {ex.Message}", "error");
+            if (ex.Message.Contains("AlreadyExists", StringComparison.OrdinalIgnoreCase) ||
+                ex.Message.Contains("Email already in use", StringComparison.OrdinalIgnoreCase) ||
+                ex.Message.Contains("StatusCode=\"AlreadyExists\"", StringComparison.OrdinalIgnoreCase))
+            {
+                ShowNotification("This email is already in use.", "error");
+            }
+            else
+            {
+                ShowNotification("Failed to update recruiter.", "error");
+            }
         }
         finally
         {
             isSubmitting = false;
         }
+    }
+
+    private void GoBack()
+    {
+        Nav.NavigateTo($"/company/{CompanyId}");
     }
 
     private void ShowNotification(string message, string type)

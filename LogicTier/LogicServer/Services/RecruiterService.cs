@@ -77,8 +77,7 @@ public class RecruiterService
         };
 
         var reply = await client.GetRecruiterByIdAsync(request);
-
-        // recruiter not found → Java returns id = 0
+        
         if (reply.Id == 0)
             return null;
 
