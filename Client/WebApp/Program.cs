@@ -11,15 +11,15 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:5177") });
-builder.Services.AddScoped<HttpCompanyRepresentativeService>();
-builder.Services.AddScoped<HttpApplicantService>();
-builder.Services.AddScoped<HttpCompanyService>();
-builder.Services.AddScoped<HttpRecruiterService>();
+builder.Services.AddScoped<ICompanyRepresentativeService, HttpCompanyRepresentativeService>();
+builder.Services.AddScoped<IApplicantService, HttpApplicantService>();
+builder.Services.AddScoped<ICompanyService, HttpCompanyService>();
+builder.Services.AddScoped<IRecruiterService, HttpRecruiterService>();
 builder.Services.AddScoped<AuthProvider>();
-builder.Services.AddScoped<HttpApplicationService>();
+builder.Services.AddScoped<IApplicationService, HttpApplicationService>();
 builder.Services.AddScoped<AuthenticationStateProvider, AuthProvider>();
 builder.Services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<AuthProvider>());
-builder.Services.AddScoped<HttpJobListingService>();
+builder.Services.AddScoped<IJobListingService, HttpJobListingService>();
 builder.Services.AddAuthentication("Cookies").AddCookie();
 builder.Services.AddAuthorization();
 

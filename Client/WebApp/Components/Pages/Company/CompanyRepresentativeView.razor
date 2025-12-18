@@ -7,7 +7,7 @@
 @using WebApp.DTOs.Company
 @using WebApp.Services
 
-@inject HttpCompanyService CompanyService
+@inject ICompanyService CompanyService
 @inject NavigationManager Nav
 
 <AuthorizeView Roles="company_representative">

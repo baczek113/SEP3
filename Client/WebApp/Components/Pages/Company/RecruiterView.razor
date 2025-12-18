@@ -7,7 +7,7 @@
 @using WebApp.DTOs.Job
 @using WebApp.Services
 
-@inject HttpJobListingService JobListingService
+@inject IJobListingService JobListingService
 
 <AuthorizeView Roles="recruiter">
     <Authorized Context="_">

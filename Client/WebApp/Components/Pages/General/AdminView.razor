@@ -6,7 +6,7 @@
 @using WebApp.Services
 @using Microsoft.AspNetCore.Components.Authorization
 
-@inject HttpCompanyService CompanyService
+@inject ICompanyService CompanyService
 @inject NavigationManager Nav
 
 <AuthorizeView Roles="admin">

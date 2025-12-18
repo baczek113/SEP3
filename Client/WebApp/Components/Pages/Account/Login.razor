@@ -67,13 +67,11 @@
                 _                        => "/"  
             };
 
-            // 5) Przekierowanie
             navigationManager.NavigateTo(target);
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
-            // tutaj możesz wstawić ładny komunikat o błędzie na UI
         }
     }
 

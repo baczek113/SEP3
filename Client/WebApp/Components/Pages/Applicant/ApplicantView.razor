@@ -8,8 +8,8 @@
 @using System.Security.Claims
 @using WebApp.Services
 
-@inject HttpApplicantService ApplicantService
-@inject HttpApplicationService ApplicationService
+@inject IApplicantService ApplicantService
+@inject IApplicationService ApplicationService
 @inject AuthenticationStateProvider AuthStateProvider
 
 <AuthorizeView Roles="applicant">

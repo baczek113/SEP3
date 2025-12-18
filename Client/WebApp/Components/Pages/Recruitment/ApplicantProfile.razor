@@ -6,8 +6,8 @@
 @using WebApp.DTOs.Application
 @using WebApp.Services
 
-@inject HttpApplicantService ApplicantService
-@inject HttpApplicationService ApplicationService
+@inject IApplicantService ApplicantService
+@inject IApplicationService ApplicationService
 
 <AuthorizeView Roles="recruiter">
     <Authorized>

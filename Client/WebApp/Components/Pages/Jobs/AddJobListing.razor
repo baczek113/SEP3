@@ -4,8 +4,8 @@
 @using WebApp.DTOs.Job
 @using WebApp.Services
 
-@inject HttpJobListingService HttpJobListingService
-@inject HttpRecruiterService HttpRecruiterService
+@inject IJobListingService HttpJobListingService
+@inject IRecruiterService HttpRecruiterService
 @inject NavigationManager Nav
 @inject AuthenticationStateProvider AuthStateProvider
 

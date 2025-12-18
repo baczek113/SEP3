@@ -22,14 +22,19 @@
       <AdditionalFiles Include="Components\Pages\Communication\Chat.razor" />
       <AdditionalFiles Include="Components\Pages\Company\CompanyRepresentativeView.razor" />
       <AdditionalFiles Include="Components\Pages\Company\CompanyView.razor" />
+      <AdditionalFiles Include="Components\Pages\Company\EditCompany.razor" />
+      <AdditionalFiles Include="Components\Pages\Company\EditRecruiter.razor" />
       <AdditionalFiles Include="Components\Pages\Company\RecruiterView.razor" />
       <AdditionalFiles Include="Components\Pages\Company\RegisterCompany.razor" />
+      <AdditionalFiles Include="Components\Pages\General\AdminView.razor" />
       <AdditionalFiles Include="Components\Pages\General\Error.razor" />
       <AdditionalFiles Include="Components\Pages\General\Home.razor" />
       <AdditionalFiles Include="Components\Pages\General\NotFound.razor" />
       <AdditionalFiles Include="Components\Pages\Jobs\AddJobListing.razor" />
       <AdditionalFiles Include="Components\Pages\Jobs\AddJobListingSkills.razor" />
       <AdditionalFiles Include="Components\Pages\Jobs\RecruiterJobMatches.razor" />
+      <AdditionalFiles Include="Components\Pages\Jobs\RemoveJobListingById.razor" />
+      <AdditionalFiles Include="Components\Pages\Jobs\RemoveJobListingByList.razor" />
       <AdditionalFiles Include="Components\Pages\Recruitment\ReviewingApplications.razor" />
     </ItemGroup>
 

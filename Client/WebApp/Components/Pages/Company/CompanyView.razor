@@ -9,8 +9,8 @@
 @using WebApp.Services
 
 @inject AuthenticationStateProvider AuthStateProvider
-@inject HttpCompanyService CompanyService
-@inject HttpRecruiterService RecruiterService
+@inject ICompanyService CompanyService
+@inject IRecruiterService RecruiterService
 @inject NavigationManager Nav
 
 <AuthorizeView Roles="company_representative">

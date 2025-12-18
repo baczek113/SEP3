@@ -7,7 +7,7 @@
 @inject NavigationManager Navigation
 @inject AuthenticationStateProvider AuthStateProvider
 @inject IJSRuntime JS
-@inject HttpApplicantService HttpApplicantService
+@inject IApplicantService HttpApplicantService
 
 @implements IAsyncDisposable
 @rendermode InteractiveServer
@@ -82,6 +82,7 @@ else
 
     private long CurrentUserId;
     private string CurrentUserName = string.Empty;
+    private string? currentUserRole;
 
     private HubConnection? _hubConnection;
     private readonly List<ChatMessageDto> messages = new();
@@ -90,7 +91,6 @@ else
     private string? messageInput;
     private long? activeApplicationId;
 
-    // NEW: applicant name for header
     private string applicantDisplayName = string.Empty;
 
     protected override async Task OnInitializedAsync()
@@ -105,14 +105,13 @@ else
         }
 
         CurrentUserName = user.Identity?.Name ?? string.Empty;
-
+        currentUserRole = user.FindFirst(ClaimTypes.Role)?.Value;
         var idClaim = user.FindFirst(ClaimTypes.NameIdentifier);
         if (idClaim != null && long.TryParse(idClaim.Value, out var parsedId))
         {
             CurrentUserId = parsedId;
         }
 
-        // NEW: load applicant name for the header
         await LoadApplicantNameAsync();
 
         _hubConnection = new HubConnectionBuilder()
@@ -204,7 +203,18 @@ else
 
     private void GoBack()
     {
-        Navigation.NavigateTo($"/recruiter/job/{JobId}/matches");
+        if (string.Equals(currentUserRole, "recruiter", StringComparison.OrdinalIgnoreCase))
+        {
+            Navigation.NavigateTo($"/recruiter/job/{JobId}/matches");
+        }
+        else if (string.Equals(currentUserRole, "applicant", StringComparison.OrdinalIgnoreCase))
+        {
+            Navigation.NavigateTo("/applicant/applications");
+        }
+        else
+        {
+            Navigation.NavigateTo("/");
+        }
     }
 
     public async ValueTask DisposeAsync()

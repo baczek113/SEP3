@@ -25,5 +25,6 @@ public interface IJobListingService
     public Task<JobListingDto> UpdateJobListingAsync(UpdateJobListingDto request);
 
     public Task<JobListingDto> CloseJobListingAsync(long jobListingId);
+    public Task<JobListingDto> GetByIdAsync(long jobListingId);
 
 }
