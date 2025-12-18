@@ -8,6 +8,8 @@
 @inject AuthenticationStateProvider AuthStateProvider
 @inject IJSRuntime JS
 @inject IApplicantService HttpApplicantService
+@inject IJobListingService HttpJobListingService
+@inject IRecruiterService HttpRecruiterService
 
 @implements IAsyncDisposable
 @rendermode InteractiveServer
@@ -92,6 +94,7 @@ else
     private long? activeApplicationId;
 
     private string applicantDisplayName = string.Empty;
+    private string recruiterDisplayName = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -113,6 +116,7 @@ else
         }
 
         await LoadApplicantNameAsync();
+        await LoadRecruiterName();
 
         _hubConnection = new HubConnectionBuilder()
             .WithUrl("https://localhost:5177/hub/chat")
@@ -176,10 +180,42 @@ else
         }
     }
 
+    private async Task LoadRecruiterName()
+    {
+        recruiterDisplayName = "";
+        try
+        {
+            var job = await HttpJobListingService.GetByIdAsync(JobId);
+            if (job.PostedById.HasValue)
+            {
+                var recruiter = await HttpRecruiterService.GetRecruiterByIdAsync(job.PostedById.Value);
+                
+                if (!string.IsNullOrWhiteSpace(recruiter?.Name))
+                {
+                    recruiterDisplayName = recruiter.Name;
+                }
+            }
+            
+        }
+        catch(Exception e)
+        {
+            errorMessage = e.Message;
+        }
+    }
+
     private string GetChatTitle()
-        => string.IsNullOrWhiteSpace(applicantDisplayName)
+    {
+        if (string.Equals(currentUserRole, "applicant", StringComparison.OrdinalIgnoreCase))
+        {
+            return string.IsNullOrWhiteSpace(recruiterDisplayName) 
+                ? "Recruiter" 
+                : recruiterDisplayName;
+        }
+
+        return string.IsNullOrWhiteSpace(applicantDisplayName)
             ? $"Applicant #{ApplicantId}"
             : applicantDisplayName;
+    }
 
     public bool CanSend =>
         _hubConnection?.State == HubConnectionState.Connected && activeApplicationId.HasValue;
