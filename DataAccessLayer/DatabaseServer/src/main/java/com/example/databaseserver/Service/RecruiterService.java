@@ -15,6 +15,7 @@ import com.example.databaseserver.generated.GetRecruitersForCompanyRequest;
 import com.example.databaseserver.generated.GetRecruitersForCompanyResponse;
 import com.example.databaseserver.generated.GetRecruiterByIdRequest;
 import com.example.databaseserver.generated.UpdateRecruiterRequest;
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import jakarta.transaction.Transactional;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -222,16 +223,27 @@ public class RecruiterService extends RecruiterServiceGrpc.RecruiterServiceImplB
                 return;
             }
 
-            if (!request.getEmail().isEmpty()) {
-                user.setEmail(request.getEmail());
+            String newEmail = request.getEmail();
+            if (newEmail != null && !newEmail.isBlank() && !newEmail.equals(user.getEmail())) {
+                if (userRepository.existsByEmail(newEmail)) {
+                    responseObserver.onError(
+                            Status.ALREADY_EXISTS
+                                    .withDescription("Email already in use: " + newEmail)
+                                    .asRuntimeException()
+                    );
+                    return;
+                }
+                user.setEmail(newEmail);
             }
 
-            if (!request.getName().isEmpty()) {
-                user.setName(request.getName());
+            String newName = request.getName();
+            if (newName != null && !newName.isBlank()) {
+                user.setName(newName);
             }
 
-            if (!request.getPasswordHash().isEmpty()) {
-                user.setPassword(request.getPasswordHash());
+            String newPasswordHash = request.getPasswordHash();
+            if (newPasswordHash != null && !newPasswordHash.isBlank()) {
+                user.setPassword(newPasswordHash);
             }
 
             recruiter.setPosition(request.getPosition());
@@ -261,7 +273,12 @@ public class RecruiterService extends RecruiterServiceGrpc.RecruiterServiceImplB
             responseObserver.onCompleted();
         }
         catch (Exception e) {
-            responseObserver.onError(e);
+            responseObserver.onError(
+                    Status.INTERNAL
+                            .withDescription(e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName())
+                            .withCause(e)
+                            .asRuntimeException()
+            );
         }
     }
 

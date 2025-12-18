@@ -190,25 +190,22 @@ public class ApplicantService extends ApplicantServiceGrpc.ApplicantServiceImplB
 
             Skill skill = skillRepository.findByName(request.getSkillName())
                     .orElseGet(() -> {
-                        String category = request.getCategory().isBlank()
-                                ? null
-                                : request.getCategory();
+                        String category = request.getCategory().isBlank() ? null : request.getCategory();
                         Skill newSkill = new Skill(request.getSkillName(), category);
                         return skillRepository.save(newSkill);
                     });
 
-            boolean exists = applicantSkillRepository
-                    .existsByApplicant_IdAndSkill_Id(applicant.getId(), skill.getId());
-
-            if (exists) {
-                throw new RuntimeException("Applicant already has this skill assigned.");
-            }
-
             SkillLevel level = mapProtoToEntityLevel(request.getLevel());
 
-            ApplicantSkill applicantSkill = new ApplicantSkill(applicant, skill, level);
-            ApplicantSkill saved = applicantSkillRepository.save(applicantSkill);
+            ApplicantSkill applicantSkill = applicantSkillRepository
+                    .findByApplicant_IdAndSkill_Id(applicant.getId(), skill.getId())
+                    .map(existing -> {
+                        existing.setLevel(level);
+                        return existing;
+                    })
+                    .orElseGet(() -> new ApplicantSkill(applicant, skill, level));
 
+            ApplicantSkill saved = applicantSkillRepository.save(applicantSkill);
 
             ApplicantSkillResponse response = ApplicantSkillResponse.newBuilder()
                     .setId(saved.getId())
@@ -220,10 +217,8 @@ public class ApplicantService extends ApplicantServiceGrpc.ApplicantServiceImplB
 
             responseObserver.onNext(response);
             responseObserver.onCompleted();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-
             responseObserver.onError(
                     io.grpc.Status.INTERNAL
                             .withDescription(e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName())
@@ -238,12 +233,9 @@ public class ApplicantService extends ApplicantServiceGrpc.ApplicantServiceImplB
                                    StreamObserver<ApplicantSkillsResponse> responseObserver) {
         try {
             List<ApplicantSkill> skills = applicantSkillRepository.findByApplicant_Id(request.getApplicantId());
-            if(skills.isEmpty()) {
-                throw new RuntimeException("Applicant with id " + request.getApplicantId() + " has no skills");
-            }
 
             List<ApplicantSkillResponse> skillsResponse = new ArrayList<>();
-            for(ApplicantSkill skill : skills) {
+            for (ApplicantSkill skill : skills) {
                 skillsResponse.add(ApplicantSkillResponse.newBuilder()
                         .setId(skill.getId())
                         .setApplicantId(request.getApplicantId())
@@ -252,16 +244,15 @@ public class ApplicantService extends ApplicantServiceGrpc.ApplicantServiceImplB
                         .setLevel(mapEntityToProtoLevel(skill.getLevel()))
                         .build());
             }
+
             ApplicantSkillsResponse response = ApplicantSkillsResponse.newBuilder()
                     .addAllSkills(skillsResponse)
                     .build();
 
             responseObserver.onNext(response);
             responseObserver.onCompleted();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
-
             responseObserver.onError(
                     io.grpc.Status.INTERNAL
                             .withDescription(e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName())
@@ -269,6 +260,7 @@ public class ApplicantService extends ApplicantServiceGrpc.ApplicantServiceImplB
                             .asRuntimeException());
         }
     }
+
 
     @Override
     @Transactional
