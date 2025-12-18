@@ -63,6 +63,7 @@ public class HttpRecruiterService : IRecruiterService
         {
             throw new Exception($"Status {httpResponse.StatusCode}: {response}");
         }
+        
 
         return JsonSerializer.Deserialize<RecruiterDto>(response,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;

@@ -56,9 +56,13 @@
                     <div class="company-header-actions">
                         @if (company is not null)
                         {
+                            <a @onclick="GoBack" class="btn btn-outline-primary">
+                                ← Go Back
+                            </a>
                             <a class="edit-company-btn" href="@($"/company/{CompanyId}/edit")">
                                 Edit
                             </a>
+                          
                         }
                         <a href="@($"/company/{CompanyId}/register-recruiter")"
                            class="edit-company-btn">
@@ -66,8 +70,6 @@
                         </a>
                     </div>
                 </div>
-
-                <!-- CONTENT -->
                 <div class="company-detail-content">
                     @if (isLoading)
                     {
@@ -279,5 +281,9 @@
             isDeleting = false;
             StateHasChanged();
         }
+    }
+    private void GoBack()
+    {
+        Nav.NavigateTo("company-representative/dashboard");
     }
 }

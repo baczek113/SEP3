@@ -1,108 +1,172 @@
 @page "/recruiter/job/{JobId:long}/matches"
+
 @using WebApp.DTOs.Application
 @using WebApp.DTOs.Applicant
 @using WebApp.Services
+
 @inject HttpApplicationService AppService
 @inject HttpApplicantService ApplicantService
 @inject NavigationManager Nav
+
 @rendermode InteractiveServer
 
-<div class="dash-shell">
-    <div class="dash-card">
-        <div class="dash-header">
-            <div class="dash-title">
-                <h2>Matched Candidates</h2>
-                <p>Applicants you have accepted for Job #@JobId</p>
-            </div>
-            <a href="/recruiter/dashboard" class="pill-back-link">Back to matches</a>
-        </div>
+<AuthorizeView Roles="recruiter">
+    <Authorized Context="_">
+        <div class="dash-shell">
+            <div class="dash-card matches-shell">
+                <div class="dash-header matches-header">
+                    <div class="dash-title">
+                        <h2>Matched Candidates</h2>
+                    </div>
 
-        <div class="dash-content">
-            @if (isLoading)
-            {
-                <p class="dash-loading">Loading matches...</p>
-            }
-            else if (matches == null || !matches.Any())
-            {
-                <div class="dash-empty">
-                    <h4>No matches found</h4>
-                    <p>Go to <a href="/recruiter/job/@JobId/applications">Review Applicants</a> to find candidates.</p>
+                    <div class="matches-header-actions">
+                        <a @onclick="GoBack" class="btn btn-outline-primary">
+                            ← Go Back
+                        </a>
+                        <a href="@($"/recruiter/job/{JobId}/applications")" class="edit-company-btn">
+                            Review applicants
+                        </a>
+                    </div>
                 </div>
-            }
-            else
-            {
-                <div class="list-group">
-                    @foreach (var app in matches)
+
+                <div class="dash-content">
+                    @if (isLoading)
                     {
-                        var applicantName = applicantNames.ContainsKey(app.ApplicantId) 
-                            ? applicantNames[app.ApplicantId] 
-                            : $"Applicant #{app.ApplicantId}";
+                        <p class="dash-loading">Loading matches...</p>
+                    }
+                    else if (!string.IsNullOrWhiteSpace(errorMessage))
+                    {
+                        <div class="dash-empty">
+                            <h4>Unable to load matches</h4>
+                            <p>@errorMessage</p>
+                        </div>
+                    }
+                    else if (matches is null || !matches.Any())
+                    {
+                        <div class="dash-empty">
+                            <h4>No matches found</h4>
+                            <p>
+                                Go to
+                                <a href="@($"/recruiter/job/{JobId}/applications")">Review applicants</a>
+                                to find candidates.
+                            </p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="matches-grid">
+                            @foreach (var app in matches)
+                            {
+                                var applicantName =
+                                    applicantNames.TryGetValue(app.ApplicantId, out var name)
+                                        ? name
+                                        : $"Applicant #{app.ApplicantId}";
 
-                        <div class="list-group-item d-flex justify-content-between align-items-center p-3 mb-2 border rounded">
-                            <div>
-                                <h5 class="mb-1">@applicantName</h5>
-                                <small class="text-muted">Matched on: @app.SubmittedAt.ToShortDateString()</small>
-                            </div>
+                                <div class="match-card">
+                                    <div class="match-main">
+                                        <div class="match-title-row">
+                                            <h4 class="match-name">@applicantName</h4>
+                                            <span class="match-pill">Matched</span>
+                                        </div>
 
-                            <div class="d-flex flex-column gap-2">
-                                <a href="/chat/@JobId/@app.ApplicantId" class="btn btn-primary">
-                                    Chat
-                                </a>
-                                <a href="/recruiter/job/@JobId/applicant/@app.ApplicantId" class="btn btn-primary">
-                                    Profile
-                                </a>
-                            </div>
+                                        <div class="match-meta">
+                                            <span class="match-meta-item">
+                                                Application ID: <strong>@app.Id</strong>
+                                            </span>
+                                            <span class="match-meta-dot">•</span>
+                                            <span class="match-meta-item">
+                                                Matched on: <strong>@app.SubmittedAt.ToLocalTime().ToString("d")</strong>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="match-actions">
+                                        <a href="@($"/chat/{JobId}/{app.ApplicantId}")"
+                                           class="match-action-btn primary">
+                                            Chat
+                                        </a>
+
+                                        <a href="@($"/recruiter/job/{JobId}/applicant/{app.ApplicantId}")"
+                                           class="match-action-btn secondary">
+                                            View profile
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="matches-footer">
+                            <span class="matches-count">
+                                Total matches: <strong>@matches.Count</strong>
+                            </span>
                         </div>
                     }
                 </div>
-            }
+            </div>
         </div>
-    </div>
-</div>
+    </Authorized>
+
+    <NotAuthorized>
+        <div class="dash-shell">
+            <div class="dash-card">
+                <p>You must be logged in as a recruiter to see this page.</p>
+                <a href="/login" class="primary-btn dash-register-btn">Go to login</a>
+            </div>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
     [Parameter] public long JobId { get; set; }
-    
-    private List<ApplicationDto>? allApps = new();
+
     private List<ApplicationDto>? matches;
-    private Dictionary<long, string> applicantNames = new();
+    private readonly Dictionary<long, string> applicantNames = new();
     private bool isLoading = true;
+    private string? errorMessage;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
             isLoading = true;
-            
-            allApps = await AppService.GetByJobAsync(JobId);
-            
-            matches = allApps
+            errorMessage = null;
+
+            var allApps = await AppService.GetByJobAsync(JobId);
+
+            matches = (allApps ?? new List<ApplicationDto>())
                 .Where(a => string.Equals(a.Status, "matched", StringComparison.OrdinalIgnoreCase))
+                .OrderByDescending(a => a.SubmittedAt)
                 .ToList();
 
             foreach (var app in matches)
             {
-                if (!applicantNames.ContainsKey(app.ApplicantId))
+                if (applicantNames.ContainsKey(app.ApplicantId))
+                    continue;
+
+                try
                 {
-                    try 
-                    {
-                        var applicant = await ApplicantService.GetApplicantAsync(app.ApplicantId);
-                        applicantNames[app.ApplicantId] = applicant.Name;
-                    }
-                    catch 
-                    {
-                        applicantNames[app.ApplicantId] = "Unknown Applicant";
-                    }
+                    var applicant = await ApplicantService.GetApplicantAsync(app.ApplicantId);
+                    applicantNames[app.ApplicantId] = string.IsNullOrWhiteSpace(applicant?.Name)
+                        ? $"Applicant #{app.ApplicantId}"
+                        : applicant.Name;
+                }
+                catch
+                {
+                    applicantNames[app.ApplicantId] = $"Applicant #{app.ApplicantId}";
                 }
             }
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine($"Error loading matches: {e.Message}");
+            errorMessage = ex.Message;
         }
         finally
         {
             isLoading = false;
         }
+    }
+    private void GoBack()
+    {
+        Nav.NavigateTo($"/recruiter/dashboard");
     }
 }

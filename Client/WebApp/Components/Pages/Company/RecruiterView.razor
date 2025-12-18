@@ -33,7 +33,7 @@
                     }
                     else if (!string.IsNullOrEmpty(statusMessage))
                     {
-                        <div class="alert alert-warning" role="alert">@statusMessage</div>
+                        <div class="alert @statusMessageClass" role="alert">@statusMessage</div>
                     }
                     else if (jobListings is null || jobListings.Count == 0)
                     {
@@ -51,12 +51,22 @@
                             @foreach (var job in jobListings)
                             {
                                 <div class="job-card">
-                                    <div class="job-card-header">
-                                        <h3>@job.Title</h3>
-                                        @if (!string.IsNullOrWhiteSpace(job.DatePosted.ToString()))
-                                        {
-                                            <span class="job-date">@job.DatePosted.ToShortDateString()</span>
-                                        }
+                                    <div class="job-card-header job-card-header--with-actions">
+                                        <div class="job-card-header-left">
+                                            <h3>@job.Title</h3>
+                                            @if (!string.IsNullOrWhiteSpace(job.DatePosted.ToString()))
+                                            {
+                                                <span class="job-date">@job.DatePosted.ToShortDateString()</span>
+                                            }
+                                        </div>
+
+                                        <!-- Remove button moved to top-right -->
+                                        <button type="button"
+                                                class="btn btn-danger btn-sm job-remove-top"
+                                                title="Remove job listing"
+                                                @onclick="() => OpenDeleteModal(job)">
+                                            Remove
+                                        </button>
                                     </div>
 
                                     @if (!string.IsNullOrWhiteSpace(job.Description))
@@ -69,7 +79,6 @@
                                         {
                                             <span class="job-salary">Salary: @job.Salary</span>
                                         }
-                                        <span class="job-id">ID: @job.Id</span>
                                         <span class="job-status-pill @(job.IsClosed ? "closed" : "open")">
                                             @(job.IsClosed ? "Closed" : "Open")
                                         </span>
@@ -79,7 +88,7 @@
                                         <a href="/recruiter/job/@job.Id/applications" class="btn btn-outline-primary flex-grow-1">
                                             Review
                                         </a>
-                                        
+
                                         <a href="/recruiter/job/@job.Id/matches" class="btn btn-success flex-grow-1">
                                             Matches
                                         </a>
@@ -95,7 +104,53 @@
                 </div>
             </div>
         </div>
+
+        @if (isDeleteModalOpen)
+        {
+            <div class="hf-modal-backdrop" @onclick="CloseDeleteModal">
+                <div class="hf-modal" role="dialog" aria-modal="true" aria-labelledby="hfDeleteTitle"
+                     @onclick:stopPropagation="true">
+                    <div class="hf-modal-header">
+                        <h5 id="hfDeleteTitle" class="hf-modal-title">Remove job listing</h5>
+                        <button type="button" class="hf-modal-close" aria-label="Close" @onclick="CloseDeleteModal">×</button>
+                    </div>
+
+                    <div class="hf-modal-body">
+                        <p class="hf-modal-warning">
+                            Are you sure you want to remove this job listing?
+                        </p>
+                        <p class="hf-modal-warning">
+                            You will lose all applications and chats associated with it.
+                        </p>
+
+                        @if (jobToDelete is not null)
+                        {
+                            <div class="hf-modal-jobinfo">
+                                <div><strong>Title:</strong> @jobToDelete.Title</div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="hf-modal-footer">
+                        <button type="button"
+                                class="btn btn-outline-secondary"
+                                @onclick="CloseDeleteModal"
+                                disabled="@isDeleting">
+                            Cancel
+                        </button>
+
+                        <button type="button"
+                                class="btn btn-danger"
+                                @onclick="ConfirmDeleteAsync"
+                                disabled="@isDeleting">
+                            @(isDeleting ? "Removing..." : "Remove")
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
     </Authorized>
+
     <NotAuthorized>
         <p>You must be logged in as a recruiter to view this page.</p>
         <a href="/login">Go to login</a>
@@ -109,7 +164,13 @@
     private long recruiterId;
     private List<JobListingDto> jobListings = new();
     private bool isLoading = true;
+
     private string? statusMessage;
+    private string statusMessageClass = "alert-warning";
+
+    private bool isDeleteModalOpen;
+    private bool isDeleting;
+    private JobListingDto? jobToDelete;
 
     protected override async Task OnInitializedAsync()
     {
@@ -127,5 +188,48 @@
         }
 
         isLoading = false;
+    }
+
+    private void OpenDeleteModal(JobListingDto job)
+    {
+        statusMessage = null;
+        jobToDelete = job;
+        isDeleteModalOpen = true;
+    }
+
+    private void CloseDeleteModal()
+    {
+        if (isDeleting) return;
+        isDeleteModalOpen = false;
+        jobToDelete = null;
+    }
+
+    private async Task ConfirmDeleteAsync()
+    {
+        if (jobToDelete is null) return;
+
+        isDeleting = true;
+        statusMessage = null;
+
+        try
+        {
+            await JobListingService.DeleteJobListingAsync(jobToDelete.Id);
+
+            jobListings.Remove(jobToDelete);
+
+            // No success message (per your request)
+            statusMessage = null;
+        }
+        catch
+        {
+            statusMessageClass = "alert-danger";
+            statusMessage = "Failed to remove the job listing. Please try again.";
+        }
+        finally
+        {
+            isDeleting = false;
+            isDeleteModalOpen = false;
+            jobToDelete = null;
+        }
     }
 }

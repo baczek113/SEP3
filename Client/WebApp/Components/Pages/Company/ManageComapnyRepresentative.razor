@@ -16,11 +16,16 @@
         <div class="register-shell">
             <div class="register-card">
                 <div class="register-header">
+                  
                     <h2>Manage account</h2>
                     <p>
                         Update your account information or delete your company representative account.
                     </p>
+                    <a @onclick="GoBack" class="btn btn-outline-primary">
+                        ← Go Back
+                    </a>
                 </div>
+                
 
                 <div class="register-form-area">
                     <EditForm Model="@repProfile" OnValidSubmit="HandleSaveChanges">
@@ -44,22 +49,7 @@
                                 <InputText id="r-position" class="form-control" @bind-Value="repProfile.Position" />
                                 <ValidationMessage For="@(() => repProfile.Position)" class="validation-message" />
                             </div>
-
-                            <div class="form-group">
-                                <label for="r-password">New password (optional)</label>
-                                <InputText id="r-password" type="password" class="form-control"
-                                           @bind-Value="newPassword" />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="r-password-confirm">Confirm new password</label>
-                                <InputText id="r-password-confirm" type="password" class="form-control"
-                                           @bind-Value="confirmPassword" />
-                                @if (!string.IsNullOrEmpty(passwordError))
-                                {
-                                    <span class="validation-message">@passwordError</span>
-                                }
-                            </div>
+                            
                         </div>
 
                         <button type="submit" class="submit-btn primary-btn">
@@ -168,8 +158,19 @@
         }
         catch (Exception ex)
         {
-            ShowNotification($"Failed to update account: {ex.Message}", "error");
+            if (ex.Message.Contains("AlreadyExists", StringComparison.OrdinalIgnoreCase) ||
+                ex.Message.Contains("Email already in use", StringComparison.OrdinalIgnoreCase) ||
+                ex.Message.Contains("This email is already in use", StringComparison.OrdinalIgnoreCase) ||
+                ex.Message.Contains("StatusCode=\"AlreadyExists\"", StringComparison.OrdinalIgnoreCase))
+            {
+                ShowNotification("This email is already in use.", "error");
+            }
+            else
+            {
+                ShowNotification("Failed to update profile.", "error");
+            }
         }
+
     }
 
     private void ShowNotification(string message, string type)
@@ -206,5 +207,9 @@
         {
             ShowNotification($"Failed to delete account: {ex.Message}", "error");
         }
+    }
+    private void GoBack()
+    {
+        Nav.NavigateTo("company-representative/dashboard");
     }
 }

@@ -148,3 +148,64 @@ label {
         grid-template-columns: 1fr;
     }
 }
+
+
+
+.primary-btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 20px;
+    border-radius: 999px;
+    border: none;
+    background-color: #3182ce;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease;
+}
+
+.primary-btn:hover {
+    background-color: #2b6cb0;
+    box-shadow: 0 6px 16px rgba(56, 189, 248, 0.5);
+}
+
+.primary-btn:active {
+    transform: scale(0.98);
+}
+
+
+.secondary-btn.w-100 {
+    width: 100%;
+}
+
+.btn-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.secondary-btn.btn-pill {
+    border: 1px solid #cbd5e0;
+    background-color: #ffffff;
+    color: #4a5568;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease;
+}
+
+.secondary-btn.btn-pill:hover {
+    background-color: #f7fafc;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.10);
+}
+
+.secondary-btn.btn-pill:active {
+    transform: scale(0.99);
+}

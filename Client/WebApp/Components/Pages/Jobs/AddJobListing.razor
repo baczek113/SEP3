@@ -25,45 +25,45 @@
 
                 <div class="register-form-area">
                     <EditForm Model="@jobListing" OnValidSubmit="HandleJobListingSubmit">
-                        <DataAnnotationsValidator/>
+                        <DataAnnotationsValidator />
+                        <ValidationSummary class="validation-summary" />
 
                         <div class="form-grid">
 
                             <div class="form-group full-width">
                                 <label for="j-title">Job Title</label>
-                                <InputText id="j-title" class="form-control" @bind-Value="jobListing.Title"/>
-                                <ValidationMessage For="@(() => jobListing.Title)" class="validation-message"/>
+                                <InputText id="j-title" class="form-control" @bind-Value="jobListing.Title" />
+                                <ValidationMessage For="@(() => jobListing.Title)" class="validation-message" />
                             </div>
 
                             <div class="form-group full-width">
                                 <label for="j-description">Description</label>
-                                <InputTextArea id="j-description" class="form-control" @bind-Value="jobListing.Description"/>
-                                <ValidationMessage For="@(() => jobListing.Description)" class="validation-message"/>
+                                <InputTextArea id="j-description" class="form-control" @bind-Value="jobListing.Description" />
+                                <ValidationMessage For="@(() => jobListing.Description)" class="validation-message" />
                             </div>
 
                             <div class="form-group">
                                 <label for="j-salary">Salary (optional)</label>
-                                <InputNumber id="j-salary" class="form-control" @bind-Value="jobListing.Salary"/>
-                                <ValidationMessage For="@(() => jobListing.Salary)" class="validation-message"/>
+                                <InputNumber id="j-salary" class="form-control" @bind-Value="jobListing.Salary" />
+                                <ValidationMessage For="@(() => jobListing.Salary)" class="validation-message" />
                             </div>
 
-                            <!-- LOCATION -->
                             <div class="form-group">
                                 <label for="j-city">City</label>
-                                <InputText id="j-city" class="form-control" @bind-Value="jobListing.City"/>
-                                <ValidationMessage For="@(() => jobListing.City)" class="validation-message"/>
+                                <InputText id="j-city" class="form-control" @bind-Value="jobListing.City" />
+                                <ValidationMessage For="@(() => jobListing.City)" class="validation-message" />
                             </div>
 
                             <div class="form-group">
                                 <label for="j-postcode">Postcode</label>
-                                <InputText id="j-postcode" class="form-control" @bind-Value="jobListing.Postcode"/>
-                                <ValidationMessage For="@(() => jobListing.Postcode)" class="validation-message"/>
+                                <InputText id="j-postcode" class="form-control" @bind-Value="jobListing.Postcode" />
+                                <ValidationMessage For="@(() => jobListing.Postcode)" class="validation-message" />
                             </div>
 
                             <div class="form-group full-width">
                                 <label for="j-address">Address</label>
-                                <InputText id="j-address" class="form-control" @bind-Value="jobListing.Address"/>
-                                <ValidationMessage For="@(() => jobListing.Address)" class="validation-message"/>
+                                <InputText id="j-address" class="form-control" @bind-Value="jobListing.Address" />
+                                <ValidationMessage For="@(() => jobListing.Address)" class="validation-message" />
                             </div>
 
                         </div>
@@ -90,7 +90,14 @@
 </AuthorizeView>
 
 @code {
-    private CreateJobListingDto jobListing = new();
+    private CreateJobListingDto jobListing = new()
+    {
+        Title = string.Empty,
+        Description = string.Empty,
+        City = string.Empty,
+        Postcode = string.Empty,
+        Address = string.Empty
+    };
 
     private bool notificationVisible = false;
     private string notificationMessage = string.Empty;
@@ -103,19 +110,17 @@
         {
             isSubmitting = true;
 
-            // 🔹 IDENTYCZNIE jak w register-company:
             var authState = await AuthStateProvider.GetAuthenticationStateAsync();
             var user = authState.User;
 
             var idClaim = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (!long.TryParse(idClaim, out var recruiterId))
+            if (!long.TryParse(idClaim, out var recruiterId) || recruiterId <= 0)
             {
                 ShowNotification("You must be logged in as a recruiter to create a job listing.", "error");
                 Nav.NavigateTo("/login");
                 return;
             }
-            
+
             var recruiter = await HttpRecruiterService.GetRecruiterByIdAsync(recruiterId);
 
             jobListing.PostedById = recruiterId;
@@ -123,18 +128,14 @@
 
             var created = await HttpJobListingService.AddJobListing(jobListing);
 
-            ShowNotification(message: "Job listing created successfully!", type: "success");
-
+            ShowNotification("Job listing created successfully!", "success");
             await Task.Delay(800);
 
-
             Nav.NavigateTo($"/joblisting/skills/{created.Id}");
-
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             ShowNotification(ex.Message, "error");
-
         }
         finally
         {

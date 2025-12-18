@@ -20,11 +20,12 @@
                         <span class="company-detail-label">Edit company profile</span>
                         <h2>Edit Company</h2>
                         <p>Update your company details so candidates see the latest information.</p>
+                       
                     </div>
                     <div class="header-actions">
-                        <button class="ghost-btn" type="button" @onclick="@(() => Nav.NavigateTo($"/company/{CompanyId}"))">
-                            Cancel
-                        </button>
+                        <a @onclick="GoBack" class="btn btn-outline-primary">
+                            ← Go Back
+                        </a>
                         <button form="edit-company-form" class="primary-btn pill-btn" type="submit">
                             Save changes
                         </button>
@@ -209,5 +210,9 @@
             notificationVisible = false;
             InvokeAsync(StateHasChanged);
         });
+    }
+    private void GoBack()
+    {
+        Nav.NavigateTo($"/company/{CompanyId}");
     }
 }

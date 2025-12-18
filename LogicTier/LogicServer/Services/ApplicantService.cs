@@ -181,7 +181,6 @@ public class ApplicantService
 
         foreach (var jobListing in jobListingsInTheArea)
         {
-            // jeśli już aplikował na ten job → pomijamy
             if (applications.Any(a => a.JobId == jobListing.Id))
             {
                 continue;
@@ -192,8 +191,7 @@ public class ApplicantService
             List<ApplicantSkillResponse> applicantSkillsMatchedWithJob = new();
             List<JobListingSkillDto> jobListingSkills =
                 await _jobListingService.GetJobListingSkillsAsync(jobListing.Id);
-
-            // 🔹 TU: porównujemy po SkillId, nie po Id
+            
             foreach (JobListingSkillDto skill in jobListingSkills)
             {
                 var matches = applicantSkills
@@ -205,7 +203,7 @@ public class ApplicantService
 
             foreach (ApplicantSkillResponse applicantSkill in applicantSkillsMatchedWithJob)
             {
-                // 🔹 TU: też porównujemy po SkillId
+                
                 string jobListingSkillPriorityString =
                     jobListingSkills
                         .First(skill => skill.SkillId == applicantSkill.SkillId)

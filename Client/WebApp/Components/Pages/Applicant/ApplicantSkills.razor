@@ -3,6 +3,7 @@
 @using WebApp.Services
 @inject HttpApplicantService HttpApplicantService
 @layout MainLayout
+@inject NavigationManager Nav
 @page "/applicant/skills/{ApplicantId:long}"
 @rendermode InteractiveServer
 
@@ -200,7 +201,11 @@
                 await HttpApplicantService.AddApplicantSkillAsync(dto);
             }
 
-            ShowNotification("Skills have been saved to your profile.", "success");
+            ShowNotification(message: "Applicant account created successfully!", type: "success");
+
+            await Task.Delay(800);
+            
+            Nav.NavigateTo($"/login");
         }
         catch (Exception ex)
         {

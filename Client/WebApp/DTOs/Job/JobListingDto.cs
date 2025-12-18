@@ -1,4 +1,6 @@
-﻿namespace WebApp.DTOs.Job
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace WebApp.DTOs.Job
 
 {
     public class JobListingDto
@@ -9,6 +11,7 @@
         public string? Description { get; set; }
 
         public DateTime DatePosted { get; set; }
+        
         public decimal? Salary { get; set; }
 
         public long CompanyId { get; set; }

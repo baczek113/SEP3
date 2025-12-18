@@ -1,7 +1,9 @@
 @page "/applicant/dashboard"
+@rendermode InteractiveServer
 
 @using WebApp.DTOs.Job
 @using WebApp.DTOs.Application
+@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.Web
 @using System.Security.Claims
 @using WebApp.Services
@@ -13,14 +15,14 @@
 <AuthorizeView Roles="applicant">
     <Authorized Context="_">
         <div class="dash-shell">
-            <div class="dash-card job-swipe-shell" tabindex="0" @onkeydown="HandleKeyDown">
+            <div class="dash-card job-swipe-shell" tabindex="0" @ref="_swipeShellRef" @onkeydown="HandleKeyDown">
                 <div class="dash-header">
                     <div class="dash-title">
                         <h2>Discover jobs</h2>
-                        <p>Use left arrow to skip, right arrow to apply. Simple as Tinder.</p>
+                        <p>Here are job listings recommended for you. Apply quickly using the arrow keys or the buttons below.</p>
                     </div>
 
-                    <div class="d-flex gap-2">
+                    <div class="d-flex gap-2 dash-header-actions">
                         <a href="/applicant/applications" class="btn btn-outline-primary">
                             View My Applications
                         </a>
@@ -50,11 +52,14 @@
                     {
                         <div class="job-card-main">
                             <div class="job-card-header">
-                                <h3>@CurrentJob.Title</h3>
+                                <div class="job-title-block">
+                                    <h3>@CurrentJob.Title</h3>
 
-                                <span class="job-location">
-                                    @CurrentJob.City
-                                </span>
+                                    @if (!string.IsNullOrWhiteSpace(CurrentJob.City))
+                                    {
+                                        <span class="job-location">@CurrentJob.City</span>
+                                    }
+                                </div>
                             </div>
 
                             @if (CurrentJob.Salary is not null)
@@ -71,23 +76,30 @@
                                 </p>
                             }
 
-                            <div class="job-meta-row">
-                                <span class="job-meta-pill">
-                                    Posted @CurrentJob.DatePosted.ToShortDateString()
-                                </span>
-                                <span class="job-meta-pill subtle">
-                                    Job #@CurrentJob.Id
-                                </span>
+                            <div class="job-card-footer">
+                                <div class="job-meta-left">
+                                    <span class="job-meta-pill">
+                                        Posted @CurrentJob.DatePosted.ToShortDateString()
+                                    </span>
+                                </div>
+
+                                <div class="job-meta-actions">
+                                    <button disabled class="dash-muted-btn">Pending Review...</button>
+
+                                    <a href="/applicant/job/@CurrentJob.Id/company" class="dash-company-btn mt-2">
+                                        🏢 View Company Details
+                                    </a>
+                                </div>
                             </div>
                         </div>
 
                         <div class="job-actions">
                             <button class="job-btn job-btn-decline" @onclick="Decline">
-                                ? Skip<br /><span>Left arrow</span>
+                                ← Skip<br /><span>Left arrow</span>
                             </button>
 
                             <button class="job-btn job-btn-accept" @onclick="AcceptAsync">
-                                ? Apply<br /><span>Right arrow</span>
+                                → Apply<br /><span>Right arrow</span>
                             </button>
                         </div>
 
@@ -110,6 +122,8 @@
 </AuthorizeView>
 
 @code {
+    private ElementReference _swipeShellRef;
+
     private long _applicantId;
     private List<JobListingDto> jobListings = new();
     private int currentIndex = 0;
@@ -144,6 +158,14 @@
         finally
         {
             isLoading = false;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await _swipeShellRef.FocusAsync();
         }
     }
 
@@ -196,7 +218,6 @@
             };
 
             var created = await ApplicationService.CreateAsync(createDto);
-
             await ApplicationService.RejectAsync(created.Id);
 
             MoveNext();
@@ -215,7 +236,7 @@
             currentIndex = jobListings.Count;
         }
     }
-    
+
     private async Task HandleKeyDown(KeyboardEventArgs e)
     {
         if (e.Key == "ArrowRight")
@@ -224,8 +245,7 @@
         }
         else if (e.Key == "ArrowLeft")
         {
-            Decline();
+            await Decline();
         }
     }
-
 }
