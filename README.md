@@ -199,8 +199,6 @@ Open your browser at:
 
     https://localhost:7292
 
-(Exact ports may vary depending on configuration.)
-
 ---
 
 ## Security Notes
