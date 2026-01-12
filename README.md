@@ -50,9 +50,10 @@ HireFire follows a **three-tier distributed architecture**:
 
 ## Repository Structure
 
-    client/           # Blazor Server application (UI & client-side logic)
-    logic-server/     # ASP.NET Core application (business logic & APIs)
-    data-server/      # Java Spring Boot application (database & gRPC services)
+    Client/           # Blazor Server application (UI & client-side logic)
+    LogicServer/      # ASP.NET Core application (business logic & APIs)
+    DatabaseServer/   # Java Spring Boot application (database & gRPC services)
+    Docs/             # Project Description, Project Report and Process Report
 
 Each tier is fully isolated and communicates only through defined interfaces.
 
@@ -113,24 +114,22 @@ Each tier is fully isolated and communicates only through defined interfaces.
 
 ### 1. Clone the Repository
 
-    git clone https://github.com/your-username/hirefire.git
-    cd hirefire
+    git clone https://github.com/baczek113/SEP3.git
+    cd SEP3
 
 ---
 
 ### 2. Database Setup
 
-1. Create a PostgreSQL database:
-   
-       CREATE DATABASE hirefire;
+1. Create a PostgreSQL schema by running HireFire.sql found under DatabaseServer/Database.
 
 2. Configure database credentials in:
 
-       data-server/src/main/resources/application.properties
+       DatabaseServer/src/main/resources/application.properties
 
    Example:
 
-       spring.datasource.url=jdbc:postgresql://localhost:5432/hirefire
+       spring.datasource.url=jdbc:postgresql://localhost:5432/postgres?currentSchema=HireFire
        spring.datasource.username=postgres
        spring.datasource.password=your_password
 
@@ -138,20 +137,45 @@ Each tier is fully isolated and communicates only through defined interfaces.
 
 ---
 
-### 3. Start the Data Server (Java)
+### 3. HTTPS setup
 
-    cd data-server
+1. Navigate to DatabaseServer/src/main/resources using the Terminal.
+
+2. Generate a 2048-bit RSA key pair by entering the following command and replacing [your-password] with your designated password.
+   
+       keytool -genkeypair -alias hirefire-data -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore keystore.p12 -validity 3650 -storepass [your_passoword]
+
+3. Follow through with the key generation proceedure (Entering personal information is not mandatory)
+
+4. Configure password in:
+
+       DatabaseServer/src/main/resources/application.properties
+
+   Replace [your-password] with the password entered previously:
+
+       grpc.server.security.key-store-password=[your-password]
+
+5. Navigate to LogicTier using the Terminal and enter the following:
+
+       dotnet dev-certs https --trust
+
+6. If a pop-up window appears - Click "Yes".
+
+---
+
+### 4. Start the Data Server (Java)
+
+    cd DataTier/DatabaseServer
     ./mvnw spring-boot:run
 
 - Hosts database access
 - Exposes gRPC services
-- Must be running before the Logic Server
 
 ---
 
-### 4. Start the Logic Server (.NET)
+### 5. Start the Logic Server (.NET)
 
-    cd logic-server
+    cd LogicTier/LogicServer
     dotnet restore
     dotnet run
 
@@ -159,13 +183,11 @@ Each tier is fully isolated and communicates only through defined interfaces.
 - Hosts SignalR hubs
 - Communicates with the Data Server via gRPC
 
-> ⚠️ In development, the Logic Server may need to trust the Data Server’s TLS certificate.
-
 ---
 
-### 5. Start the Client (Blazor Server)
+### 6. Start the Client (Blazor Server)
 
-    cd client
+    cd Client/WebApp
     dotnet restore
     dotnet run
 
@@ -175,11 +197,11 @@ Each tier is fully isolated and communicates only through defined interfaces.
 
 ---
 
-### 6. Access the Application
+### 7. Access the Application
 
 Open your browser at:
 
-    https://localhost:<client-port>
+    https://localhost:7292
 
 (Exact ports may vary depending on configuration.)
 
@@ -227,6 +249,7 @@ Open your browser at:
 
 This project was developed as part of a **Software Technology Engineering** course.  
 While created in an academic setting, the system follows production-style architecture and practices.
+Full project and process reports are available in the `/docs` directory.
 
 ---
 
