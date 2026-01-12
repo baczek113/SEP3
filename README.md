@@ -97,10 +97,6 @@ Each tier is fully isolated and communicates only through defined interfaces.
 
 ## Running the Project Locally (Sample Setup)
 
-> ⚠️ **Note:**  
-> This is a **reference setup guide** written based on the project report.  
-> Some steps (certificates, ports, startup order, environment variables) may need adjustment.
-
 ---
 
 ### Prerequisites
