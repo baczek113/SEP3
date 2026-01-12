@@ -243,7 +243,7 @@ Open your browser at:
 
 This project was developed as part of a **Software Technology Engineering** course.  
 While created in an academic setting, the system follows production-style architecture and practices.
-Full project and process reports are available in the `/docs` directory.
+Full project and process reports are available in the `/Docs` directory.
 
 ---
 
