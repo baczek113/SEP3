@@ -1,4 +1,4 @@
-# HireFire
+dotnet dev-certs https --trust# HireFire
 
 A distributed job-matching platform designed to streamline recruitment by enabling fast applications, recruiter decision-making, and real-time communication between matched candidates and recruiters.
 
@@ -141,7 +141,7 @@ Each tier is fully isolated and communicates only through defined interfaces.
    
        keytool -genkeypair -alias hirefire-data -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore keystore.p12 -validity 3650 -storepass [your_passoword]
 
-3. Follow through with the key generation proceedure (Entering personal information is not mandatory)
+3. Follow through with the key generation procedure.
 
 4. Configure password in:
 
