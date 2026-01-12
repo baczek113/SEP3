@@ -50,10 +50,10 @@ HireFire follows a **three-tier distributed architecture**:
 
 ## Repository Structure
 
-    Client/           # Blazor Server application (UI & client-side logic)
-    LogicServer/      # ASP.NET Core application (business logic & APIs)
-    DatabaseServer/   # Java Spring Boot application (database & gRPC services)
-    Docs/             # Project Description, Project Report and Process Report
+    Client/WebApp              # Blazor Server application (UI & client-side logic)
+    LogicTier/LogicServer      # ASP.NET Core application (business logic & APIs)
+    DataTier/DatabaseServer    # Java Spring Boot application (database & gRPC services)
+    Docs/                      # Project Description, Project Report and Process Report
 
 Each tier is fully isolated and communicates only through defined interfaces.
 
