@@ -138,50 +138,35 @@ public class ApplicationService extends com.example.databaseserver.generated.App
 
     @Override
     @Transactional
-    public void acceptApplication(ChangeStatusRequest request,
-                                StreamObserver<ApplicationResponse> responseObserver)
+    public void changeApplicationStatus(ChangeStatusRequest request,
+                                  StreamObserver<ApplicationResponse> responseObserver)
     {
         try {
-            changeApplicationStatusHelper(request, ApplicationStatus.matched, responseObserver);
+            Application application = applicationRepository.findById(request.getId())
+                    .orElseThrow(() -> new RuntimeException("Application not found"));
+
+            ApplicationStatus status = ApplicationStatus.valueOf(request.getStatus());
+
+            application.setStatus(status);
+            applicationRepository.save(application);
+
+            if(status == ApplicationStatus.matched && chatThreadRepository.findByApplication_Id(application.getId()) == null){
+                ChatThread chatThread = new ChatThread(application);
+                chatThreadRepository.save(chatThread);
+            }
+
+            ApplicationResponse response = ApplicationResponse.newBuilder()
+                    .setId(application.getId())
+                    .setJobId(application.getJob().getId())
+                    .setApplicantId(application.getApplicant().getId())
+                    .setStatus(mapEntityToProtoStatus(application.getStatus()))
+                    .setSubmittedAt(application.getSubmittedAt().toString())
+                    .build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
         } catch (Exception e) {
             responseObserver.onError(e);
         }
-    }
-
-    @Override
-    @Transactional
-    public void rejectApplication(ChangeStatusRequest request,
-                                StreamObserver<ApplicationResponse> responseObserver)
-    {
-        try {
-            changeApplicationStatusHelper(request, ApplicationStatus.declined, responseObserver);
-        } catch (Exception e) {
-            responseObserver.onError(e);
-        }
-    }
-
-    private void changeApplicationStatusHelper(ChangeStatusRequest request, ApplicationStatus status, StreamObserver<ApplicationResponse> responseObserver)
-    {
-        Application application = applicationRepository.findById(request.getApplicationId())
-                .orElseThrow(() -> new RuntimeException("Application not found"));
-
-        application.setStatus(status);
-        applicationRepository.save(application);
-
-        if(status == ApplicationStatus.matched && chatThreadRepository.findByApplication_Id(application.getId()) == null){
-            ChatThread chatThread = new ChatThread(application);
-            chatThreadRepository.save(chatThread);
-        }
-
-        ApplicationResponse response = ApplicationResponse.newBuilder()
-                .setId(application.getId())
-                .setJobId(application.getJob().getId())
-                .setApplicantId(application.getApplicant().getId())
-                .setStatus(mapEntityToProtoStatus(application.getStatus()))
-                .setSubmittedAt(application.getSubmittedAt().toString())
-                .build();
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
     }
 
     private com.example.databaseserver.generated.ApplicationStatus mapEntityToProtoStatus(ApplicationStatus status) {

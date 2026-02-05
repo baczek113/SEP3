@@ -20,15 +20,15 @@ public class ApplicationService
         using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
 
         var client = new HireFire.Grpc.ApplicationService.ApplicationServiceClient(channel);
-    
+
         var request = new CreateApplicationRequest()
         {
             ApplicantId = dto.ApplicantId,
             JobId = dto.JobId
         };
-    
+
         var reply = await client.CreateApplicationAsync(request);
-    
+
         DateTime dateSubmitted;
         if (!DateTime.TryParse(
                 reply.SubmittedAt,
@@ -38,7 +38,7 @@ public class ApplicationService
         {
             dateSubmitted = DateTime.UtcNow;
         }
-        
+
         return new ApplicationDto()
         {
             Id = reply.Id,
@@ -48,7 +48,7 @@ public class ApplicationService
             Status = reply.Status.ToString(),
         };
     }
-    
+
     public async Task<List<ApplicationDto>> GetApplicationsForJobAsync(long jobId)
     {
         using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
@@ -78,7 +78,7 @@ public class ApplicationService
 
             // KONWERSJA STATUSU ENUM DO STRINGA
             string status = application.Status.ToString();
-            
+
             applications.Add(new ApplicationDto()
             {
                 Id = application.Id,
@@ -87,7 +87,7 @@ public class ApplicationService
                 SubmittedAt = dateSubmitted,
                 Status = status
             });
-                
+
         }
         Console.Write(applications.Count);
         return applications;
@@ -98,16 +98,16 @@ public class ApplicationService
     {
         using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.ApplicationService.ApplicationServiceClient(channel);
-    
+
         var request = new GetApplicationsForApplicantRequest()
         {
             ApplicantId = applicantId
         };
-    
+
         var reply = await client.GetApplicationsForApplicantAsync(request);
-        
+
         List<ApplicationDto> applications = new List<ApplicationDto>();
-        
+
         foreach (var application in reply.Applications)
         {
             DateTime dateSubmitted;
@@ -119,8 +119,8 @@ public class ApplicationService
             {
                 dateSubmitted = DateTime.UtcNow;
             }
-            
-            applications.Add(new  ApplicationDto()
+
+            applications.Add(new ApplicationDto()
             {
                 Id = application.Id,
                 ApplicantId = application.ApplicantId,
@@ -129,43 +129,26 @@ public class ApplicationService
                 Status = application.Status.ToString(),
             });
         }
-        
-        
+
+
         return new ApplicationsDto()
         {
             Applications = applications
         };
     }
 
-    public async Task<ApplicationDto> AcceptApplication(long applicationId)
-    {
-        return await UpdateApplicationStatusHelperAsync(true, applicationId);
-    }
-    
-    public async Task<ApplicationDto> RejectApplication(long applicationId)
-    {
-        return await UpdateApplicationStatusHelperAsync(false, applicationId);
-    }
-
-    private async Task<ApplicationDto> UpdateApplicationStatusHelperAsync(bool accept, long applicationId)
+    public async Task<ApplicationDto> ChangeApplicationStatus(long applicationId, string status)
     {
         using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.ApplicationService.ApplicationServiceClient(channel);
-    
+
         var request = new ChangeStatusRequest()
         {
-            ApplicationId = applicationId
+            Id = applicationId,
+            Status = status
         };
-        
-        ApplicationResponse reply;
-        if (accept)
-        {
-            reply = await client.AcceptApplicationAsync(request);
-        }
-        else
-        {
-            reply = await client.RejectApplicationAsync(request);
-        }
+
+        ApplicationResponse reply = await client.ChangeApplicationStatusAsync(request);
 
         DateTime dateSubmitted;
         if (!DateTime.TryParse(
@@ -176,7 +159,7 @@ public class ApplicationService
         {
             dateSubmitted = DateTime.UtcNow;
         }
-        
+
         return new ApplicationDto()
         {
             Id = reply.Id,

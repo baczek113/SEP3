@@ -14,6 +14,16 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     </ItemGroup>
     <ItemGroup>
+        <Protobuf Include="Proto\applicant.proto" GrpcServices="Client" OutputDir="GeneratedGrpc\" />
+        <Protobuf Include="Proto\company.proto" GrpcServices="Client" OutputDir="GeneratedGrpc\" />
+        <Protobuf Include="Proto\representative.proto" GrpcServices="Client" OutputDir="GeneratedGrpc\" />
+        <Protobuf Include="Proto\authentication.proto" GrpcServices="Client" OutputDir="GeneratedGrpc\" />
+        <Protobuf Include="Proto\recruiter.proto" GrpcServices="Client" OutputDir="GeneratedGrpc\" />
+        <Protobuf Include="Proto\job.proto" GrpcServices="Client" OutputDir="GeneratedGrpc\" />
+        <Protobuf Include="Proto\chat.proto" GrpcServices="Client" OutputDir="GeneratedGrpc\" />
+        <Protobuf Include="Proto\application.proto" GrpcServices="Client" OutputDir="GeneratedGrpc\" />
+    </ItemGroup>
+    <ItemGroup>
       <Folder Include="GeneratedGrpc\" />
     </ItemGroup>
 </Project>

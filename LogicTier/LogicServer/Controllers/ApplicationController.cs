@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LogicServer.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("applications")]
 public class ApplicationController : ControllerBase
 {
     private readonly ApplicationService _service;
@@ -45,8 +45,8 @@ public class ApplicationController : ControllerBase
         }
     }
 
-    [HttpPost("accept-application")]
-    public async Task<ActionResult<ApplicationDto>> AcceptApplication([FromBody] ChangeApplicationStatusDto dto)
+    [HttpPatch("{id:long}/status")]
+    public async Task<ActionResult<ApplicationDto>> ChangeApplicationStatus(long id, [FromBody] ChangeApplicationStatusDto dto)
     {
         try
         {
@@ -55,27 +55,7 @@ public class ApplicationController : ControllerBase
                 return BadRequest("Invalid data");
             }
 
-            var result = await _service.AcceptApplication(dto.ApplicationId);
-            return Ok(result);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Internal Server Error while changing application status");
-            return StatusCode(500, e.Message);
-        }
-    }
-
-    [HttpPost("reject-application")]
-    public async Task<ActionResult<ApplicationDto>> RejectApplication([FromBody] ChangeApplicationStatusDto dto)
-    {
-        try
-        {
-            if (dto == null)
-            {
-                return BadRequest("Invalid data");
-            }
-
-            var result = await _service.RejectApplication(dto.ApplicationId);
+            var result = await _service.ChangeApplicationStatus(id, dto.Status);
             return Ok(result);
         }
         catch (Exception e)
