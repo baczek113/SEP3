@@ -1,5 +1,3 @@
-dotnet dev-certs https --trust# HireFire
-
 A distributed job-matching platform designed to streamline recruitment by enabling fast applications, recruiter decision-making, and real-time communication between matched candidates and recruiters.
 
 HireFire was built as a full-stack, three-tier system with a strong focus on **clear separation of concerns**, **secure communication**, and **real-time interaction**.
