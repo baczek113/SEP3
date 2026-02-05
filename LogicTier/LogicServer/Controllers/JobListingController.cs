@@ -16,7 +16,7 @@ public class JobListingController : ControllerBase
     {
         _jobListingService = jobListingService;
     }
-    
+
     [HttpPost]
     public async Task<ActionResult<JobListingDto>> CreateJobListing([FromBody] CreateJobListingDto dto)
     {
@@ -57,14 +57,14 @@ public class JobListingController : ControllerBase
         var result = await _jobListingService.GetJobListingsForRecruiterAsync(recruiterId);
         return Ok(result);
     }
-    
+
     [HttpGet("by-city/{city}")]
     public async Task<ActionResult<List<JobListingDto>>> GetByCity(string city)
     {
         var result = await _jobListingService.GetJobListingsByCityAsync(city);
         return Ok(result);
     }
-    
+
     [HttpGet("job-skills/by-job-id/{jobId:long}")]
     public async Task<ActionResult<List<JobListingSkillDto>>> GetSkillsForJob(long jobId)
     {

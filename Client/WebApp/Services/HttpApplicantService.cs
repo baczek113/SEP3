@@ -4,7 +4,7 @@ using WebApp.DTOs.Job;
 
 namespace WebApp.Services;
 
-public class HttpApplicantService: IApplicantService
+public class HttpApplicantService : IApplicantService
 {
     private readonly HttpClient client;
 
@@ -12,10 +12,10 @@ public class HttpApplicantService: IApplicantService
     {
         this.client = client;
     }
-    
+
     public async Task<ApplicantDto> AddApplicantAsync(AddApplicantDto request)
     {
-        HttpResponseMessage httpResponse = await client.PostAsJsonAsync("api/applicant", request);
+        HttpResponseMessage httpResponse = await client.PostAsJsonAsync("applicants", request);
         string response = await httpResponse.Content.ReadAsStringAsync();
         if (!httpResponse.IsSuccessStatusCode)
         {
@@ -25,7 +25,7 @@ public class HttpApplicantService: IApplicantService
     }
     public async Task<ApplicantSkillDto> AddApplicantSkillAsync(AddApplicantSkillDto request)
     {
-        HttpResponseMessage httpResponse = await client.PostAsJsonAsync("api/applicant/skills", request);
+        HttpResponseMessage httpResponse = await client.PostAsJsonAsync("applicants/" + request.ApplicantId + "/skills", request);
         string response = await httpResponse.Content.ReadAsStringAsync();
 
         if (!httpResponse.IsSuccessStatusCode)
@@ -41,7 +41,7 @@ public class HttpApplicantService: IApplicantService
 
     public async Task<List<ApplicantSkillDto>> GetApplicantSkillsAsync(long applicantId)
     {
-        var httpResponse = await client.GetAsync($"api/applicant/skills/by-applicant/{applicantId}");
+        var httpResponse = await client.GetAsync($"applicants/{applicantId}/skills");
         var response = await httpResponse.Content.ReadAsStringAsync();
 
         if (!httpResponse.IsSuccessStatusCode)
@@ -55,7 +55,7 @@ public class HttpApplicantService: IApplicantService
 
     public async Task<RemoveApplicantSkillResponseDto> RemoveApplicantSkillAsync(long applicantSkillId)
     {
-        var httpResponse = await client.DeleteAsync($"api/applicant/skills/{applicantSkillId}");
+        var httpResponse = await client.DeleteAsync($"applicant-skills/{applicantSkillId}");
         var response = await httpResponse.Content.ReadAsStringAsync();
 
         if (!httpResponse.IsSuccessStatusCode)
@@ -70,7 +70,7 @@ public class HttpApplicantService: IApplicantService
 
     public async Task<List<JobListingDto>> GetSuggestJobListingAsync(long applicantId)
     {
-        var httpResponse = await client.GetAsync($"api/applicant/job-listings/by-applicant/{applicantId}");
+        var httpResponse = await client.GetAsync($"applicants/{applicantId}/job-listings");
         var response = await httpResponse.Content.ReadAsStringAsync();
 
         if (!httpResponse.IsSuccessStatusCode)
@@ -84,9 +84,9 @@ public class HttpApplicantService: IApplicantService
 
     public async Task<ApplicantDto> GetApplicantAsync(long applicantId)
     {
-        var httpResponse = await client.GetAsync($"api/applicant/by-id/{applicantId}"); ;
+        var httpResponse = await client.GetAsync($"applicants/{applicantId}"); ;
         var response = await httpResponse.Content.ReadAsStringAsync();
-        
+
         if (!httpResponse.IsSuccessStatusCode)
             throw new Exception(response);
         return JsonSerializer.Deserialize<ApplicantDto>(
@@ -97,7 +97,7 @@ public class HttpApplicantService: IApplicantService
 
     public async Task<ApplicantDto> UpdateApplicantAsync(UpdateApplicantDto request)
     {
-        var httpResponse = await client.PutAsJsonAsync($"api/applicant/{request.Id}", request);
+        var httpResponse = await client.PutAsJsonAsync($"applicants/{request.Id}", request);
         var response = await httpResponse.Content.ReadAsStringAsync();
 
         if (!httpResponse.IsSuccessStatusCode)

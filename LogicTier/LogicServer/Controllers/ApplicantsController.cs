@@ -7,13 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace LogicServer.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class ApplicantController : ControllerBase
+[Route("applicants")]
+public class ApplicantsController : ControllerBase
 {
     private readonly ApplicantService _service;
-    private readonly ILogger<ApplicantController> _logger;
+    private readonly ILogger<ApplicantsController> _logger;
 
-    public ApplicantController(ApplicantService service, ILogger<ApplicantController> logger)
+    public ApplicantsController(ApplicantService service, ILogger<ApplicantsController> logger)
     {
         _service = service;
         _logger = logger;
@@ -55,16 +55,16 @@ public class ApplicantController : ControllerBase
         return Ok(new { message = result.Message });
     }
 
-    
-    [HttpPost("skills")]
-    public async Task<ActionResult<ApplicantSkillDto>> AddSkill([FromBody] AddApplicantSkillDto dto)
+
+    [HttpPost("{applicantId:long}/skills")]
+    public async Task<ActionResult<ApplicantSkillDto>> AddSkill([FromBody] AddApplicantSkillDto dto, long applicantId)
     {
         if (dto == null)
             return BadRequest("Invalid data");
 
         try
         {
-            var result = await _service.AddSkillAsync(dto);
+            var result = await _service.AddSkillAsync(dto, applicantId);
             return Ok(result);
         }
         catch (Exception ex)
@@ -72,35 +72,23 @@ public class ApplicantController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
-    
-    [HttpDelete("skills/{applicantSkillId:long}")]
-    public async Task<ActionResult<RemoveApplicantSkillResponseDto>> RemoveSkill(long applicantSkillId)
-    {
-        if (applicantSkillId <= 0) return BadRequest("Invalid skill id.");
 
-        var result = await _service.RemoveSkillAsync(applicantSkillId);
-
-        if (!result.Success)
-            return BadRequest(result);
-
-        return Ok(result);
-    }
-    
-    [HttpGet("skills/by-applicant/{applicantId:long}")]
+    [HttpGet("{applicantId:long}/skills")]
     public async Task<ActionResult<List<ApplicantSkillDto>>> GetApplicantSkills(long applicantId)
     {
         var result = await _service.GetApplicantSkillsAsync(applicantId);
         var mapped = result.Select(MapToDto).ToList();
         return Ok(mapped);
     }
-    
-    [HttpGet("job-listings/by-applicant/{applicantId:long}")]
+
+    [HttpGet("{applicantId:long}/job-listings/")]
     public async Task<ActionResult<List<JobListingDto>>> GetSuggestedJobListings(long applicantId)
     {
         var result = await _service.GetSuggestedJobsAsync(applicantId);
         return Ok(result);
     }
-    [HttpGet("by-id/{applicantId:long}")]
+
+    [HttpGet("{applicantId:long}")]
     public async Task<ActionResult<ApplicantDto>> GetApplicationsById(long applicantId)
     {
         var result = await _service.GetByIdAsync(applicantId);
@@ -145,11 +133,11 @@ public class ApplicantController : ControllerBase
             Level = proto.Level switch
             {
                 HireFire.Grpc.SkillLevelProto.SkillLevelBeginner => SkillLevelDto.Beginner,
-                HireFire.Grpc.SkillLevelProto.SkillLevelJunior   => SkillLevelDto.Junior,
-                HireFire.Grpc.SkillLevelProto.SkillLevelMid      => SkillLevelDto.Mid,
-                HireFire.Grpc.SkillLevelProto.SkillLevelSenior   => SkillLevelDto.Senior,
-                HireFire.Grpc.SkillLevelProto.SkillLevelExpert   => SkillLevelDto.Expert,
-                _                                                => SkillLevelDto.Beginner
+                HireFire.Grpc.SkillLevelProto.SkillLevelJunior => SkillLevelDto.Junior,
+                HireFire.Grpc.SkillLevelProto.SkillLevelMid => SkillLevelDto.Mid,
+                HireFire.Grpc.SkillLevelProto.SkillLevelSenior => SkillLevelDto.Senior,
+                HireFire.Grpc.SkillLevelProto.SkillLevelExpert => SkillLevelDto.Expert,
+                _ => SkillLevelDto.Beginner
             }
         };
     }

@@ -3,6 +3,7 @@ using System.Globalization;
 using Grpc.Net.Client;
 using HireFire.Grpc;
 using LogicServer.DTOs.Job;
+using LogicServer.DTOs.Application;
 using LogicServer.DTOs.JobListing;
 using LogicServer.Services.Helper;
 
@@ -24,17 +25,17 @@ public class JobListingService
 
         var request = new CreateJobListingRequest
         {
-            Title       = dto.Title,
+            Title = dto.Title,
             Description = dto.Description ?? string.Empty,
-            Salary      = dto.Salary.HasValue 
-                ? dto.Salary.Value.ToString("0.##", CultureInfo.InvariantCulture) 
+            Salary = dto.Salary.HasValue
+                ? dto.Salary.Value.ToString("0.##", CultureInfo.InvariantCulture)
                 : string.Empty,
-            CompanyId   = dto.CompanyId,
-            City          = dto.City,
-            Postcode      = dto.Postcode,
-            Address       = dto.Address,
-            PostedById  = dto.PostedById,
-            IsClosed    = false
+            CompanyId = dto.CompanyId,
+            City = dto.City,
+            Postcode = dto.Postcode,
+            Address = dto.Address,
+            PostedById = dto.PostedById,
+            IsClosed = false
         };
 
         var reply = await client.CreateJobListingAsync(request);
@@ -51,7 +52,7 @@ public class JobListingService
         {
             Id = requestDto.Id
         };
-        
+
         var reply = await client.RemoveJobListingAsync(request);
 
         return new RemoveJobListingResponseDto
@@ -60,7 +61,7 @@ public class JobListingService
             Message = reply.Message
         };
     }
-    
+
     public async Task<List<JobListingDto>> GetJobListingsForCompanyAsync(long companyId)
     {
         using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
@@ -78,7 +79,7 @@ public class JobListingService
             .ToList();
     }
 
-    
+
     public async Task<List<JobListingDto>> GetJobListingsForRecruiterAsync(long recruiterId)
     {
         using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
@@ -114,11 +115,11 @@ public class JobListingService
         {
             skills.Add(new JobListingSkillDto
             {
-                Id           = skill.Id,            
-                Priority     = skill.Priority,      
+                Id = skill.Id,
+                Priority = skill.Priority,
                 JobListingId = skill.JobListingId,
-                SkillId      = skill.SkillId,
-                SkillName    = skill.SkillName
+                SkillId = skill.SkillId,
+                SkillName = skill.SkillName
             });
         }
 
@@ -128,12 +129,12 @@ public class JobListingService
     {
         using var channel = GrpcChannelHelper.CreateSecureChannel(_grpcAddress);
         var client = new HireFire.Grpc.JobListingService.JobListingServiceClient(channel);
-    
+
         var request = new GetJobListingsByCityRequest()
         {
             CityName = city
         };
-    
+
         var reply = await client.GetJobListingsByCityAsync(request);
 
         return reply.Listings
@@ -149,15 +150,15 @@ public class JobListingService
 
         var request = new UpdateJobListingRequest
         {
-            Id          = dto.Id,
-            Title       = dto.Title,
+            Id = dto.Id,
+            Title = dto.Title,
             Description = dto.Description ?? string.Empty,
-            Salary      = dto.Salary.HasValue ? dto.Salary.Value.ToString("0.##", CultureInfo.InvariantCulture) : string.Empty,
-            City        = dto.City,
-            Postcode    = dto.Postcode ?? string.Empty,
-            Address     = dto.Address ?? string.Empty,
-            CompanyId   = dto.CompanyId,
-            IsClosed    = dto.IsClosed
+            Salary = dto.Salary.HasValue ? dto.Salary.Value.ToString("0.##", CultureInfo.InvariantCulture) : string.Empty,
+            City = dto.City,
+            Postcode = dto.Postcode ?? string.Empty,
+            Address = dto.Address ?? string.Empty,
+            CompanyId = dto.CompanyId,
+            IsClosed = dto.IsClosed
         };
 
         var reply = await client.UpdateJobListingAsync(request);
@@ -177,7 +178,7 @@ public class JobListingService
         var reply = await client.CloseJobListingAsync(request);
         return MapToDto(reply);
     }
-    
+
     private JobListingDto MapToDto(JobListingResponse reply)
     {
         DateTime datePosted;
@@ -201,17 +202,17 @@ public class JobListingService
 
         return new JobListingDto
         {
-            Id         = reply.Id,
-            Title      = reply.Title,
+            Id = reply.Id,
+            Title = reply.Title,
             Description = string.IsNullOrWhiteSpace(reply.Description) ? null : reply.Description,
             DatePosted = datePosted,
-            Salary     = salary,
-            CompanyId  = reply.CompanyId,
-            City          = reply.City,
-            Postcode      = reply.Postcode,
-            Address       = reply.Address,
+            Salary = salary,
+            CompanyId = reply.CompanyId,
+            City = reply.City,
+            Postcode = reply.Postcode,
+            Address = reply.Address,
             PostedById = postedById,
-            IsClosed   = reply.IsClosed
+            IsClosed = reply.IsClosed
         };
     }
     public async Task<JobListingSkillDto> AddJobListingSkillAsync(AddJobListingSkillDto dto)
@@ -228,21 +229,21 @@ public class JobListingService
         var request = new AddJobListingSkillRequest
         {
             JobListingId = dto.JobListingId,
-            SkillName    = dto.SkillName,
-            Category     = dto.Category ?? string.Empty,
-            Priority     = dto.Priority      
+            SkillName = dto.SkillName,
+            Category = dto.Category ?? string.Empty,
+            Priority = dto.Priority
         };
 
         var reply = await client.AddJobListingSkillAsync(request);
 
-        
+
         return new JobListingSkillDto
         {
-            Id           = reply.Id,
-            Priority     = reply.Priority,
+            Id = reply.Id,
+            Priority = reply.Priority,
             JobListingId = reply.JobListingId,
-            SkillId      = reply.SkillId,
-            SkillName    = reply.SkillName
+            SkillId = reply.SkillId,
+            SkillName = reply.SkillName
         };
     }
     public async Task<JobListingDto?> GetJobListingByIdAsync(long jobId)
@@ -266,7 +267,7 @@ public class JobListingService
         }
     }
 
-    
+
 
     public async Task<RemoveJobListingSkillResponseDto> RemoveJobListingSkillAsync(long jobListingSkillId)
     {
@@ -286,5 +287,4 @@ public class JobListingService
             Message = reply.Message
         };
     }
-
 }

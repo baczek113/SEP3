@@ -12,9 +12,9 @@ namespace LogicServer.Controllers;
 public class ApplicationController : ControllerBase
 {
     private readonly ApplicationService _service;
-    private readonly ILogger<ApplicantController> _logger;
+    private readonly ILogger<ApplicantsController> _logger;
 
-    public ApplicationController(ApplicationService service, ILogger<ApplicantController> logger)
+    public ApplicationController(ApplicationService service, ILogger<ApplicantsController> logger)
     {
         _service = service;
         _logger = logger;
@@ -44,7 +44,7 @@ public class ApplicationController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-    
+
     [HttpPost("accept-application")]
     public async Task<ActionResult<ApplicationDto>> AcceptApplication([FromBody] ChangeApplicationStatusDto dto)
     {
@@ -54,7 +54,7 @@ public class ApplicationController : ControllerBase
             {
                 return BadRequest("Invalid data");
             }
-    
+
             var result = await _service.AcceptApplication(dto.ApplicationId);
             return Ok(result);
         }
@@ -64,7 +64,7 @@ public class ApplicationController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-    
+
     [HttpPost("reject-application")]
     public async Task<ActionResult<ApplicationDto>> RejectApplication([FromBody] ChangeApplicationStatusDto dto)
     {
@@ -74,7 +74,7 @@ public class ApplicationController : ControllerBase
             {
                 return BadRequest("Invalid data");
             }
-    
+
             var result = await _service.RejectApplication(dto.ApplicationId);
             return Ok(result);
         }
@@ -84,7 +84,7 @@ public class ApplicationController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-    
+
     [HttpGet("applications/by-job/{jobId:long}")]
     public async Task<ActionResult<ApplicationsDto>> GetApplicationsByJob(long jobId)
     {
@@ -92,7 +92,7 @@ public class ApplicationController : ControllerBase
         return Ok(result);
     }
 
-    
+
     [HttpGet("applications/by-applicant/{applicantId:long}")]
     public async Task<ActionResult<ApplicationDto>> GetApplicationsByApplicant(long applicantId)
     {
@@ -107,6 +107,6 @@ public class ApplicationController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-    
-    
+
+
 }

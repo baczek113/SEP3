@@ -18,17 +18,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSignalR();
-builder.Services.AddSingleton<LogicServer.Services.RepresentativeService>();
-builder.Services.AddSingleton<ApplicantService>();
-builder.Services.AddSingleton<CompanyService>();
-builder.Services.AddSingleton<AuthenticationService>();
-builder.Services.AddSingleton<RecruiterService>();
-builder.Services.AddSingleton<JobListingService>();
-builder.Services.AddSingleton<ApplicationService>();
+builder.Services.AddScoped<LogicServer.Services.RepresentativeService>();
+builder.Services.AddScoped<ApplicantService>();
+builder.Services.AddScoped<CompanyService>();
+builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddScoped<RecruiterService>();
+builder.Services.AddScoped<JobListingService>();
+builder.Services.AddScoped<ApplicationService>();
 builder.Services.AddGrpcClient<ChatService.ChatServiceClient>(o =>
 {
-    o.Address = new Uri(chatServiceUrl); 
-}).ConfigurePrimaryHttpMessageHandler(() => GrpcChannelHelper.GetSecureHandler());;
+    o.Address = new Uri(chatServiceUrl);
+}).ConfigurePrimaryHttpMessageHandler(() => GrpcChannelHelper.GetSecureHandler()); ;
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
